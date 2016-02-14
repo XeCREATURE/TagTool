@@ -1,4 +1,4 @@
-﻿namespace Composer.Wwise
+﻿namespace HaloOnlineTagTool.Resources.Sounds
 {
     /// <summary>
     /// Interface for an object which can be referenced through a Wwise ID.

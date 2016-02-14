@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Composer.Wwise;
 
-namespace Composer
+namespace HaloOnlineTagTool.Resources.Sounds
 {
     /// <summary>
     /// Provides data for the FoundSoundBankFile and FoundSoundPackFile events.

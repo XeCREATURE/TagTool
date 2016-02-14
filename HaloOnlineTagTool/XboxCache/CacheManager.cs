@@ -11,10 +11,10 @@ namespace HaloOnlineTagTool.XboxCache
             CacheBase retCache = null;
             using (var fs = new FileStream(Filename, FileMode.Open, FileAccess.Read))
             {
-                var Reader = new EndianReader((Stream)fs, EndianFormat.BigEndian);
+                var Reader = new EndianReader((Stream)fs, EndianFormat.Big);
 
                 var head = Reader.ReadInt32();
-                if (head == 1684104552) Reader.EndianType = EndianFormat.LittleEndian;
+                if (head == 1684104552) Reader.Format = EndianFormat.Little;
                 var v = Reader.ReadInt32();
 
                 switch (v)

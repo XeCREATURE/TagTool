@@ -208,7 +208,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo3Beta
                 #region Read Names
                 Reader.SeekTo(CH.fileTableOffset);
                 EndianReader newReader = (cache.tagsKey == "" || cache.tagsKey == null)
-                    ? new EndianReader(new MemoryStream(Reader.ReadBytes(CH.fileTableSize)), EndianFormat.BigEndian)
+                    ? new EndianReader(new MemoryStream(Reader.ReadBytes(CH.fileTableSize)), EndianFormat.Big)
                     : AES.DecryptSegment(Reader, CH.fileTableOffset, CH.fileTableSize, cache.tagsKey);
 
                 for (int i = 0; i < indices.Length; i++)
@@ -285,7 +285,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo3Beta
             {
                 fName = FilePath + "\\shared.map";
                 FileStream fs = new FileStream(fName, FileMode.Open, FileAccess.Read);
-                er = new EndianReader(fs, EndianFormat.BigEndian);
+                er = new EndianReader(fs, EndianFormat.Big);
             }
             else
                 er = Reader;

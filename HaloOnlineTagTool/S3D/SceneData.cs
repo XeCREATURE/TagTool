@@ -17,7 +17,7 @@ namespace HaloOnlineTagTool.S3D
         public SceneData(PakFile Pak, PakFile.PakTag Item)
         {
             var reader = Pak.Reader;
-            reader.EndianType = EndianFormat.LittleEndian;
+            reader.Format = EndianFormat.Little;
             reader.SeekTo(Item.Offset);
 
             unmapped0 = reader.ReadBytes(16);

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Composer.Wwise
+namespace HaloOnlineTagTool.Resources.Sounds
 {
     /// <summary>
     /// A folder in a sound pack.

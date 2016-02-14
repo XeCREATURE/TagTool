@@ -18,7 +18,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo1CE
             if (Address < 0) //external bitmap
             {
                 var fs = new FileStream(Cache.FilePath + "\\bitmaps.map", FileMode.Open, FileAccess.Read);
-                Reader = new EndianReader(fs, EndianFormat.LittleEndian);
+                Reader = new EndianReader(fs, EndianFormat.Little);
 
                 Reader.SeekTo(8);
                 var indexOffset = Reader.ReadInt32();

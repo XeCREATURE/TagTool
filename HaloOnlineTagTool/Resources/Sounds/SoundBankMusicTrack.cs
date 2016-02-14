@@ -1,7 +1,7 @@
 ﻿//using Composer.IO;
 using HaloOnlineTagTool.Endian;
 
-namespace Composer.Wwise
+namespace HaloOnlineTagTool.Resources.Sounds
 {
     /// <summary>
     /// A music track in a sound bank.

@@ -175,6 +175,8 @@
     <Compile Include="Resources\Shaders\ShaderCompiler.cs" />
     <Compile Include="Resources\Shaders\ShaderConverter.cs" />
     <Compile Include="Resources\Sounds\SampleRate.cs" />
+    <Compile Include="Resources\Sounds\SoundFormat.cs" />
+    <Compile Include="Resources\Sounds\SoundFormatDetection.cs" />
     <Compile Include="Resources\Sounds\SoundType.cs" />
     <Compile Include="Serialization\MaxVersionAttribute.cs" />
     <Compile Include="Serialization\MinVersionAttribute.cs" />
@@ -650,34 +652,32 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="V1_106708\StringIdResolver.cs" />
-    <Compile Include="Composer\FormatIdentification.cs" />
-    <Compile Include="Composer\Info.cs" />
-    <Compile Include="Composer\SoundExtraction.cs" />
-    <Compile Include="Composer\SoundScanner.cs" />
-    <Compile Include="Composer\StreamUtil.cs" />
-    <Compile Include="Composer\Wwise\IWwiseObject.cs" />
-    <Compile Include="Composer\Wwise\IWwiseObjectVisitor.cs" />
-    <Compile Include="Composer\Wwise\RIFX.cs" />
-    <Compile Include="Composer\Wwise\RTPC.cs" />
-    <Compile Include="Composer\Wwise\SoundBank.cs" />
-    <Compile Include="Composer\Wwise\SoundBankAction.cs" />
-    <Compile Include="Composer\Wwise\SoundBankActorMixer.cs" />
-    <Compile Include="Composer\Wwise\SoundBankEvent.cs" />
-    <Compile Include="Composer\Wwise\SoundBankFile.cs" />
-    <Compile Include="Composer\Wwise\SoundBankMusicPlaylist.cs" />
-    <Compile Include="Composer\Wwise\SoundBankMusicSegment.cs" />
-    <Compile Include="Composer\Wwise\SoundBankMusicSwitchContainer.cs" />
-    <Compile Include="Composer\Wwise\SoundBankMusicTrack.cs" />
-    <Compile Include="Composer\Wwise\SoundBankSequenceContainer.cs" />
-    <Compile Include="Composer\Wwise\SoundBankSwitchContainer.cs" />
-    <Compile Include="Composer\Wwise\SoundBankVoice.cs" />
-    <Compile Include="Composer\Wwise\SoundInfo.cs" />
-    <Compile Include="Composer\Wwise\SoundPack.cs" />
-    <Compile Include="Composer\Wwise\SoundPackFile.cs" />
-    <Compile Include="Composer\Wwise\SoundPackFolder.cs" />
-    <Compile Include="Composer\Wwise\SoundPath.cs" />
-    <Compile Include="Composer\Wwise\StateGroup.cs" />
-    <Compile Include="Composer\Wwise\WwiseObjectCollection.cs" />
+    <Compile Include="Resources\Sounds\Info.cs" />
+    <Compile Include="Resources\Sounds\SoundExtractor.cs" />
+    <Compile Include="Resources\Sounds\SoundScanner.cs" />
+    <Compile Include="Resources\Sounds\IWwiseObject.cs" />
+    <Compile Include="Resources\Sounds\IWwiseObjectVisitor.cs" />
+    <Compile Include="Resources\Sounds\RIFX.cs" />
+    <Compile Include="Resources\Sounds\RTPC.cs" />
+    <Compile Include="Resources\Sounds\SoundBank.cs" />
+    <Compile Include="Resources\Sounds\SoundBankAction.cs" />
+    <Compile Include="Resources\Sounds\SoundBankActorMixer.cs" />
+    <Compile Include="Resources\Sounds\SoundBankEvent.cs" />
+    <Compile Include="Resources\Sounds\SoundBankFile.cs" />
+    <Compile Include="Resources\Sounds\SoundBankMusicPlaylist.cs" />
+    <Compile Include="Resources\Sounds\SoundBankMusicSegment.cs" />
+    <Compile Include="Resources\Sounds\SoundBankMusicSwitchContainer.cs" />
+    <Compile Include="Resources\Sounds\SoundBankMusicTrack.cs" />
+    <Compile Include="Resources\Sounds\SoundBankSequenceContainer.cs" />
+    <Compile Include="Resources\Sounds\SoundBankSwitchContainer.cs" />
+    <Compile Include="Resources\Sounds\SoundBankVoice.cs" />
+    <Compile Include="Resources\Sounds\SoundInfo.cs" />
+    <Compile Include="Resources\Sounds\SoundPack.cs" />
+    <Compile Include="Resources\Sounds\SoundPackFile.cs" />
+    <Compile Include="Resources\Sounds\SoundPackFolder.cs" />
+    <Compile Include="Resources\Sounds\SoundPath.cs" />
+    <Compile Include="Resources\Sounds\StateGroup.cs" />
+    <Compile Include="Resources\Sounds\WwiseObjectCollection.cs" />
     <Compile Include="XboxCache\AES.cs" />
     <Compile Include="XboxCache\Base\bink.cs" />
     <Compile Include="XboxCache\Base\bitmap.cs" />
@@ -775,7 +775,6 @@
     <Content Include="XboxCache\Builds.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Composer\README.txt" />
     <Content Include="XboxCache\Versions.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Composer.Wwise
+namespace HaloOnlineTagTool.Resources.Sounds
 {
     /// <summary>
     /// A collection of Wwise objects that can be referenced through an ID number.

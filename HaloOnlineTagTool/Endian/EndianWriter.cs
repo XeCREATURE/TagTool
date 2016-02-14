@@ -1,219 +1,88 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using System.Linq;
+using static System.BitConverter;
+using static HaloOnlineTagTool.Endian.EndianFormat;
 
 namespace HaloOnlineTagTool.Endian
 {
     public class EndianWriter : BinaryWriter
     {
-        public EndianFormat EndianType;
-
-        /// <summary>
-        /// Creates a new instance of the EndianWriter class.
-        /// </summary>
-        /// <param name="Stream">The Stream to write to.</param>
-        /// <param name="Type">The default EndianFormat the EndianWriter will use.</param>
-        public EndianWriter(Stream Stream, EndianFormat Type)
-            : base(Stream)
+        public EndianFormat Format { get; set; }
+        
+        public EndianWriter(Stream stream, EndianFormat format)
+            : base(stream)
         {
-            EndianType = Type;
+            Format = format;
         }
 
-        #region Param-less Overrides
-        /// <summary>
-        /// Writes a Double value in the EndianWriter's default EndianFormat.
-        /// </summary>
-        public override void Write(double value)
-        {
-            Write(value, EndianType);
-        }
+        public override void Write(short value) =>
+            Write(value, Format);
 
-        /// <summary>
-        /// Writes a Single value in the EndianWriter's default EndianFormat.
-        /// </summary>
-        public override void Write(float value)
-        {
-            Write(value, EndianType);
-        }
+        public override void Write(int value) =>
+            Write(value, Format);
 
-        /// <summary>
-        /// Writes an Int32 value in the EndianWriter's default EndianFormat.
-        /// </summary>
-        public override void Write(int value)
-        {
-            Write(value, EndianType);
-        }
+        public override void Write(long value) =>
+            Write(value, Format);
 
-        /// <summary>
-        /// Writes an Int64 value in the EndianWriter's default EndianFormat.
-        /// </summary>
-        public override void Write(long value)
-        {
-            Write(value, EndianType);
-        }
+        public override void Write(ushort value) =>
+            Write(value, Format);
 
-        /// <summary>
-        /// Writes an Int16 value in the EndianWriter's default EndianFormat.
-        /// </summary>
-        public override void Write(short value)
-        {
-            Write(value, EndianType);
-        }
+        public override void Write(uint value) =>
+            Write(value, Format);
 
-        /// <summary>
-        /// Writes a UInt32 value in the EndianWriter's default EndianFormat.
-        /// </summary>
-        public override void Write(uint value)
-        {
-            Write(value, EndianType);
-        }
+        public override void Write(ulong value) =>
+            Write(value, Format);
 
-        /// <summary>
-        /// Writes a UInt64 value in the EndianWriter's default EndianFormat.
-        /// </summary>
-        public override void Write(ulong value)
-        {
-            Write(value, EndianType);
-        }
+        public override void Write(float value) =>
+            Write(value, Format);
 
-        /// <summary>
-        /// Writes a UInt16 value in the EndianWriter's default EndianFormat.
-        /// </summary>
-        public override void Write(ushort value)
-        {
-            Write(value, EndianType);
-        }
-        #endregion
+        public override void Write(double value) =>
+            Write(value, Format);
 
-        #region EndianFormat Overloads
-        /// <summary>
-        /// Writes a Double value in the specified EndianFormat.
-        /// </summary>
-        /// <param name="value">The value to write to the stream.</param>
-        /// <param name="Type">The EndianFormat to write the value in.</param>
-        public void Write(double value, EndianFormat Type)
-        {
-            byte[] bits = BitConverter.GetBytes(value);
+        public void Write(short value, EndianFormat format) =>
+            Write(format == Big ?
+                GetBytes(value).Reverse().ToArray() :
+                GetBytes(value));
 
-            if (Type == EndianFormat.BigEndian)
-                Array.Reverse(bits);
+        public void Write(int value, EndianFormat format) =>
+            Write(format == Big ?
+                GetBytes(value).Reverse().ToArray() :
+                GetBytes(value));
 
-            base.Write(bits);
-        }
+        public void Write(long value, EndianFormat format) =>
+            Write(format == Big ?
+                GetBytes(value).Reverse().ToArray() :
+                GetBytes(value));
 
-        /// <summary>
-        /// Writes a Single value in the specified EndianFormat.
-        /// </summary>
-        /// <param name="value">The value to write to the stream.</param>
-        /// <param name="Type">The EndianFormat to write the value in.</param>
-        public void Write(float value, EndianFormat Type)
-        {
-            byte[] bits = BitConverter.GetBytes(value);
+        public void Write(ushort value, EndianFormat format) =>
+            Write(format == Big ?
+                GetBytes(value).Reverse().ToArray() :
+                GetBytes(value));
 
-            if (Type == EndianFormat.BigEndian)
-                Array.Reverse(bits);
+        public void Write(uint value, EndianFormat format) =>
+            Write(format == Big ?
+                GetBytes(value).Reverse().ToArray() :
+                GetBytes(value));
 
-            base.Write(bits);
-        }
+        public void Write(ulong value, EndianFormat format) =>
+            Write(format == Big ?
+                GetBytes(value).Reverse().ToArray() :
+                GetBytes(value));
 
-        /// <summary>
-        /// Writes an Int32 value in the specified EndianFormat.
-        /// </summary>
-        /// <param name="value">The value to write to the stream.</param>
-        /// <param name="Type">The EndianFormat to write the value in.</param>
-        public void Write(int value, EndianFormat Type)
-        {
-            byte[] bits = BitConverter.GetBytes(value);
+        public void Write(float value, EndianFormat format) =>
+            Write(format == Big ?
+                GetBytes(value).Reverse().ToArray() :
+                GetBytes(value));
 
-            if (Type == EndianFormat.BigEndian)
-                Array.Reverse(bits);
+        public void Write(double value, EndianFormat format) =>
+            Write(format == Big ?
+                GetBytes(value).Reverse().ToArray() :
+                GetBytes(value));
 
-            base.Write(bits);
-        }
-
-        /// <summary>
-        /// Writes an Int64 value in the specified EndianFormat.
-        /// </summary>
-        /// <param name="value">The value to write to the stream.</param>
-        /// <param name="Type">The EndianFormat to write the value in.</param>
-        public void Write(long value, EndianFormat Type)
-        {
-            byte[] bits = BitConverter.GetBytes(value);
-
-            if (Type == EndianFormat.BigEndian)
-                Array.Reverse(bits);
-
-            base.Write(bits);
-        }
-
-        /// <summary>
-        /// Writes an Int16 value in the specified EndianFormat.
-        /// </summary>
-        /// <param name="value">The value to write to the stream.</param>
-        /// <param name="Type">The EndianFormat to write the value in.</param>
-        public void Write(short value, EndianFormat Type)
-        {
-            byte[] bits = BitConverter.GetBytes(value);
-
-            if (Type == EndianFormat.BigEndian)
-                Array.Reverse(bits);
-
-            base.Write(bits);
-        }
-
-        /// <summary>
-        /// Writes a UInt32 value in the specified EndianFormat.
-        /// </summary>
-        /// <param name="value">The value to write to the stream.</param>
-        /// <param name="Type">The EndianFormat to write the value in.</param>
-        public void Write(uint value, EndianFormat Type)
-        {
-            byte[] bits = BitConverter.GetBytes(value);
-
-            if (Type == EndianFormat.BigEndian)
-                Array.Reverse(bits);
-
-            base.Write(bits);
-        }
-
-        /// <summary>
-        /// Writes a UInt64 value in the specified EndianFormat.
-        /// </summary>
-        /// <param name="value">The value to write to the stream.</param>
-        /// <param name="Type">The EndianFormat to write the value in.</param>
-        public void Write(ulong value, EndianFormat Type)
-        {
-            byte[] bits = BitConverter.GetBytes(value);
-
-            if (Type == EndianFormat.BigEndian)
-                Array.Reverse(bits);
-
-            base.Write(bits);
-        }
-
-        /// <summary>
-        /// Writes a UInt16 value in the specified EndianFormat.
-        /// </summary>
-        /// <param name="value">The value to write to the stream.</param>
-        /// <param name="Type">The EndianFormat to write the value in.</param>
-        public void Write(ushort value, EndianFormat Type)
-        {
-            byte[] bits = BitConverter.GetBytes(value);
-
-            if (Type == EndianFormat.BigEndian)
-                Array.Reverse(bits);
-
-            base.Write(bits);
-        }
-        #endregion
-
-        public void WriteBlock(byte[] data)
-        {
+        public void WriteBlock(byte[] data) =>
             BaseStream.Write(data, 0, data.Length);
-        }
 
-        public void WriteBlock(byte[] data, int offset, int length)
-        {
+        public void WriteBlock(byte[] data, int offset, int length) =>
             BaseStream.Write(data, offset, length);
-        }
     }
 }

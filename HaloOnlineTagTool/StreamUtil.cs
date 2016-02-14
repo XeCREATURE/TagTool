@@ -1,3 +1,4 @@
+using HaloOnlineTagTool.Endian;
 using System;
 using System.IO;
 
@@ -59,6 +60,31 @@ namespace HaloOnlineTagTool
 
                 stream.Write(buffer, 0, read);
                 remaining -= read;
+            }
+        }
+
+        public static void Copy(EndianReader input, EndianWriter output)
+        {
+            const int BufferSize = 0x1000;
+
+            var buffer = new byte[BufferSize];
+            int read;
+
+            while ((read = input.ReadBlock(buffer, 0, BufferSize)) > 0)
+                output.WriteBlock(buffer, 0, read);
+        }
+
+        public static void Copy(EndianReader input, EndianWriter output, int size)
+        {
+            const int BufferSize = 0x1000;
+
+            var buffer = new byte[BufferSize];
+
+            while (size > 0)
+            {
+                int read = input.ReadBlock(buffer, 0, Math.Min(BufferSize, size));
+                output.WriteBlock(buffer, 0, read);
+                size -= BufferSize;
             }
         }
 

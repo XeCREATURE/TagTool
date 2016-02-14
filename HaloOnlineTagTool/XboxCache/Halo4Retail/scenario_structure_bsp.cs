@@ -94,7 +94,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo4Retail
             Reader.SeekTo(Address + 1364);
             int id = Reader.ReadInt32();
             var entry = Cache.zone.RawEntries[id & 0xFFFF];
-            var er = new EndianReader(new MemoryStream(Cache.GetRawFromID(id)), EndianFormat.BigEndian);
+            var er = new EndianReader(new MemoryStream(Cache.GetRawFromID(id)), EndianFormat.Big);
             int addr = entry.Fixups[entry.Fixups.Count - 10].Offset;
 
             for (int i = 0; i < GeomInstances.Count; i++)

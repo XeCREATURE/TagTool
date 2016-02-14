@@ -10,7 +10,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo1PC
         public CacheFile(string Filename, string Build)
             : base(Filename, Build)
         {
-            Reader.EndianType = EndianFormat.LittleEndian;
+            Reader.Format = EndianFormat.Little;
             Version = DefinitionSet.Halo1PC;
 
             Header = new CacheHeader(this);
@@ -88,7 +88,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo1PC
                 for (int i = 0; i < IH.tagCount; i++)
                 {
                     var cname = Reader.ReadString(4);
-                    if (Reader.EndianType == EndianFormat.LittleEndian)
+                    if (Reader.Format == EndianFormat.Little)
                     {
                         var tname = cname.ToCharArray();
                         Array.Reverse(tname);
@@ -151,7 +151,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo1PC
                 #endregion
 
                 #region Read Names
-                Reader.StreamOrigin = CH.fileTableOffset;
+                Reader.Origin = CH.fileTableOffset;
 
                 for (int i = 0; i < indices.Length; i++)
                 {
@@ -196,7 +196,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo1PC
                     this[i].Filename = Reader.ReadNullTerminatedString(length);
                 }
 
-                Reader.StreamOrigin = 0;
+                Reader.Origin = 0;
                 #endregion
             }
         }
@@ -213,7 +213,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo1PC
             {
                 fName = FilePath + "\\bitmaps.map";
                 FileStream fs = new FileStream(fName, FileMode.Open, FileAccess.Read);
-                er = new EndianReader(fs, EndianFormat.LittleEndian);
+                er = new EndianReader(fs, EndianFormat.Little);
             }
             else er = Reader;
 

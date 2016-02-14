@@ -1,20 +1,23 @@
 ﻿//using Composer.IO;
 using HaloOnlineTagTool.Endian;
 
-namespace Composer.Wwise
+namespace HaloOnlineTagTool.Resources.Sounds
 {
     /// <summary>
-    /// An actor-mixer in a sound bank.
+    /// A (possibly random) sequence container in a sound bank.
     /// </summary>
-    public class SoundBankActorMixer : IWwiseObject
+    public class SoundBankSequenceContainer : IWwiseObject
     {
-        public SoundBankActorMixer(EndianReader reader, uint id)
+        public SoundBankSequenceContainer(EndianReader reader, uint id)
         {
             ID = id;
 
             Info = new SoundInfo(reader);
 
-            // Actor-mixers are just a list of children
+            // hax
+            reader.Skip(0x18);
+
+            // Read child IDs
             int numChildren = reader.ReadInt32();
             ChildIDs = new uint[numChildren];
             for (int i = 0; i < numChildren; i++)
@@ -22,22 +25,22 @@ namespace Composer.Wwise
         }
 
         /// <summary>
-        /// The actor-mixer's ID.
+        /// The container's ID.
         /// </summary>
         public uint ID { get; private set; }
 
         /// <summary>
-        /// Sound information about the actor-mixer.
+        /// Sound information about the container.
         /// </summary>
         public SoundInfo Info { get; private set; }
 
         /// <summary>
-        /// The IDs of the actor-mixer's children.
+        /// The IDs of the child sound objects.
         /// </summary>
         public uint[] ChildIDs { get; private set; }
 
         /// <summary>
-        /// Calls the Visit(SoundBankActorMixer) method on an IWwiseObjectVisitor.
+        /// Calls the Visit(SoundBankSequenceContainer) method on an IWwiseObjectVisitor.
         /// </summary>
         /// <param name="visitor">The visitor to call the method on.</param>
         public void Accept(IWwiseObjectVisitor visitor)

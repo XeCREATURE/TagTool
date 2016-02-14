@@ -24,7 +24,7 @@ namespace HaloOnlineTagTool.S3D
             this.Filename = Filename;
 
             FileStream fs = new FileStream(Filename, FileMode.Open, FileAccess.Read);
-            Reader = new EndianReader((Stream)fs, EndianFormat.LittleEndian);
+            Reader = new EndianReader((Stream)fs, EndianFormat.Little);
 
             PakItems = new PakTable(this);
 

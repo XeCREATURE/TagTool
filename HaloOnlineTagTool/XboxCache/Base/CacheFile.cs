@@ -45,7 +45,7 @@ namespace HaloOnlineTagTool.XboxCache
             this.Filename = Filename;
             this.Build = Build;
             var fs = new FileStream(Filename, FileMode.Open, FileAccess.Read);
-            Reader = new EndianReader((Stream)fs, EndianFormat.BigEndian);
+            Reader = new EndianReader((Stream)fs, EndianFormat.Big);
 
             #region Read XML
             buildNode = GetBuildNode(Build);
@@ -137,7 +137,7 @@ namespace HaloOnlineTagTool.XboxCache
                 #region Read Names
                 Reader.SeekTo(CH.stringTableOffset);
                 EndianReader newReader = (cache.stringsKey == "" || cache.stringsKey == null)
-                    ? new EndianReader(new MemoryStream(Reader.ReadBytes(CH.stringTableSize)), EndianFormat.BigEndian)
+                    ? new EndianReader(new MemoryStream(Reader.ReadBytes(CH.stringTableSize)), EndianFormat.Big)
                     : AES.DecryptSegment(Reader, CH.stringTableOffset, CH.stringTableSize, cache.stringsKey);
 
                 for (int i = 0; i < indices.Length; i++)
@@ -256,7 +256,7 @@ namespace HaloOnlineTagTool.XboxCache
                 #region Read Names
                 Reader.SeekTo(tableOffset);
                 EndianReader newReader = (cache.localesKey == "" || cache.localesKey == null)
-                    ? new EndianReader(new MemoryStream(Reader.ReadBytes(tableSize)), EndianFormat.BigEndian)
+                    ? new EndianReader(new MemoryStream(Reader.ReadBytes(tableSize)), EndianFormat.Big)
                     : AES.DecryptSegment(Reader, tableOffset, tableSize, cache.localesKey);
 
                 for (int i = 0; i < indices.Length; i++)

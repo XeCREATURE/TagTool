@@ -1,15 +1,14 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using Composer.IO;
-using Composer.Wwise;
+using HaloOnlineTagTool.Resources.Sounds;
 using HaloOnlineTagTool.Endian;
 
-namespace Composer
+namespace HaloOnlineTagTool.Resources.Sounds
 {
     /// <summary>
     /// Provides methods for extracting and converting Wwise sound files.
     /// </summary>
-    public static class SoundExtraction
+    public static class SoundExtractor
     {
         /// <summary>
         /// Extracts the raw contents of a sound to a file.
@@ -20,7 +19,7 @@ namespace Composer
         /// <param name="outPath">The path of the file to save to.</param>
         public static void ExtractRaw(EndianReader reader, int offset, int size, string outPath)
         {
-            using (EndianWriter output = new EndianWriter(File.OpenWrite(outPath), EndianFormat.BigEndian))
+            using (EndianWriter output = new EndianWriter(File.OpenWrite(outPath), EndianFormat.Big))
             {
                 // Just copy the data over to the output stream
                 reader.SeekTo(offset);
@@ -42,20 +41,20 @@ namespace Composer
 
             try
             {
-                using (EndianWriter output = new EndianWriter(File.OpenWrite(tempFile), EndianFormat.BigEndian))
+                using (EndianWriter output = new EndianWriter(File.OpenWrite(tempFile), EndianFormat.Big))
                 {
                     // Generate an XMA header
                     // ADAPTED FROM wwisexmabank - I DO NOT TAKE ANY CREDIT WHATSOEVER FOR THE FOLLOWING CODE.
                     // See http://hcs64.com/vgm_ripping.html for more information
                     output.Write(0x52494646); // 'RIFF'
-                    output.EndianType = EndianFormat.LittleEndian;
+                    output.Format = EndianFormat.Little;
                     output.Write(rifx.DataSize + 0x34);
-                    output.EndianType = EndianFormat.BigEndian;
-                    output.Write(RIFFFormat.WAVE);
+                    output.Format = EndianFormat.Big;
+                    output.Write((int)RIFFFormat.WAVE);
 
                     // Generate the 'fmt ' chunk
                     output.Write(0x666D7420); // 'fmt '
-                    output.EndianType = EndianFormat.LittleEndian;
+                    output.Format = EndianFormat.Little;
                     output.Write(0x20);
                     output.Write((short)0x165); // WAVE_FORMAT_XMA
                     output.Write((short)16);    // 16 bits per sample
@@ -73,9 +72,9 @@ namespace Composer
                     output.Write((short)0x0002);// channel mask
 
                     // 'data' chunk
-                    output.EndianType = EndianFormat.BigEndian;
+                    output.Format = EndianFormat.Big;
                     output.Write(0x64617461); // 'data'
-                    output.EndianType = EndianFormat.LittleEndian;
+                    output.Format = EndianFormat.Little;
                     output.Write(rifx.DataSize);
 
                     // Copy the data chunk contents from the original RIFX
@@ -115,7 +114,7 @@ namespace Composer
 
             try
             {
-                using (EndianWriter output = new EndianWriter(File.OpenWrite(tempFile), EndianFormat.BigEndian))
+                using (EndianWriter output = new EndianWriter(File.OpenWrite(tempFile), EndianFormat.Big))
                 {
                     // Generate a little-endian XWMA header
                     // TODO: move this into a class?
@@ -124,15 +123,15 @@ namespace Composer
                     // Recompute the file size because the one Wwise gives us is trash
                     // fileSize = header size (always 0x2C) + dpds data size + data header size (always 0x8) + data size
                     int fileSize = 0x2C + rifx.SeekOffsets.Length * 0x4 + 0x8 + rifx.DataSize;
-                    output.EndianType = EndianFormat.LittleEndian;
+                    output.Format = EndianFormat.Little;
                     output.Write(fileSize);
 
-                    output.EndianType = EndianFormat.BigEndian;
-                    output.Write(RIFFFormat.XWMA);
+                    output.Format = EndianFormat.Big;
+                    output.Write((int)RIFFFormat.XWMA);
 
                     // Generate the 'fmt ' chunk
                     output.Write(0x666D7420); // 'fmt '
-                    output.EndianType = EndianFormat.LittleEndian;
+                    output.Format = EndianFormat.Little;
                     output.Write(0x18); // Chunk size
                     output.Write(rifx.Codec);
                     output.Write(rifx.ChannelCount);
@@ -151,18 +150,18 @@ namespace Composer
 
                     // Generate the 'dpds' chunk
                     // It's really just the 'seek' chunk from the original data but renamed
-                    output.EndianType = EndianFormat.BigEndian;
+                    output.Format = EndianFormat.Big;
                     output.Write(0x64706473); // 'dpds'
 
-                    output.EndianType = EndianFormat.LittleEndian;
+                    output.Format = EndianFormat.Little;
                     output.Write(rifx.SeekOffsets.Length * 4); // One uint32 per offset
                     foreach (int seek in rifx.SeekOffsets)
                         output.Write(seek);
 
                     // 'data' chunk
-                    output.EndianType = EndianFormat.BigEndian;
+                    output.Format = EndianFormat.Big;
                     output.Write(0x64617461); // 'data'
-                    output.EndianType = EndianFormat.LittleEndian;
+                    output.Format = EndianFormat.Little;
                     output.Write(rifx.DataSize);
 
                     // Copy the data chunk contents from the original RIFX
@@ -219,7 +218,7 @@ namespace Composer
 
             try
             {
-                using (EndianWriter output = new EndianWriter(File.OpenWrite(tempFile), EndianFormat.BigEndian))
+                using (EndianWriter output = new EndianWriter(File.OpenWrite(tempFile), EndianFormat.Big))
                 {
                     reader.SeekTo(offset);
                     StreamUtil.Copy(reader, output, size);

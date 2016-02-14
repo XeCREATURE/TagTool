@@ -130,7 +130,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo3Beta
             var data = cache.GetRawFromID(geomRawID);
 
             var ms = new MemoryStream(data);
-            var reader = new EndianReader(ms, EndianFormat.BigEndian);
+            var reader = new EndianReader(ms, EndianFormat.Big);
 
             var validParts = new Dictionary<int, mode.ModelSection>();
 
@@ -222,7 +222,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo3Beta
         protected void LoadFixups()
         {
             var Entry = cache.zone.RawEntries[geomRawID & ushort.MaxValue];
-            var reader = new EndianReader(new MemoryStream(cache.zone.FixupData), EndianFormat.BigEndian);
+            var reader = new EndianReader(new MemoryStream(cache.zone.FixupData), EndianFormat.Big);
 
             reader.SeekTo(Entry.FixupOffset + (Entry.FixupSize - 24));
             int vCount = reader.ReadInt32();

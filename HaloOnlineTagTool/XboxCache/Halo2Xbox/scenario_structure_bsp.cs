@@ -74,7 +74,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo2Xbox
 
                 var data = cache.GetRawFromID(section.rawOffset, section.rawSize);
                 var ms = new MemoryStream(data);
-                var reader = new EndianReader(ms, Endian.EndianFormat.LittleEndian);
+                var reader = new EndianReader(ms, Endian.EndianFormat.Little);
 
                 #region Read Submeshes
                 for (int j = 0; j < section.rSize[0] / 72; j++)
@@ -172,7 +172,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo2Xbox
 
                 var data = cache.GetRawFromID(section.rawOffset, section.rawSize);
                 var ms = new MemoryStream(data);
-                var reader = new EndianReader(ms, Endian.EndianFormat.LittleEndian);
+                var reader = new EndianReader(ms, Endian.EndianFormat.Little);
 
                 #region Read Submeshes
                 for (int j = 0; j < section.rSize[0] / 72; j++)

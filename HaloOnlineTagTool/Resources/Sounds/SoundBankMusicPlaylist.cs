@@ -1,22 +1,20 @@
 ﻿//using Composer.IO;
 using HaloOnlineTagTool.Endian;
 
-namespace Composer.Wwise
+namespace HaloOnlineTagTool.Resources.Sounds
 {
     /// <summary>
-    /// A music switch container in a sound bank.
+    /// A music playlist in a sound bank.
     /// </summary>
-    public class SoundBankMusicSwitchContainer : IWwiseObject
+    public class SoundBankMusicPlaylist : IWwiseObject
     {
-        public SoundBankMusicSwitchContainer(EndianReader reader, uint id)
+        public SoundBankMusicPlaylist(EndianReader reader, uint id)
         {
             ID = id;
 
             Info = new SoundInfo(reader);
 
             // Read segment IDs
-            // TODO: this is pretty similar to SoundBankMusicPlaylist,
-            // maybe this can be factored out into a common class somehow?
             int numSegments = reader.ReadInt32();
             SegmentIDs = new uint[numSegments];
             for (int i = 0; i < numSegments; i++)
@@ -26,22 +24,22 @@ namespace Composer.Wwise
         }
 
         /// <summary>
-        /// The switch container's ID.
+        /// The playlist's ID.
         /// </summary>
         public uint ID { get; private set; }
 
         /// <summary>
-        /// Sound information about the container.
+        /// Sound information about the playlist.
         /// </summary>
         public SoundInfo Info { get; private set; }
 
         /// <summary>
-        /// The IDs of the music segments in the container.
+        /// The IDs of the music segments in the playlist.
         /// </summary>
         public uint[] SegmentIDs { get; private set; }
 
         /// <summary>
-        /// Calls the Visit(SoundBankMusicSwitchContainer) method on an IWwiseObjectVisitor.
+        /// Calls the Visit(SoundBankMusicPlaylist) method on an IWwiseObjectVisitor.
         /// </summary>
         /// <param name="visitor">The visitor to call the method on.</param>
         public void Accept(IWwiseObjectVisitor visitor)

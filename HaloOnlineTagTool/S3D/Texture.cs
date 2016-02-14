@@ -118,11 +118,11 @@ namespace HaloOnlineTagTool.S3D
         public Texture(PakFile Pak, PakFile.PakTag Item)
         {
             var reader = Pak.Reader;
-            reader.EndianType = EndianFormat.LittleEndian;
+            reader.Format = EndianFormat.Little;
             reader.SeekTo(Item.Offset + 6);
 
             isLittleEndian = reader.ReadInt32() == 1346978644; //PICT
-            if (!isLittleEndian) reader.EndianType = Endian.EndianFormat.BigEndian;
+            if (!isLittleEndian) reader.Format = Endian.EndianFormat.Big;
 
             reader.SeekTo(Item.Offset + (isLittleEndian ? 16 : 12));
             Width = reader.ReadInt32();
@@ -173,7 +173,7 @@ namespace HaloOnlineTagTool.S3D
                 throw new Exception("CHECK THIS");
 
             DataAddress = Item.Offset + (isLittleEndian ? 58 : 4096);
-            reader.EndianType = Endian.EndianFormat.LittleEndian; //in case it was PICT
+            reader.Format = Endian.EndianFormat.Little; //in case it was PICT
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Composer;
+using HaloOnlineTagTool.Resources.Sounds;
 
 namespace HaloOnlineTagTool.XboxCache.Halo4Retail
 {

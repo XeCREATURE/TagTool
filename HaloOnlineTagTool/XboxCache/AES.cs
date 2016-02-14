@@ -38,7 +38,7 @@ namespace HaloOnlineTagTool.XboxCache
             };
 
             Stream stream = (Stream)new MemoryStream(aes.CreateDecryptor(aes.Key, aes.IV).TransformFinalBlock(data, 0, data.Length));
-            return new EndianReader(stream, EndianFormat.BigEndian);
+            return new EndianReader(stream, EndianFormat.Big);
         }
     }
 }

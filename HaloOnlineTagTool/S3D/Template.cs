@@ -22,8 +22,8 @@ namespace HaloOnlineTagTool.S3D
         public Template(PakFile Pak, PakFile.PakTag Item, bool loadMesh)
         {
             var reader = Pak.Reader;
-            reader.EndianType = EndianFormat.LittleEndian;
-            reader.StreamOrigin = Item.Offset;
+            reader.Format = EndianFormat.Little;
+            reader.Origin = Item.Offset;
             reader.SeekTo(0);
 
             reader.ReadInt16(); //E402
@@ -128,7 +128,7 @@ namespace HaloOnlineTagTool.S3D
             reader.ReadInt16(); //0100
             reader.ReadInt32(); //address to EOF
 
-            reader.StreamOrigin = 0;
+            reader.Origin = 0;
         }
     }
 }

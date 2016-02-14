@@ -11,7 +11,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo2Xbox
         public CacheFile(string Filename, string Build)
             : base(Filename, Build)
         {
-            Reader.EndianType = EndianFormat.LittleEndian;
+            Reader.Format = EndianFormat.Little;
             Version = DefinitionSet.Halo2Xbox;
 
             Header = new CacheHeader(this);
@@ -214,7 +214,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo2Xbox
                 #endregion
 
                 #region Read Names
-                Reader.StreamOrigin = CH.fileTableOffset;
+                Reader.Origin = CH.fileTableOffset;
                 
                 for (int i = 0; i < indices.Length; i++)
                 {
@@ -259,7 +259,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo2Xbox
                     this[i].Filename = Reader.ReadString(length);
                 }
 
-                Reader.StreamOrigin = 0;
+                Reader.Origin = 0;
                 #endregion
             }
         }
@@ -287,7 +287,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo2Xbox
                         break;
                 }
                 FileStream fs = new FileStream(fName, FileMode.Open, FileAccess.Read);
-                er = new EndianReader(fs, EndianFormat.LittleEndian);
+                er = new EndianReader(fs, EndianFormat.Little);
             }
             else er = Reader;
 

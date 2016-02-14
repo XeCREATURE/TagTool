@@ -2,7 +2,7 @@
 //using Composer.IO;
 using HaloOnlineTagTool.Endian;
 
-namespace Composer.Wwise
+namespace HaloOnlineTagTool.Resources.Sounds
 {
     /// <summary>
     /// A Wwise sound bank.
@@ -95,7 +95,7 @@ namespace Composer.Wwise
 
         private void ReadBlocks(EndianReader reader, long fileSize)
         {
-            EndianFormat defaultEndian = reader.EndianType;
+            EndianFormat defaultEndian = reader.Format;
 
             long startOffset = reader.Position;
             long endOffset = startOffset + fileSize;
@@ -104,9 +104,9 @@ namespace Composer.Wwise
             {
                 // Read the block header
                 // The magic value is *always* big-endian, so switch to it temporarily
-                reader.EndianType = EndianFormat.BigEndian;
+                reader.Format = EndianFormat.Big;
                 int blockMagic = reader.ReadInt32();
-                reader.EndianType = defaultEndian;
+                reader.Format = defaultEndian;
 
                 int blockSize = reader.ReadInt32();
                 offset += 8;

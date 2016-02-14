@@ -177,7 +177,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo3Retail
                 else
                 {
                     FileStream fs = new FileStream(fName, FileMode.Open, FileAccess.Read);
-                    er = new EndianReader(fs, EndianFormat.BigEndian);
+                    er = new EndianReader(fs, EndianFormat.Big);
                 }
             }
             else
@@ -259,7 +259,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo3Retail
                     if (fName == Filename)
                         er = Reader;
                     else
-                        er = new EndianReader(new FileStream(fName, FileMode.Open, FileAccess.Read), EndianFormat.BigEndian);
+                        er = new EndianReader(new FileStream(fName, FileMode.Open, FileAccess.Read), EndianFormat.Big);
                 }
                 else
                     er = Reader;
@@ -292,7 +292,7 @@ namespace HaloOnlineTagTool.XboxCache.Halo3Retail
                     if (fName == Filename)
                         er = Reader;
                     else
-                        er = new EndianReader(new FileStream(fName, FileMode.Open, FileAccess.Read), EndianFormat.BigEndian);
+                        er = new EndianReader(new FileStream(fName, FileMode.Open, FileAccess.Read), EndianFormat.Big);
                 }
                 else
                     er = Reader;

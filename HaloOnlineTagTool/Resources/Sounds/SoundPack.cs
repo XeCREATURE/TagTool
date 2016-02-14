@@ -3,7 +3,7 @@ using System.Collections.Generic;
 //using Composer.IO;
 using HaloOnlineTagTool.Endian;
 
-namespace Composer.Wwise
+namespace HaloOnlineTagTool.Resources.Sounds
 {
     public class SoundPack
     {
@@ -70,7 +70,7 @@ namespace Composer.Wwise
 
         private void ReadHeader(EndianReader reader)
         {
-            reader.EndianType = EndianFormat.BigEndian;// Endianness = Endian.BigEndian;
+            reader.Format = EndianFormat.Big;// Endianness = Endian.BigEndian;
             reader.SeekTo(0);
 
             // Validate the magic number at the beginning
@@ -86,7 +86,7 @@ namespace Composer.Wwise
         private void ReadFolderTable(EndianReader reader)
         {
             // Seek to the beginning of the folder list
-            reader.EndianType = EndianFormat.BigEndian;
+            reader.Format = EndianFormat.Big;
             reader.SeekTo(FolderListStart);
 
             // Read the number of folders

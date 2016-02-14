@@ -12,7 +12,7 @@ namespace HaloOnlineTagTool.S3D
         public SceneCDT(PakFile Pak, PakFile.PakTag Item)
         {
             var reader = Pak.Reader;
-            reader.EndianType = EndianFormat.LittleEndian;
+            reader.Format = EndianFormat.Little;
             reader.SeekTo(Item.Offset);
 
             reader.ReadInt16(); //F000

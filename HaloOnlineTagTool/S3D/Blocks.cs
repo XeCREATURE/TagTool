@@ -14,7 +14,7 @@ namespace HaloOnlineTagTool.S3D.Blocks
         protected S3DBlock(EndianReader reader, int ident)
         {
             BaseAddress = (int)reader.Position;
-            Ident = reader.ReadUInt16(EndianFormat.BigEndian);
+            Ident = reader.ReadUInt16(EndianFormat.Big);
 
             if (Ident != ident)
                 throw new InvalidOperationException(string.Format("Block identifier mismatch. Expected 0x{0:X4}, got 0x{1:X4}.", ident, Ident));
@@ -201,7 +201,7 @@ namespace HaloOnlineTagTool.S3D.Blocks
             DataCount = reader.ReadInt32(); //vCount
 
             x2E00 = reader.ReadInt16(); //2E00
-            reader.EndianType = EndianFormat.BigEndian;
+            reader.Format = EndianFormat.Big;
 
             unkUV0 = reader.ReadInt16(); //flags? 0x1C00 when world
             unkUV1 = reader.ReadByte();
@@ -292,7 +292,7 @@ namespace HaloOnlineTagTool.S3D.Blocks
                 Vertices[i].Values.Add(new VertexValue(tex1, VertexValue.ValueType.Int16_N2, "texcoords", 0));
             }
 
-            reader.EndianType = EndianFormat.LittleEndian;
+            reader.Format = EndianFormat.Little;
         }
     }
 

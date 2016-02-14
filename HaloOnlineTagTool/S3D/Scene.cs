@@ -28,8 +28,8 @@ namespace HaloOnlineTagTool.S3D
         public Scene(PakFile Pak, PakFile.PakTag Item, bool loadMesh)
         {
             var reader = Pak.Reader;
-            reader.EndianType = EndianFormat.LittleEndian;
-            reader.StreamOrigin = Item.Offset;
+            reader.Format = EndianFormat.Little;
+            reader.Origin = Item.Offset;
             reader.SeekTo(0);
 
             Name = Item.Name;
@@ -122,7 +122,7 @@ namespace HaloOnlineTagTool.S3D
                 if (obj.isInheritor)
                     Objects[obj._2901.InheritID].isInherited = true;
 
-            reader.StreamOrigin = 0;
+            reader.Origin = 0;
         }
     }
 }

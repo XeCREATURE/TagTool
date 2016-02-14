@@ -2,15 +2,26 @@
 //using Composer.IO;
 using HaloOnlineTagTool.Endian;
 
-namespace Composer.Wwise
+namespace HaloOnlineTagTool.Resources.Sounds
 {
+    /// <summary>
+    /// RIFX codec values used by Wwise.
+    /// </summary>
+    public enum RIFXCodec : short
+    {
+        WwiseOGG = -1,
+        WMA = 0x161,
+        WMAPro = 0x162,
+        XMA = 0x166
+    }
+
     /// <summary>
     /// Provides constants for common format magic values in RIFF/RIFX files.
     /// </summary>
-    public static class RIFFFormat
+    public enum RIFFFormat : int
     {
-        public const int WAVE = 0x57415645;
-        public const int XWMA = 0x58574D41;
+        WAVE = 0x57415645,
+        XWMA = 0x58574D41
     }
 
     /// <summary>
@@ -87,7 +98,7 @@ namespace Composer.Wwise
 
         private void ReadHeader(EndianReader reader)
         {
-            reader.EndianType = EndianFormat.BigEndian;
+            reader.Format = EndianFormat.Big;
 
             // Check the 'RIFX' magic
             if (reader.ReadInt32() != 0x52494658) // RIFX
@@ -102,7 +113,7 @@ namespace Composer.Wwise
 
         private void ReadBlocks(EndianReader reader, int size)
         {
-            reader.EndianType = EndianFormat.BigEndian;
+            reader.Format = EndianFormat.Big;
 
             int offset = 4 * 3; // Start reading after the header
             long baseOffset = reader.Position - offset; // Start of the RIFX data

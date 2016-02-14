@@ -1,7 +1,6 @@
-﻿//using Composer.IO;
-using HaloOnlineTagTool.Endian;
+﻿using HaloOnlineTagTool.Endian;
 
-namespace Composer.Wwise
+namespace HaloOnlineTagTool.Resources.Sounds
 {
     public enum StateGroupChangeMoment : sbyte
     {
