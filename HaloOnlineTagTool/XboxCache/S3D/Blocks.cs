@@ -173,13 +173,13 @@ namespace HaloOnlineTagTool.XboxCache.S3D.Blocks
                 if (geomUnk01 == 134 || geomUnk01 == 142)
                 {
                     v = new Vertex() { FormatName = "S3D_World" };
-                    var data = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                    var data = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
                     v.Values.Add(new VertexValue(data, VertexValue.ValueType.Float32_3, "position", 0));
                 }
                 else
                 {
                     v = new Vertex() { FormatName = "S3D_Compressed" };
-                    var data = new RealQuat(reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16());
+                    var data = new Vector(reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16());
                     v.Values.Add(new VertexValue(data, VertexValue.ValueType.Int16_N4, "position", 0));
                 }
                 Data[i] = v;
@@ -213,13 +213,13 @@ namespace HaloOnlineTagTool.XboxCache.S3D.Blocks
             if (!loadMesh) reader.SeekTo(EOBOffset);
             else for (int i = 0; i < DataCount; i++)
             {
-                RealQuat tex0 = new RealQuat();
+                Vector tex0 = new Vector();
 
                 #region switch
                 switch (DataSize)
                 {
                     case 8:
-                        tex0 = RealQuat.FromUByteN4(reader.ReadUInt32());
+                        tex0 = Vector.FromUByteN4(reader.ReadUInt32());
                         reader.Skip(0);
                         break;
                     case 12:
@@ -253,7 +253,7 @@ namespace HaloOnlineTagTool.XboxCache.S3D.Blocks
                 int v = reader.ReadInt16();
 
                 //var tex0 = new RealQuat(((float)a + (float)0) / (float)0xFFFF, ((float)b + (float)0) / (float)0xFFFF);
-                var tex1 = new RealQuat((float)u / (float)(0x7FFF), (float)v / (float)(0x7FFF));
+                var tex1 = new Vector((float)u / (float)(0x7FFF), (float)v / (float)(0x7FFF));
 
                 #region switch
                 switch (DataSize)
@@ -317,44 +317,53 @@ namespace HaloOnlineTagTool.XboxCache.S3D.Blocks
     public class BoundsBlock_1D01 : S3DBlock
     {
         public int DataCount; //always 1
-        public RealBoundingBox Data;
+        public BoundingBox Data;
 
         public BoundsBlock_1D01(EndianReader reader)
             : base(reader, 0x1D01)
         {
             DataCount = reader.ReadInt32();
-            var min = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-            var max = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            var min = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            var max = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 
-            Data.XBounds = new RealBounds(min.x, max.x);
-            Data.YBounds = new RealBounds(min.y, max.y);
-            Data.ZBounds = new RealBounds(min.z, max.z);
+            Data.XBounds = new Range<float>(min.X, max.X);
+            Data.YBounds = new Range<float>(min.Y, max.Y);
+            Data.ZBounds = new Range<float>(min.Z, max.Z);
         }
     }
 
     public class MatrixBlock_F900 : S3DBlock
     {
-        public Matrix Data;
+        public Matrix4x3 Data;
 
         public MatrixBlock_F900(EndianReader reader)
             : base(reader, 0xF900)
         {
-            Data.m11 = reader.ReadSingle();
-            Data.m12 = reader.ReadSingle();
-            Data.m13 = reader.ReadSingle();
+            var m11 = reader.ReadSingle();
+            var m12 = reader.ReadSingle();
+            var m13 = reader.ReadSingle();
             reader.ReadSingle(); //0.0f
-            Data.m21 = reader.ReadSingle();
-            Data.m22 = reader.ReadSingle();
-            Data.m23 = reader.ReadSingle();
+
+            var m21 = reader.ReadSingle();
+            var m22 = reader.ReadSingle();
+            var m23 = reader.ReadSingle();
             reader.ReadSingle(); //0.0f
-            Data.m31 = reader.ReadSingle();
-            Data.m32 = reader.ReadSingle();
-            Data.m33 = reader.ReadSingle();
+
+            var m31 = reader.ReadSingle();
+            var m32 = reader.ReadSingle();
+            var m33 = reader.ReadSingle();
             reader.ReadSingle(); //0.0f
-            Data.m41 = reader.ReadSingle();
-            Data.m42 = reader.ReadSingle();
-            Data.m43 = reader.ReadSingle();
+
+            var m41 = reader.ReadSingle();
+            var m42 = reader.ReadSingle();
+            var m43 = reader.ReadSingle();
             reader.ReadSingle(); //1.0f
+
+            Data = new Matrix4x3(
+                m11, m12, m13,
+                m21, m22, m23,
+                m31, m32, m33,
+                m41, m42, m43);
         }
     }
 
@@ -492,7 +501,7 @@ namespace HaloOnlineTagTool.XboxCache.S3D.Blocks
     {
         public int FirstNodeID, NodeCount;
 
-        public List<RealQuat> nodes = new List<RealQuat>();
+        public List<Vector> nodes = new List<Vector>();
 
         public Block_3301(EndianReader reader, bool loadSkin, Vertex[] Vertices)
             : base(reader, 0x3301)
@@ -503,7 +512,7 @@ namespace HaloOnlineTagTool.XboxCache.S3D.Blocks
             if (!loadSkin) reader.Skip(Vertices.Length * 4);
             else foreach (var v in Vertices)
                 {
-                    var val = RealQuat.FromUByte4(reader.ReadUInt32());
+                    var val = Vector.FromUByte4(reader.ReadUInt32());
                     nodes.Add(val);
                     v.Values.Add(new VertexValue(val, VertexValue.ValueType.UInt8_4, "blendindices", 0));
                 }
@@ -518,7 +527,7 @@ namespace HaloOnlineTagTool.XboxCache.S3D.Blocks
             if (!loadSkin) reader.Skip(Vertices.Length * 4);
             else foreach (var v in Vertices)
                 {
-                    var val = RealQuat.FromUByteN4(reader.ReadUInt32());
+                    var val = Vector.FromUByteN4(reader.ReadUInt32());
                     v.Values.Add(new VertexValue(val, VertexValue.ValueType.UInt8_4, "blendweight", 0));
                 }
         }
@@ -572,23 +581,23 @@ namespace HaloOnlineTagTool.XboxCache.S3D.Blocks
 
     public class PosBlock_FA02 : S3DBlock
     {
-        public RealQuat Data; //relative position coords
+        public Vector Data; //relative position coords
 
         public PosBlock_FA02(EndianReader reader)
             : base(reader, 0xFA02)
         {
-            Data = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            Data = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
         }
     }
 
     public class Block_FB02 : S3DBlock
     {
-        public RealQuat Data; //assumed rotation
+        public Vector Data; //assumed rotation
 
         public Block_FB02(EndianReader reader)
             : base(reader, 0xFB02)
         {
-            Data = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            Data = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
         }
     }
 
@@ -621,7 +630,7 @@ namespace HaloOnlineTagTool.XboxCache.S3D.Blocks
     {
         public int DataCount;
         public int unk0, unk1;
-        public List<Matrix> Data = new List<Matrix>();
+        public List<Matrix4x3> Data = new List<Matrix4x3>();
 
         public Block_0503(EndianReader reader)
             : base(reader, 0x0503)
@@ -637,26 +646,32 @@ namespace HaloOnlineTagTool.XboxCache.S3D.Blocks
             {
                 for (int i = 0; i < DataCount; i++)
                 {
-                    var mat = new Matrix();
+                    var m11 = reader.ReadSingle();
+                    var m12 = reader.ReadSingle();
+                    var m13 = reader.ReadSingle();
+                    reader.ReadSingle(); //0.0f
 
-                    mat.m11 = reader.ReadSingle();
-                    mat.m12 = reader.ReadSingle();
-                    mat.m13 = reader.ReadSingle();
+                    var m21 = reader.ReadSingle();
+                    var m22 = reader.ReadSingle();
+                    var m23 = reader.ReadSingle();
                     reader.ReadSingle(); //0.0f
-                    mat.m21 = reader.ReadSingle();
-                    mat.m22 = reader.ReadSingle();
-                    mat.m23 = reader.ReadSingle();
+
+                    var m31 = reader.ReadSingle();
+                    var m32 = reader.ReadSingle();
+                    var m33 = reader.ReadSingle();
                     reader.ReadSingle(); //0.0f
-                    mat.m31 = reader.ReadSingle();
-                    mat.m32 = reader.ReadSingle();
-                    mat.m33 = reader.ReadSingle();
-                    reader.ReadSingle(); //0.0f
-                    mat.m41 = reader.ReadSingle();
-                    mat.m42 = reader.ReadSingle();
-                    mat.m43 = reader.ReadSingle();
+
+                    var m41 = reader.ReadSingle();
+                    var m42 = reader.ReadSingle();
+                    var m43 = reader.ReadSingle();
                     reader.ReadSingle(); //1.0f
-
-                    Data.Add(mat);
+                    
+                    Data.Add(
+                        new Matrix4x3(
+                            m11, m12, m13,
+                            m21, m22, m23,
+                            m31, m32, m33,
+                            m41, m42, m43));
                 }
             }
 
@@ -713,8 +728,8 @@ namespace HaloOnlineTagTool.XboxCache.S3D.Blocks
     public class Block_2002 : S3DBlock
     {
         public int unk0, unk1, unk2;
-        public RealBoundingBox Bounds;
-        public RealQuat unkPos0;
+        public BoundingBox Bounds;
+        public Vector unkPos0;
 
         public Block_2002(EndianReader reader)
             : base(reader, 0x2002)
@@ -723,15 +738,15 @@ namespace HaloOnlineTagTool.XboxCache.S3D.Blocks
             unk1 = reader.ReadInt32(); // ] unknown purpose, often all 60
             unk2 = reader.ReadInt32(); // ]
 
-            var min = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-            var max = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-            Bounds = new RealBoundingBox()
+            var min = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            var max = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            Bounds = new BoundingBox()
             {
-                XBounds = new RealBounds(min.x, max.x),
-                YBounds = new RealBounds(min.y, max.y),
-                ZBounds = new RealBounds(min.z, max.z),
+                XBounds = new Range<float>(min.X, max.X),
+                YBounds = new Range<float>(min.Y, max.Y),
+                ZBounds = new Range<float>(min.Z, max.Z),
             };
-            unkPos0 = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            unkPos0 = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
         }
     }
 

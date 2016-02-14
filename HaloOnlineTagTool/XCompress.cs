@@ -1,8 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace HaloOnlineTagTool.XboxCache.Definitions
+namespace HaloOnlineTagTool
 {
-    public static class xcompress
+    public static class XCompress
     {
         public enum XMemCodecType
         {

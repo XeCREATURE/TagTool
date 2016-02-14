@@ -10,7 +10,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
         public int geomRawID;
         public string BSPName;
 
-        public RealBounds XBounds, YBounds, ZBounds;
+        public Range<float> XBounds, YBounds, ZBounds;
 
         public List<Cluster> Clusters;
         public List<InstancedGeometry> GeomInstances;
@@ -52,7 +52,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
 
         public abstract class Cluster
         {
-            public RealBounds XBounds, YBounds, ZBounds;
+            public Range<float> XBounds, YBounds, ZBounds;
 
             public int SectionIndex;
         }
@@ -60,7 +60,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
         public abstract class InstancedGeometry
         {
             public float TransformScale;
-            public Matrix TransformMatrix;
+            public Matrix4x3 TransformMatrix;
             public int SectionIndex;
             public string Name;
 

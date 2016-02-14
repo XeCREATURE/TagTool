@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using HaloOnlineTagTool.Common;
+using HaloOnlineTagTool.Resources.Sounds;
 
 namespace HaloOnlineTagTool.XboxCache.Definitions
 {

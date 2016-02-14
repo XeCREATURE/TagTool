@@ -9,7 +9,7 @@ namespace HaloOnlineTagTool.XboxCache.S3D
         public byte[] unmapped0;
         public int x0700;
         public int xADDE;
-        public RealBoundingBox unkBounds;
+        public BoundingBox unkBounds;
         public List<int> indices;
         public List<struct0> unkS0;
         public byte[] unmapped1;
@@ -24,13 +24,13 @@ namespace HaloOnlineTagTool.XboxCache.S3D
             x0700 = reader.ReadInt16(); //0700
             xADDE = reader.ReadInt16(); //ADDE
 
-            var min = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-            var max = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-            unkBounds = new RealBoundingBox()
+            var min = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            var max = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            unkBounds = new BoundingBox()
             {
-                XBounds = new RealBounds(min.x, max.x),
-                YBounds = new RealBounds(min.y, max.y),
-                ZBounds = new RealBounds(min.z, max.z),
+                XBounds = new Range<float>(min.X, max.X),
+                YBounds = new Range<float>(min.Y, max.Y),
+                ZBounds = new Range<float>(min.Z, max.Z),
             };
 
             var count = reader.ReadInt32(); //always bsp object count + 1

@@ -23,7 +23,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Retail
             try
             {
                 for (int i = 0; i < int.Parse(buildNode.Attributes["languageCount"].Value); i++)
-                    LocaleTables.Add(new LocaleTable(this, (Language)i));
+                    LocaleTables.Add(new LocaleTable(this, (GameLanguage)i));
             }
             catch { LocaleTables.Clear(); }
         }
@@ -192,10 +192,10 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Retail
             if (Version >= DefinitionSet.Halo4Retail)
             {
                 int decompressionContext = 0;
-                xcompress.XMemCreateDecompressionContext(xcompress.XMemCodecType.LZX, 0, 0, ref decompressionContext);
-                xcompress.XMemResetDecompressionContext(decompressionContext);
-                xcompress.XMemDecompressStream(decompressionContext, decompressed, ref Pool.DecompressedSize, compressed, ref Pool.CompressedSize);
-                xcompress.XMemDestroyDecompressionContext(decompressionContext);
+                XCompress.XMemCreateDecompressionContext(XCompress.XMemCodecType.LZX, 0, 0, ref decompressionContext);
+                XCompress.XMemResetDecompressionContext(decompressionContext);
+                XCompress.XMemDecompressStream(decompressionContext, decompressed, ref Pool.DecompressedSize, compressed, ref Pool.CompressedSize);
+                XCompress.XMemDestroyDecompressionContext(decompressionContext);
             }
             else
             {

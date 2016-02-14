@@ -31,7 +31,7 @@ namespace HaloOnlineTagTool.XboxCache.S3D
             public List<struct0> unkS0 = new List<struct0>();
 
             public int unk0;
-            public RealQuat MinBound;
+            public Vector MinBound;
             public float unkf0;
             public int DataLength;
 
@@ -48,7 +48,7 @@ namespace HaloOnlineTagTool.XboxCache.S3D
 
                 unk0 = reader.ReadInt32(); //total faces
 
-                MinBound = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                MinBound = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 
                 unkf0 = reader.ReadSingle();
                 DataLength = reader.ReadInt32();

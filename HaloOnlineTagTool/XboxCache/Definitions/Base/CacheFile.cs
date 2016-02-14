@@ -216,7 +216,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
         {
             protected CacheBase cache;
 
-            public LocaleTable(CacheBase Cache, Language Lang)
+            public LocaleTable(CacheBase Cache, GameLanguage Lang)
             {
                 cache = Cache;
                 EndianReader Reader = cache.Reader;

@@ -1,6 +1,7 @@
 ﻿using HaloOnlineTagTool.Endian;
 using HaloOnlineTagTool.Common;
 using ugh_ = HaloOnlineTagTool.XboxCache.Definitions.sound_cache_file_gestalt;
+using HaloOnlineTagTool.Resources.Sounds;
 
 namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Retail
 {

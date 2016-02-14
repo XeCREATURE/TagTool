@@ -12,7 +12,7 @@ namespace HaloOnlineTagTool.XboxCache.S3D
         public List<MatRefBlock_5601> Materials;
         public List<Node> Objects;
         public List<BoneBlock_E902> Bones = new List<BoneBlock_E902>();
-        public RealBoundingBox RenderBounds;
+        public BoundingBox RenderBounds;
         #endregion
 
         #region Methods
@@ -24,13 +24,13 @@ namespace HaloOnlineTagTool.XboxCache.S3D
             return null;
         }
 
-        public Matrix HierarchialTransformDown(Node obj)
+        public Matrix4x3 HierarchialTransformDown(Node obj)
         {
-            if (obj.isInherited || obj.isInheritor) return Matrix.Identity; //these could end in infinite loop
+            if (obj.isInherited || obj.isInheritor) return Matrix4x3.Identity; //these could end in infinite loop
             return (obj.ParentID == -1) ? obj.Transform.Data : HierarchialTransformDown(ObjectByID(obj.ParentID)) * obj.Transform.Data;
         }
 
-        public Matrix HierarchialTransformUp(Node obj)
+        public Matrix4x3 HierarchialTransformUp(Node obj)
         {
             if (obj.isInherited || obj.isInheritor) return obj.Transform.Data;
             return (obj.ParentID == -1) ? obj.Transform.Data : obj.Transform.Data * HierarchialTransformUp(ObjectByID(obj.ParentID));

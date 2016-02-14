@@ -1,6 +1,7 @@
 ﻿using HaloOnlineTagTool.Endian;
 using HaloOnlineTagTool.Common;
 using snd_ = HaloOnlineTagTool.XboxCache.Definitions.sound;
+using HaloOnlineTagTool.Resources.Sounds;
 
 namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Retail
 {

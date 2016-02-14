@@ -54,7 +54,7 @@ namespace HaloOnlineTagTool.Resources.Bitmaps
         private static void InitInjectionDefinitions()
         {
             if (_injectionDefinitions == null)
-                _injectionDefinitions = ExtractionDefinitions.Where(d => d.Key != BitmapFormat.A4R4G4B4Font && d.Key != BitmapFormat.AY8).ToDictionary(p => p.Value, p => p.Key);
+                _injectionDefinitions = ExtractionDefinitions.Where(d => d.Key != BitmapFormat.P8Bump && d.Key != BitmapFormat.AY8).ToDictionary(p => p.Value, p => p.Key);
         }
 
         private class BitmapFormatDefinition
@@ -115,7 +115,7 @@ namespace HaloOnlineTagTool.Resources.Bitmaps
             { BitmapFormat.Dxt1,          new BitmapFormatDefinition { FormatType = DdsFormatType.Other, FourCc = DdsFourCc.FromString("DXT1") } },
             { BitmapFormat.Dxt3,          new BitmapFormatDefinition { FormatType = DdsFormatType.Other, FourCc = DdsFourCc.FromString("DXT3") } },
             { BitmapFormat.Dxt5,          new BitmapFormatDefinition { FormatType = DdsFormatType.Other, FourCc = DdsFourCc.FromString("DXT5") } },
-            { BitmapFormat.A4R4G4B4Font,  new BitmapFormatDefinition { FormatType = DdsFormatType.Rgb, BitsPerPixel = 16, ABitMask = 0xF000, RBitMask = 0x0F00, GBitMask = 0x00F0, BBitMask = 0x000F } },
+            { BitmapFormat.P8Bump,  new BitmapFormatDefinition { FormatType = DdsFormatType.Rgb, BitsPerPixel = 16, ABitMask = 0xF000, RBitMask = 0x0F00, GBitMask = 0x00F0, BBitMask = 0x000F } },
             { BitmapFormat.Dxn,           new BitmapFormatDefinition { FormatType = DdsFormatType.Other, FourCc = DdsFourCc.FromString("ATI2") } },
 
             // TODO: Double-check these

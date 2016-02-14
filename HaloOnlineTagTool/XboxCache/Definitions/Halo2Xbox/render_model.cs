@@ -140,15 +140,15 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                 {
                     reader.SeekTo(section.hSize + section.rOffset[vIndex] + ((section.rSize[vIndex] / section.vertcount) * j));
                     var v = new Vertex() { FormatName = "" };
-                    var p = new RealQuat(
+                    var p = new Vector(
                         ((float)reader.ReadInt16() + (float)0x7FFF) / (float)0xFFFF, 
                         ((float)reader.ReadInt16() + (float)0x7FFF) / (float)0xFFFF, 
                         ((float)reader.ReadInt16() + (float)0x7FFF) / (float)0xFFFF, 0);
 
                     v.Values.Add(new VertexValue(p, 0, "position", 0));
                     
-                    var b = new RealQuat();
-                    var w = new RealQuat();
+                    var b = new Vector();
+                    var w = new Vector();
 
                     switch (section.type)
                     {
@@ -168,8 +168,8 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                             switch (section.bones)
                             {
                                 case 1:
-                                    b = new RealQuat(reader.ReadByte(), reader.ReadByte(), 0, 0);
-                                    w = new RealQuat(1, 0, 0, 0);
+                                    b = new Vector(reader.ReadByte(), reader.ReadByte(), 0, 0);
+                                    w = new Vector(1, 0, 0, 0);
                                     break;
                             }
                             break;
@@ -178,17 +178,17 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                             {
                                 case 2:
                                     reader.ReadInt16();
-                                    b = new RealQuat(reader.ReadByte(), reader.ReadByte(), 0, 0);
-                                    w = new RealQuat((float)reader.ReadByte() / 255f, (float)reader.ReadByte() / 255f, 0, 0);
+                                    b = new Vector(reader.ReadByte(), reader.ReadByte(), 0, 0);
+                                    w = new Vector((float)reader.ReadByte() / 255f, (float)reader.ReadByte() / 255f, 0, 0);
                                     break;
                                 case 3:
-                                    b = new RealQuat(reader.ReadByte(), reader.ReadByte(), reader.ReadByte(), 0);
-                                    w = new RealQuat((float)reader.ReadByte() / 255f, (float)reader.ReadByte() / 255f, (float)reader.ReadByte() / 255f, 0);
+                                    b = new Vector(reader.ReadByte(), reader.ReadByte(), reader.ReadByte(), 0);
+                                    w = new Vector((float)reader.ReadByte() / 255f, (float)reader.ReadByte() / 255f, (float)reader.ReadByte() / 255f, 0);
                                     break;
                                 case 4:
                                     reader.ReadInt16();
-                                    b = new RealQuat(reader.ReadByte(), reader.ReadByte(), reader.ReadByte(), reader.ReadByte());
-                                    w = new RealQuat((float)reader.ReadByte() / 255f, (float)reader.ReadByte() / 255f, (float)reader.ReadByte() / 255f, (float)reader.ReadByte() / 255f);
+                                    b = new Vector(reader.ReadByte(), reader.ReadByte(), reader.ReadByte(), reader.ReadByte());
+                                    w = new Vector((float)reader.ReadByte() / 255f, (float)reader.ReadByte() / 255f, (float)reader.ReadByte() / 255f, (float)reader.ReadByte() / 255f);
                                     break;
                             }
                             break;
@@ -196,10 +196,10 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
 
                     if (bCount > 0)
                     {
-                        b.a = (w.a == 0) ? 0 : bArr[(int)b.a];
-                        b.b = (w.b == 0) ? 0 : bArr[(int)b.b];
-                        b.c = (w.c == 0) ? 0 : bArr[(int)b.c];
-                        b.d = (w.d == 0) ? 0 : bArr[(int)b.d];
+                        b.A = (w.A == 0) ? 0 : bArr[(int)b.A];
+                        b.B = (w.B == 0) ? 0 : bArr[(int)b.B];
+                        b.C = (w.C == 0) ? 0 : bArr[(int)b.C];
+                        b.D = (w.D == 0) ? 0 : bArr[(int)b.D];
                     }
 
                     v.Values.Add(new VertexValue(b, 0, "blendindices", 0));
@@ -214,7 +214,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                 {
                     reader.SeekTo(section.hSize + section.rOffset[uIndex] + (4 * j));
                     var v = section.Vertices[j];
-                    var uv = new RealQuat(((float)reader.ReadInt16() + (float)0x7FFF) / (float)0xFFFF, ((float)reader.ReadInt16() + (float)0x7FFF) / (float)0xFFFF);
+                    var uv = new Vector(((float)reader.ReadInt16() + (float)0x7FFF) / (float)0xFFFF, ((float)reader.ReadInt16() + (float)0x7FFF) / (float)0xFFFF);
                     v.Values.Add(new VertexValue(uv, 0, "texcoords", 0));
                 }
                 
@@ -222,7 +222,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                 {
                     reader.SeekTo(section.hSize + section.rOffset[nIndex] + (12 * j));
                     var v = section.Vertices[j];
-                    var n = RealQuat.FromHenDN3(reader.ReadUInt32());
+                    var n = Vector.FromHenDN3(reader.ReadUInt32());
                     v.Values.Add(new VertexValue(n, 0, "normal", 0));
                 }
                 #endregion
@@ -285,36 +285,18 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                 FirstChildIndex = Reader.ReadInt16();
                 NextSiblingIndex = Reader.ReadInt16();
                 Reader.ReadInt16();
-                Position = new RealQuat(
+                Position = new Vector(
                     Reader.ReadSingle(), 
                     Reader.ReadSingle(),
                     Reader.ReadSingle());
-                Rotation = new RealQuat(
+                Rotation = new Vector(
                     Reader.ReadSingle(),
                     Reader.ReadSingle(),
                     Reader.ReadSingle(),
                     Reader.ReadSingle());
 
                 TransformScale = Reader.ReadSingle();
-
-                TransformMatrix = new Matrix();
-
-                TransformMatrix.m11 = Reader.ReadSingle();
-                TransformMatrix.m12 = Reader.ReadSingle();
-                TransformMatrix.m13 = Reader.ReadSingle();
-
-                TransformMatrix.m21 = Reader.ReadSingle();
-                TransformMatrix.m22 = Reader.ReadSingle();
-                TransformMatrix.m23 = Reader.ReadSingle();
-
-                TransformMatrix.m31 = Reader.ReadSingle();
-                TransformMatrix.m32 = Reader.ReadSingle();
-                TransformMatrix.m33 = Reader.ReadSingle();
-
-                TransformMatrix.m41 = Reader.ReadSingle();
-                TransformMatrix.m42 = Reader.ReadSingle();
-                TransformMatrix.m43 = Reader.ReadSingle();
-
+                TransformMatrix = Matrix4x3.Read(Reader);
                 DistanceFromParent = Reader.ReadSingle();
             }
         }
@@ -346,11 +328,11 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                     PermutationIndex = Reader.ReadByte();
                     NodeIndex = Reader.ReadByte();
                     Reader.ReadByte();
-                    Position = new RealQuat(
+                    Position = new Vector(
                         Reader.ReadSingle(),
                         Reader.ReadSingle(),
                         Reader.ReadSingle());
-                    Rotation = new RealQuat(
+                    Rotation = new Vector(
                         Reader.ReadSingle(),
                         Reader.ReadSingle(),
                         Reader.ReadSingle(),
@@ -430,11 +412,11 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                 EndianReader Reader = Cache.Reader;
                 Reader.SeekTo(Address);
 
-                XBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                YBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                ZBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                UBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                VBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
+                XBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                YBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                ZBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                UBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                VBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
             }
         }
     }

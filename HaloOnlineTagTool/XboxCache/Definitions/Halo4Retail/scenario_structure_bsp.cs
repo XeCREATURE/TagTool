@@ -63,9 +63,9 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo4Retail
             #endregion
 
             Reader.SeekTo(Address + 268);
-            XBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-            YBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-            ZBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
+            XBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+            YBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+            ZBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
 
             #region Clusters Block
             Reader.SeekTo(Address + 340);
@@ -104,21 +104,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo4Retail
 
                 geom.TransformScale = er.ReadSingle();
 
-                geom.TransformMatrix.m11 = er.ReadSingle();
-                geom.TransformMatrix.m12 = er.ReadSingle();
-                geom.TransformMatrix.m13 = er.ReadSingle();
-
-                geom.TransformMatrix.m21 = er.ReadSingle();
-                geom.TransformMatrix.m22 = er.ReadSingle();
-                geom.TransformMatrix.m23 = er.ReadSingle();
-
-                geom.TransformMatrix.m31 = er.ReadSingle();
-                geom.TransformMatrix.m32 = er.ReadSingle();
-                geom.TransformMatrix.m33 = er.ReadSingle();
-
-                geom.TransformMatrix.m41 = er.ReadSingle();
-                geom.TransformMatrix.m42 = er.ReadSingle();
-                geom.TransformMatrix.m43 = er.ReadSingle();
+                geom.TransformMatrix = Matrix4x3.Read(er);
 
                 er.ReadUInt16();
                 er.ReadUInt16();

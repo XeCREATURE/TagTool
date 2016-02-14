@@ -85,7 +85,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
             public string Name;
             public int NodeIndex;
             public float TransformScale;
-            public Matrix TransformMatrix;
+            public Matrix4x3 TransformMatrix;
 
             public override string ToString()
             {
@@ -99,10 +99,10 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
             public int ParentIndex;
             public int FirstChildIndex;
             public int NextSiblingIndex;
-            public RealQuat Position;
-            public RealQuat Rotation;
+            public Vector Position;
+            public Vector Rotation;
             public float TransformScale;
-            public Matrix TransformMatrix;
+            public Matrix4x3 TransformMatrix;
             public float DistanceFromParent;
 
             public override string ToString()
@@ -126,8 +126,8 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                 public int RegionIndex;
                 public int PermutationIndex;
                 public int NodeIndex;
-                public RealQuat Position;
-                public RealQuat Rotation;
+                public Vector Position;
+                public Vector Rotation;
                 public float Scale;
             }
 
@@ -214,17 +214,17 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
 
         public class BoundingBox
         {
-            public RealBounds XBounds, YBounds, ZBounds;
-            public RealBounds UBounds, VBounds;
+            public Range<float> XBounds, YBounds, ZBounds;
+            public Range<float> UBounds, VBounds;
 
             public float Length
             {
                 get
                 {
                     return (float)Math.Sqrt(
-                    Math.Pow(XBounds.Length, 2) +
-                    Math.Pow(YBounds.Length, 2) +
-                    Math.Pow(ZBounds.Length, 2));
+                    Math.Pow(XBounds.Max - XBounds.Min, 2) +
+                    Math.Pow(YBounds.Max - YBounds.Min, 2) +
+                    Math.Pow(ZBounds.Max - ZBounds.Min, 2));
                 }
             }
         }

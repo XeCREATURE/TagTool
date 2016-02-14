@@ -64,9 +64,9 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Retail
             #endregion
 
             Reader.SeekTo(Address + 60);
-            XBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-            YBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-            ZBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
+            XBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+            YBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+            ZBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
 
             #region Clusters Block
             Reader.SeekTo(Address + 180);
@@ -125,9 +125,9 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Retail
                 EndianReader Reader = Cache.Reader;
                 Reader.SeekTo(Address);
 
-                XBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                YBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                ZBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
+                XBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                YBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                ZBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
 
                 Reader.SeekTo(Address + 156);
                 SectionIndex = Reader.ReadInt16();

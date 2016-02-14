@@ -1,6 +1,7 @@
 ﻿using HaloOnlineTagTool.Endian;
 using HaloOnlineTagTool.Common;
 using bitm = HaloOnlineTagTool.XboxCache.Definitions.bitmap;
+using HaloOnlineTagTool.Resources.Bitmaps;
 
 namespace HaloOnlineTagTool.XboxCache.Definitions.ReachRetail
 {
@@ -79,7 +80,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.ReachRetail
                     Right = Reader.ReadSingle();
                     Top = Reader.ReadSingle();
                     Bottom = Reader.ReadSingle();
-                    RegPoint = new RealQuat(
+                    RegPoint = new Vector(
                         Reader.ReadSingle(),
                         Reader.ReadSingle());
                 }
@@ -98,9 +99,9 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.ReachRetail
                 Height = Reader.ReadInt16();
                 Depth = Reader.ReadByte();
                 Flags = new Bitmask(Reader.ReadByte());
-                Type = (TextureType)Reader.ReadByte();
+                Type = (BitmapType)Reader.ReadByte();
                 Reader.ReadByte(); //dunno what this is
-                Format = (TextureFormat)Reader.ReadInt16();
+                Format = (BitmapFormat)Reader.ReadInt16();
 
                 if ((int)Format > 31) //change to match defined format list
                     Format -= 5;

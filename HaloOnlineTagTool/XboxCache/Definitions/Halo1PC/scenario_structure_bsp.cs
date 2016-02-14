@@ -18,9 +18,9 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo1PC
             EndianReader Reader = Cache.Reader;
 
             Reader.SeekTo(Address + 0xE0);
-            XBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-            YBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-            ZBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
+            XBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+            YBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+            ZBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
 
             Reader.SeekTo(Address + 0x110);
             indexCount = Reader.ReadInt32() * 3;
@@ -81,11 +81,11 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo1PC
                     for (int k = 0; k < mesh.VertexCount; k++)
                     {
                         var v = new Vertex() { FormatName = "Halo1PC_World" };
-                        var position = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                        var normal = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                        var binormal = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                        var tangent = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                        var texcoord = new RealQuat(reader.ReadSingle(), 1f - reader.ReadSingle());
+                        var position = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                        var normal = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                        var binormal = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                        var tangent = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                        var texcoord = new Vector(reader.ReadSingle(), 1f - reader.ReadSingle());
 
                         v.Values.Add(new VertexValue(position, VertexValue.ValueType.Float32_3, "position", 0));
                         v.Values.Add(new VertexValue(normal, VertexValue.ValueType.Float32_3, "normal", 0));
@@ -129,9 +129,9 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo1PC
         {
             public Cluster(int Index)
             {
-                XBounds = new RealBounds();
-                YBounds = new RealBounds();
-                ZBounds = new RealBounds();
+                XBounds = new Range<float>();
+                YBounds = new Range<float>();
+                ZBounds = new Range<float>();
 
                 SectionIndex = Index;
             }

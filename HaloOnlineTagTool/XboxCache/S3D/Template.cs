@@ -110,13 +110,13 @@ namespace HaloOnlineTagTool.XboxCache.S3D
             reader.ReadInt16(); //0803
             reader.ReadInt32(); //address to end of bounds values
             reader.ReadInt32(); //bounds count?
-            var min = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-            var max = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            var min = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            var max = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 
-            RenderBounds = new RealBoundingBox();
-            RenderBounds.XBounds = new RealBounds(min.x, max.x);
-            RenderBounds.YBounds = new RealBounds(min.y, max.y);
-            RenderBounds.ZBounds = new RealBounds(min.z, max.z); 
+            RenderBounds = new BoundingBox();
+            RenderBounds.XBounds = new Range<float>(min.X, max.X);
+            RenderBounds.YBounds = new Range<float>(min.Y, max.Y);
+            RenderBounds.ZBounds = new Range<float>(min.Z, max.Z); 
             #endregion
             
             _0E03 = new Block_0E03(reader);

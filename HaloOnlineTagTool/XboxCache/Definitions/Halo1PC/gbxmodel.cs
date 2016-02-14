@@ -108,15 +108,15 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo1PC
                     for (int k = 0; k < submesh.VertexCount; k++)
                     {
                         var v = new Vertex() { FormatName = "Halo1PC_Skinned" };
-                        var position = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                        var normal = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                        var binormal = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                        var tangent = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                        var texcoord = new RealQuat(reader.ReadSingle() * uScale, 1f - reader.ReadSingle() * vScale);
+                        var position = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                        var normal = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                        var binormal = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                        var tangent = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                        var texcoord = new Vector(reader.ReadSingle() * uScale, 1f - reader.ReadSingle() * vScale);
                         var nodes = (Flags.Values[1]) ? 
-                            new RealQuat(submesh.LocalNodes[reader.ReadInt16()], submesh.LocalNodes[reader.ReadInt16()], 0, 0) : 
-                            new RealQuat(reader.ReadInt16(), reader.ReadInt16(), 0, 0);
-                        var weights = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), 0, 0);
+                            new Vector(submesh.LocalNodes[reader.ReadInt16()], submesh.LocalNodes[reader.ReadInt16()], 0, 0) : 
+                            new Vector(reader.ReadInt16(), reader.ReadInt16(), 0, 0);
+                        var weights = new Vector(reader.ReadSingle(), reader.ReadSingle(), 0, 0);
 
                         v.Values.Add(new VertexValue(position, VertexValue.ValueType.Float32_3, "position", 0));
                         v.Values.Add(new VertexValue(normal, VertexValue.ValueType.Float32_3, "normal", 0));
@@ -128,12 +128,17 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo1PC
 
                         tVertices.Add(v);
 
-                        bb.XBounds.Min = Math.Min(bb.XBounds.Min, position.x);
-                        bb.XBounds.Max = Math.Max(bb.XBounds.Max, position.x);
-                        bb.YBounds.Min = Math.Min(bb.YBounds.Min, position.y);
-                        bb.YBounds.Max = Math.Max(bb.YBounds.Max, position.y);
-                        bb.ZBounds.Min = Math.Min(bb.ZBounds.Min, position.z);
-                        bb.ZBounds.Max = Math.Max(bb.ZBounds.Max, position.z);
+                        bb.XBounds = new Range<float>(
+                            Math.Min(bb.XBounds.Min, position.X),
+                            Math.Max(bb.XBounds.Max, position.X));
+
+                        bb.YBounds = new Range<float>(
+                            Math.Min(bb.YBounds.Min, position.Y),
+                            Math.Max(bb.YBounds.Max, position.Y));
+
+                        bb.ZBounds = new Range<float>(
+                            Math.Min(bb.ZBounds.Min, position.Z),
+                            Math.Max(bb.ZBounds.Max, position.Z));
                     } 
                     #endregion
                 }
@@ -202,11 +207,11 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo1PC
                 FirstChildIndex = Reader.ReadInt16();
                 ParentIndex = Reader.ReadInt16();
                 Reader.ReadInt16();
-                Position = new RealQuat(
+                Position = new Vector(
                     Reader.ReadSingle(), 
                     Reader.ReadSingle(),
                     Reader.ReadSingle());
-                Rotation = new RealQuat(
+                Rotation = new Vector(
                     -Reader.ReadSingle(),
                     -Reader.ReadSingle(),
                     -Reader.ReadSingle(),
@@ -245,11 +250,11 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo1PC
                     PermutationIndex = Reader.ReadByte();
                     NodeIndex = Reader.ReadByte();
                     Reader.ReadByte();
-                    Position = new RealQuat(
+                    Position = new Vector(
                         Reader.ReadSingle(),
                         Reader.ReadSingle(),
                         Reader.ReadSingle());
-                    Rotation = new RealQuat(
+                    Rotation = new Vector(
                         -Reader.ReadSingle(),
                         -Reader.ReadSingle(),
                         -Reader.ReadSingle(),
@@ -323,8 +328,8 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo1PC
         {
             public BoundingBox()
             {
-                XBounds = YBounds = ZBounds = new RealBounds(float.PositiveInfinity, float.NegativeInfinity);
-                UBounds = VBounds = new RealBounds(0, 1);
+                XBounds = YBounds = ZBounds = new Range<float>(float.PositiveInfinity, float.NegativeInfinity);
+                UBounds = VBounds = new Range<float>(0, 1);
             }
         }
     }

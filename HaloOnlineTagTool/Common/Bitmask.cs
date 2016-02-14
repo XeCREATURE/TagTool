@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HaloOnlineTagTool.Common
+{
+    public struct Bitmask
+    {
+        public bool[] Values { get; }
+
+        public Bitmask(byte Value)
+        {
+            Values = new bool[8];
+
+            for (int i = 0; i < 8; i++)
+                Values[i] = (Value & (1 << i)) != 0;
+        }
+
+        public Bitmask(short Value)
+        {
+            Values = new bool[16];
+
+            for (int i = 0; i < 16; i++)
+                Values[i] = (Value & (1 << i)) != 0;
+        }
+
+        public Bitmask(int Value)
+        {
+            Values = new bool[32];
+
+            for (int i = 0; i < 32; i++)
+                Values[i] = (Value & (1 << i)) != 0;
+        }
+    }
+}

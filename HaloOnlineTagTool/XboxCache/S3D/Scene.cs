@@ -21,7 +21,7 @@ namespace HaloOnlineTagTool.XboxCache.S3D
         public unkBlock_XXXX _2504;
         public unkBlock_XXXX _1D02;
 
-        public RealQuat unkCoords0;
+        public Vector unkCoords0;
 
         public List<StringBlock_BA01> Scripts;
 

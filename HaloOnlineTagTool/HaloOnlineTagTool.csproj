@@ -125,13 +125,18 @@
     <Compile Include="Commands\VFiles\ImportCommand.cs" />
     <Compile Include="Commands\VFiles\ListCommand.cs" />
     <Compile Include="Commands\VFiles\VFilesContextFactory.cs" />
+    <Compile Include="Common\Bitmask.cs" />
+    <Compile Include="Common\BoundingBox.cs" />
     <Compile Include="Common\Euler2.cs" />
     <Compile Include="Common\Euler3.cs" />
+    <Compile Include="Common\Matrix4x3.cs" />
     <Compile Include="Common\NamingConvention.cs" />
     <Compile Include="Common\ReadOnlySet.cs" />
     <Compile Include="Common\RealQuaternion.cs" />
     <Compile Include="Common\SimpleJson.cs" />
     <Compile Include="Common\TagReferenceBlock.cs" />
+    <Compile Include="Common\Vector.cs" />
+    <Compile Include="Common\Vertex.cs" />
     <Compile Include="ConsoleHistory.cs" />
     <Compile Include="Layouts\ArrayTagLayoutField.cs" />
     <Compile Include="Layouts\BasicTagLayoutField.cs" />
@@ -169,6 +174,8 @@
     <Compile Include="Resources\Geometry\VertexStreamFactory.cs" />
     <Compile Include="Resources\Shaders\ShaderCompiler.cs" />
     <Compile Include="Resources\Shaders\ShaderConverter.cs" />
+    <Compile Include="Resources\Sounds\SampleRate.cs" />
+    <Compile Include="Resources\Sounds\SoundType.cs" />
     <Compile Include="Serialization\MaxVersionAttribute.cs" />
     <Compile Include="Serialization\MinVersionAttribute.cs" />
     <Compile Include="Serialization\TagFieldEnumerator.cs" />
@@ -643,36 +650,34 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="V1_106708\StringIdResolver.cs" />
-    <Compile Include="XboxCache\Composer\FormatIdentification.cs" />
-    <Compile Include="XboxCache\Composer\Info.cs" />
-    <Compile Include="XboxCache\Composer\SoundExtraction.cs" />
-    <Compile Include="XboxCache\Composer\SoundScanner.cs" />
-    <Compile Include="XboxCache\Composer\StreamUtil.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\IWwiseObject.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\IWwiseObjectVisitor.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\RIFX.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\RTPC.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundBank.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundBankAction.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundBankActorMixer.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundBankEvent.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundBankFile.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundBankMusicPlaylist.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundBankMusicSegment.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundBankMusicSwitchContainer.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundBankMusicTrack.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundBankSequenceContainer.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundBankSwitchContainer.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundBankVoice.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundInfo.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundPack.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundPackFile.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundPackFolder.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\SoundPath.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\StateGroup.cs" />
-    <Compile Include="XboxCache\Composer\Wwise\WwiseObjectCollection.cs" />
-    <Compile Include="XboxCache\DataTypes\DataTypes.cs" />
-    <Compile Include="XboxCache\DataTypes\Vertex.cs" />
+    <Compile Include="Composer\FormatIdentification.cs" />
+    <Compile Include="Composer\Info.cs" />
+    <Compile Include="Composer\SoundExtraction.cs" />
+    <Compile Include="Composer\SoundScanner.cs" />
+    <Compile Include="Composer\StreamUtil.cs" />
+    <Compile Include="Composer\Wwise\IWwiseObject.cs" />
+    <Compile Include="Composer\Wwise\IWwiseObjectVisitor.cs" />
+    <Compile Include="Composer\Wwise\RIFX.cs" />
+    <Compile Include="Composer\Wwise\RTPC.cs" />
+    <Compile Include="Composer\Wwise\SoundBank.cs" />
+    <Compile Include="Composer\Wwise\SoundBankAction.cs" />
+    <Compile Include="Composer\Wwise\SoundBankActorMixer.cs" />
+    <Compile Include="Composer\Wwise\SoundBankEvent.cs" />
+    <Compile Include="Composer\Wwise\SoundBankFile.cs" />
+    <Compile Include="Composer\Wwise\SoundBankMusicPlaylist.cs" />
+    <Compile Include="Composer\Wwise\SoundBankMusicSegment.cs" />
+    <Compile Include="Composer\Wwise\SoundBankMusicSwitchContainer.cs" />
+    <Compile Include="Composer\Wwise\SoundBankMusicTrack.cs" />
+    <Compile Include="Composer\Wwise\SoundBankSequenceContainer.cs" />
+    <Compile Include="Composer\Wwise\SoundBankSwitchContainer.cs" />
+    <Compile Include="Composer\Wwise\SoundBankVoice.cs" />
+    <Compile Include="Composer\Wwise\SoundInfo.cs" />
+    <Compile Include="Composer\Wwise\SoundPack.cs" />
+    <Compile Include="Composer\Wwise\SoundPackFile.cs" />
+    <Compile Include="Composer\Wwise\SoundPackFolder.cs" />
+    <Compile Include="Composer\Wwise\SoundPath.cs" />
+    <Compile Include="Composer\Wwise\StateGroup.cs" />
+    <Compile Include="Composer\Wwise\WwiseObjectCollection.cs" />
     <Compile Include="XboxCache\Definitions\AES.cs" />
     <Compile Include="XboxCache\Definitions\Base\bink.cs" />
     <Compile Include="XboxCache\Definitions\Base\bitmap.cs" />
@@ -688,7 +693,7 @@
     <Compile Include="XboxCache\Definitions\Base\sound_cache_file_gestalt.cs" />
     <Compile Include="XboxCache\Definitions\CacheManager.cs" />
     <Compile Include="XboxCache\Definitions\DefinitionsManager.cs" />
-    <Compile Include="XboxCache\Definitions\Enums.cs" />
+    <Compile Include="XboxCache\Definitions\DefinitionSet.cs" />
     <Compile Include="XboxCache\Definitions\Halo1AE\CacheFile.cs" />
     <Compile Include="XboxCache\Definitions\Halo1CE\bitmap.cs" />
     <Compile Include="XboxCache\Definitions\Halo1CE\CacheFile.cs" />
@@ -747,7 +752,7 @@
     <Compile Include="XboxCache\Definitions\ReachRetail\render_model.cs" />
     <Compile Include="XboxCache\Definitions\ReachRetail\scenario_structure_bsp.cs" />
     <Compile Include="XboxCache\Definitions\ReachRetail\sound_cache_file_gestalt.cs" />
-    <Compile Include="XboxCache\Definitions\xcompress.cs" />
+    <Compile Include="XCompress.cs" />
     <Compile Include="Endian\EndianReader.cs" />
     <Compile Include="Endian\EndianWriter.cs" />
     <Compile Include="Endian\EndianFormat.cs" />
@@ -770,7 +775,7 @@
     <Content Include="XboxCache\Builds.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="XboxCache\Composer\README.txt" />
+    <Content Include="Composer\README.txt" />
     <Content Include="XboxCache\Versions.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

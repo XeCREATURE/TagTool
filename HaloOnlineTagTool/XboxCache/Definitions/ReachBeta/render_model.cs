@@ -114,11 +114,11 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.ReachBeta
                     PermutationIndex = Reader.ReadByte();
                     NodeIndex = Reader.ReadByte();
                     Reader.ReadByte();
-                    Position = new RealQuat(
+                    Position = new Vector(
                         Reader.ReadSingle(),
                         Reader.ReadSingle(),
                         Reader.ReadSingle());
-                    Rotation = new RealQuat(
+                    Rotation = new Vector(
                         Reader.ReadSingle(),
                         Reader.ReadSingle(),
                         Reader.ReadSingle(),
@@ -224,11 +224,11 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.ReachBeta
                 Reader.SeekTo(Address);
 
                 Reader.ReadInt32();
-                XBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                YBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                ZBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                UBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                VBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
+                XBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                YBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                ZBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                UBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                VBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
             }
         }
     }

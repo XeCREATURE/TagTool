@@ -5,8 +5,10 @@
     /// </summary>
     public enum BitmapType : byte
     {
-        Texture2D, // IDirect3DDevice9::CreateTexture
-        Texture3D, // IDirect3DDevice9::CreateVolumeTexture
-        CubeMap    // IDirect3DDevice9::CreateCubeTexture
+        Texture2D = 0,
+        Texture3D = 1,
+        CubeMap = 2,
+        Sprite = 3,
+        UIBitmap = 4
     }
 }

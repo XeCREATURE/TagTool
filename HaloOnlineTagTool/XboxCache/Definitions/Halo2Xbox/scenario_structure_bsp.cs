@@ -17,9 +17,9 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
             Reader.SeekTo(Address);
 
             Reader.SeekTo(Address + 68);
-            XBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-            YBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-            ZBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
+            XBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+            YBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+            ZBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
 
             #region Clusters Block
             Reader.SeekTo(Address + 172);
@@ -121,7 +121,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                 {
                     reader.SeekTo(section.hSize + section.rOffset[vIndex] + ((section.rSize[vIndex] / section.vertcount) * j));
                     var v = new Vertex();
-                    var p = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                    var p = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 
                     v.Values.Add(new VertexValue(p, 0, "position", 0));
                     section.Vertices[j] = v;
@@ -132,7 +132,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                 {
                     reader.SeekTo(section.hSize + section.rOffset[uIndex] + (8 * j));
                     var v = section.Vertices[j];
-                    var uv = new RealQuat(reader.ReadSingle(), 1 - reader.ReadSingle());
+                    var uv = new Vector(reader.ReadSingle(), 1 - reader.ReadSingle());
                     v.Values.Add(new VertexValue(uv, 0, "texcoords", 0));
                 }
 
@@ -140,7 +140,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                 {
                     reader.SeekTo(section.hSize + section.rOffset[uIndex + 1] + (12 * j));
                     var v = section.Vertices[j];
-                    var n = RealQuat.FromHenDN3(reader.ReadUInt32());
+                    var n = Vector.FromHenDN3(reader.ReadUInt32());
                     v.Values.Add(new VertexValue(n, 0, "normal", 0));
                 }
                 #endregion
@@ -219,7 +219,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                 {
                     reader.SeekTo(section.hSize + section.rOffset[vIndex] + ((section.rSize[vIndex] / section.vertcount) * j));
                     var v = new Vertex();
-                    var p = new RealQuat(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                    var p = new Vector(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 
                     v.Values.Add(new VertexValue(p, 0, "position", 0));
                     section.Vertices[j] = v;
@@ -230,7 +230,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                 {
                     reader.SeekTo(section.hSize + section.rOffset[uIndex] + (8 * j));
                     var v = section.Vertices[j];
-                    var uv = new RealQuat(reader.ReadSingle(), 1 - reader.ReadSingle());
+                    var uv = new Vector(reader.ReadSingle(), 1 - reader.ReadSingle());
                     v.Values.Add(new VertexValue(uv, 0, "texcoords", 0));
                     //DecompressVertex(ref v, BoundingBoxes[geomIndex]);
                 }
@@ -239,7 +239,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                 {
                     reader.SeekTo(section.hSize + section.rOffset[nIndex] + (12 * j));
                     var v = section.Vertices[j];
-                    var n = RealQuat.FromHenDN3(reader.ReadUInt32());
+                    var n = Vector.FromHenDN3(reader.ReadUInt32());
                     v.Values.Add(new VertexValue(n, 0, "normal", 0));
                 }
                 #endregion
@@ -263,9 +263,9 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
         {
             public Cluster(int Index)
             {
-                XBounds = new RealBounds();
-                YBounds = new RealBounds();
-                ZBounds = new RealBounds();
+                XBounds = new Range<float>();
+                YBounds = new Range<float>();
+                ZBounds = new Range<float>();
 
                 SectionIndex = Index;
             }
@@ -343,11 +343,11 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
                 EndianReader Reader = Cache.Reader;
                 Reader.SeekTo(Address);
 
-                XBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                YBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                ZBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                UBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                VBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
+                XBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                YBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                ZBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                UBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                VBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
             }
         }
 
@@ -360,23 +360,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo2Xbox
 
                 TransformScale = Reader.ReadSingle();
 
-                TransformMatrix = new Matrix();
-
-                TransformMatrix.m11 = Reader.ReadSingle();
-                TransformMatrix.m12 = Reader.ReadSingle();
-                TransformMatrix.m13 = Reader.ReadSingle();
-
-                TransformMatrix.m21 = Reader.ReadSingle();
-                TransformMatrix.m22 = Reader.ReadSingle();
-                TransformMatrix.m23 = Reader.ReadSingle();
-
-                TransformMatrix.m31 = Reader.ReadSingle();
-                TransformMatrix.m32 = Reader.ReadSingle();
-                TransformMatrix.m33 = Reader.ReadSingle();
-
-                TransformMatrix.m41 = Reader.ReadSingle();
-                TransformMatrix.m42 = Reader.ReadSingle();
-                TransformMatrix.m43 = Reader.ReadSingle();
+                TransformMatrix = Matrix4x3.Read(Reader);
 
                 SectionIndex = Reader.ReadInt16() + modifier;
 

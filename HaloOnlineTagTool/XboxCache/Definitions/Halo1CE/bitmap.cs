@@ -2,6 +2,7 @@
 using HaloOnlineTagTool.Endian;
 using HaloOnlineTagTool.Common;
 using bitm = HaloOnlineTagTool.XboxCache.Definitions.bitmap;
+using HaloOnlineTagTool.Resources.Bitmaps;
 
 namespace HaloOnlineTagTool.XboxCache.Definitions.Halo1CE
 {
@@ -60,8 +61,8 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo1CE
                 Height = Reader.ReadUInt16();
                 Depth = Reader.ReadUInt16();
                 //Flags = new Bitmask(Reader.ReadByte());
-                Type = (TextureType)Reader.ReadUInt16();
-                Format = (TextureFormat)Reader.ReadUInt16();
+                Type = (BitmapType)Reader.ReadUInt16();
+                Format = (BitmapFormat)Reader.ReadUInt16();
                 Flags = new Bitmask(Reader.ReadUInt16());
                 RegX = Reader.ReadUInt16();
                 RegY = Reader.ReadUInt16();

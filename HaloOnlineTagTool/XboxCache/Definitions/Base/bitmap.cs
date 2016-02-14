@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using HaloOnlineTagTool.Common;
+using HaloOnlineTagTool.Resources.Bitmaps;
 
 namespace HaloOnlineTagTool.XboxCache.Definitions
 {
@@ -34,7 +35,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
             {
                 public int SubmapIndex;
                 public float Left, Right, Top, Bottom;
-                public RealQuat RegPoint;
+                public Vector RegPoint;
             }
 
             public override string ToString()
@@ -48,8 +49,8 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
             public string Class;
             public int Width, Height, Depth;
             public Bitmask Flags;
-            public TextureType Type;
-            public TextureFormat Format;
+            public BitmapType Type;
+            public BitmapFormat Format;
             public Bitmask MoreFlags;
             public int RegX, RegY;
             public int MipmapCount;
@@ -65,13 +66,13 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     int var;
                     switch (Format)
                     {
-                        case TextureFormat.A8:
-                        case TextureFormat.Y8:
-                        case TextureFormat.AY8:
-                        case TextureFormat.A8Y8:
-                        case TextureFormat.A8R8G8B8:
-                        case TextureFormat.A4R4G4B4:
-                        case TextureFormat.R5G6B5:
+                        case BitmapFormat.A8:
+                        case BitmapFormat.Y8:
+                        case BitmapFormat.AY8:
+                        case BitmapFormat.A8Y8:
+                        case BitmapFormat.A8R8G8B8:
+                        case BitmapFormat.A4R4G4B4:
+                        case BitmapFormat.R5G6B5:
                             var = 32;
                             break;
 
@@ -91,13 +92,13 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     int var;
                     switch (Format)
                     {
-                        case TextureFormat.A8:
-                        case TextureFormat.Y8:
-                        case TextureFormat.AY8:
-                        case TextureFormat.A8Y8:
-                        case TextureFormat.A8R8G8B8:
-                        case TextureFormat.A4R4G4B4:
-                        case TextureFormat.R5G6B5:
+                        case BitmapFormat.A8:
+                        case BitmapFormat.Y8:
+                        case BitmapFormat.AY8:
+                        case BitmapFormat.A8Y8:
+                        case BitmapFormat.A8R8G8B8:
+                        case BitmapFormat.A4R4G4B4:
+                        case BitmapFormat.R5G6B5:
                             var = 32;
                             break;
 
@@ -117,41 +118,41 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     int size = 0;
                     switch (Format)
                     {
-                        case TextureFormat.CTX1:
-                        case TextureFormat.DXT1:
-                        case TextureFormat.DXT3a_mono:
-                        case TextureFormat.DXT3a_alpha:
-                        case TextureFormat.DXT5a:
-                        case TextureFormat.DXT5a_mono:
-                        case TextureFormat.DXT5a_alpha:
+                        case BitmapFormat.Ctx1:
+                        case BitmapFormat.Dxt1:
+                        case BitmapFormat.Dxt3aMono:
+                        case BitmapFormat.Dxt3aAlpha:
+                        case BitmapFormat.DXT5a:
+                        case BitmapFormat.Dxt5aMono:
+                        case BitmapFormat.Dxt5aApha:
                             size = VirtualWidth * VirtualHeight / 2;
                             break;
-                        case TextureFormat.A8:
-                        case TextureFormat.Y8:
-                        case TextureFormat.AY8:
-                        case TextureFormat.DXT3:
-                        case TextureFormat.DXT5:
-                        case TextureFormat.DXN:
-                        case TextureFormat.DXN_mono_alpha:
-                        case TextureFormat.P8_bump:
+                        case BitmapFormat.A8:
+                        case BitmapFormat.Y8:
+                        case BitmapFormat.AY8:
+                        case BitmapFormat.Dxt3:
+                        case BitmapFormat.Dxt5:
+                        case BitmapFormat.Dxn:
+                        case BitmapFormat.DxnMonoAlpha:
+                        case BitmapFormat.P8Bump:
                             size = VirtualWidth * VirtualHeight;
                             break;
-                        case TextureFormat.A4R4G4B4:
-                        case TextureFormat.A1R5G5B5:
-                        case TextureFormat.A8Y8:
+                        case BitmapFormat.A4R4G4B4:
+                        case BitmapFormat.A1R5G5B5:
+                        case BitmapFormat.A8Y8:
                         //case TextureFormat.U8V8:
-                        case TextureFormat.R5G6B5:
+                        case BitmapFormat.R5G6B5:
                             size = VirtualWidth * VirtualHeight * 2;
                             break;
-                        case TextureFormat.A8R8G8B8:
-                        case TextureFormat.X8R8G8B8:
+                        case BitmapFormat.A8R8G8B8:
+                        case BitmapFormat.X8R8G8B8:
                             size = VirtualWidth * VirtualHeight * 4;
                             break;
                         default:
                             return 0;
                     }
 
-                    if (Type == TextureType.CubeMap)
+                    if (Type == BitmapType.CubeMap)
                         size *= 6;
 
                     return size;
@@ -164,31 +165,31 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                 {
                     switch (Format)
                     {
-                        case TextureFormat.CTX1:
-                        case TextureFormat.DXT1:
-                        case TextureFormat.DXT3a_mono:
-                        case TextureFormat.DXT3a_alpha:
-                        case TextureFormat.DXT5a:
-                        case TextureFormat.DXT5a_mono:
-                        case TextureFormat.DXT5a_alpha:
+                        case BitmapFormat.Ctx1:
+                        case BitmapFormat.Dxt1:
+                        case BitmapFormat.Dxt3aMono:
+                        case BitmapFormat.Dxt3aAlpha:
+                        case BitmapFormat.DXT5a:
+                        case BitmapFormat.Dxt5aMono:
+                        case BitmapFormat.Dxt5aApha:
                             return 2;
-                        case TextureFormat.A8:
-                        case TextureFormat.Y8:
-                        case TextureFormat.AY8:
-                        case TextureFormat.P8_bump:
+                        case BitmapFormat.A8:
+                        case BitmapFormat.Y8:
+                        case BitmapFormat.AY8:
+                        case BitmapFormat.P8Bump:
                             return 1;
-                        case TextureFormat.DXT3:
-                        case TextureFormat.DXT5:
-                        case TextureFormat.DXN:
-                        case TextureFormat.DXN_mono_alpha:
+                        case BitmapFormat.Dxt3:
+                        case BitmapFormat.Dxt5:
+                        case BitmapFormat.Dxn:
+                        case BitmapFormat.DxnMonoAlpha:
                             return 2;
-                        case TextureFormat.A4R4G4B4:
-                        case TextureFormat.A1R5G5B5:
-                        case TextureFormat.A8Y8:
-                        case TextureFormat.R5G6B5:
+                        case BitmapFormat.A4R4G4B4:
+                        case BitmapFormat.A1R5G5B5:
+                        case BitmapFormat.A8Y8:
+                        case BitmapFormat.R5G6B5:
                             return 2;
-                        case TextureFormat.A8R8G8B8:
-                        case TextureFormat.X8R8G8B8:
+                        case BitmapFormat.A8R8G8B8:
+                        case BitmapFormat.X8R8G8B8:
                             return 4;
                         default:
                             return 0;

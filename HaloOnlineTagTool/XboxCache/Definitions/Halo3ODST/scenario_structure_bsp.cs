@@ -59,9 +59,9 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3ODST
             #endregion
 
             Reader.SeekTo(Address + 64);
-            XBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-            YBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-            ZBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
+            XBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+            YBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+            ZBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
 
             #region Clusters Block
             Reader.SeekTo(Address + 184);

@@ -21,7 +21,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Beta
             try
             {
                 for (int i = 0; i < int.Parse(buildNode.Attributes["languageCount"].Value); i++)
-                    LocaleTables.Add(new LocaleTable(this, (Language)i));
+                    LocaleTables.Add(new LocaleTable(this, (GameLanguage)i));
             }
             catch { LocaleTables.Clear(); }
         }

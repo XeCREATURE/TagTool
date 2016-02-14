@@ -159,8 +159,8 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Beta
                     #region rigid fix
                     if (section.NodeIndex != 255 && !mode.Flags.Values[18])
                     {
-                        vert.Values.Add(new VertexValue(new RealQuat(section.NodeIndex, 0, 0, 0), VertexValue.ValueType.Int8_N4, "blendindices", 0));
-                        vert.Values.Add(new VertexValue(new RealQuat(1, 0, 0, 0), VertexValue.ValueType.Int8_N4, "blendweight", 0));
+                        vert.Values.Add(new VertexValue(new Vector(section.NodeIndex, 0, 0, 0), VertexValue.ValueType.Int8_N4, "blendindices", 0));
+                        vert.Values.Add(new VertexValue(new Vector(1, 0, 0, 0), VertexValue.ValueType.Int8_N4, "blendweight", 0));
                     }
                     #endregion
 
@@ -170,19 +170,19 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Beta
                         VertexValue w;
                         var hasWeights = vert.TryGetValue("blendweight", 0, out w);
 
-                        if (!hasWeights) w = new VertexValue(new RealQuat(1, 0, 0, 0), VertexValue.ValueType.Int8_N4, "blendweight", 0);
+                        if (!hasWeights) w = new VertexValue(new Vector(1, 0, 0, 0), VertexValue.ValueType.Int8_N4, "blendweight", 0);
 
                         if (vert.TryGetValue("blendindices", 0, out v))
                         {
-                            v.Data.a = w.Data.a == 0 ? 0 : mode.NodeIndexGroups[i].NodeIndices[(int)v.Data.a].Index;
-                            v.Data.b = w.Data.b == 0 ? 0 : mode.NodeIndexGroups[i].NodeIndices[(int)v.Data.b].Index;
-                            v.Data.c = w.Data.c == 0 ? 0 : mode.NodeIndexGroups[i].NodeIndices[(int)v.Data.c].Index;
-                            v.Data.d = w.Data.d == 0 ? 0 : mode.NodeIndexGroups[i].NodeIndices[(int)v.Data.d].Index;
+                            v.Data.A = w.Data.A == 0 ? 0 : mode.NodeIndexGroups[i].NodeIndices[(int)v.Data.A].Index;
+                            v.Data.B = w.Data.B == 0 ? 0 : mode.NodeIndexGroups[i].NodeIndices[(int)v.Data.B].Index;
+                            v.Data.C = w.Data.C == 0 ? 0 : mode.NodeIndexGroups[i].NodeIndices[(int)v.Data.C].Index;
+                            v.Data.D = w.Data.D == 0 ? 0 : mode.NodeIndexGroups[i].NodeIndices[(int)v.Data.D].Index;
                         }
                         else
                         {
-                            v = new VertexValue(new RealQuat(0, 0, 0, 0), VertexValue.ValueType.Int8_N4, "blendindices", 0);
-                            v.Data.a = mode.NodeIndexGroups[i].NodeIndices[0].Index;
+                            v = new VertexValue(new Vector(0, 0, 0, 0), VertexValue.ValueType.Int8_N4, "blendindices", 0);
+                            v.Data.A = mode.NodeIndexGroups[i].NodeIndices[0].Index;
                             vert.Values.Add(v);
                             vert.Values.Add(w);
                         }
@@ -192,11 +192,11 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Beta
                     #region rigid_boned fix
                     if (!vert.TryGetValue("blendweight", 0, out v) && vert.TryGetValue("blendindices", 0, out v))
                     {
-                        var q = new RealQuat(
-                            v.Data.a == 0 ? 0 : 1,
-                            v.Data.b == 0 ? 0 : 1,
-                            v.Data.c == 0 ? 0 : 1,
-                            v.Data.d == 0 ? 0 : 1);
+                        var q = new Vector(
+                            v.Data.A == 0 ? 0 : 1,
+                            v.Data.B == 0 ? 0 : 1,
+                            v.Data.C == 0 ? 0 : 1,
+                            v.Data.D == 0 ? 0 : 1);
                         vert.Values.Add(new VertexValue(q, VertexValue.ValueType.Int8_N4, "blendweight", 0));
                     }
                     #endregion
@@ -484,14 +484,14 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Beta
                     n.Data.Vector3DTransform(instance.TransformMatrix);
 
                     if (vert.TryGetValue("blendindices", 0, out v))
-                        v.Data = new RealQuat(instance.NodeIndex, 0, 0, 0);
+                        v.Data = new Vector(instance.NodeIndex, 0, 0, 0);
                     else
-                        vert.Values.Add(new VertexValue(new RealQuat(instance.NodeIndex, 0, 0, 0), VertexValue.ValueType.Int8_N4, "blendindices", 0));
+                        vert.Values.Add(new VertexValue(new Vector(instance.NodeIndex, 0, 0, 0), VertexValue.ValueType.Int8_N4, "blendindices", 0));
 
                     if (vert.TryGetValue("blendweight", 0, out w))
-                        w.Data = new RealQuat(instance.NodeIndex, 0, 0, 0);
+                        w.Data = new Vector(instance.NodeIndex, 0, 0, 0);
                     else
-                        vert.Values.Add(new VertexValue(new RealQuat(1, 0, 0, 0), VertexValue.ValueType.Int8_N4, "blendweight", 0));
+                        vert.Values.Add(new VertexValue(new Vector(1, 0, 0, 0), VertexValue.ValueType.Int8_N4, "blendweight", 0));
                 }
             }
 
@@ -540,23 +540,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Beta
 
                 TransformScale = Reader.ReadSingle();
 
-                TransformMatrix = new Matrix();
-
-                TransformMatrix.m11 = Reader.ReadSingle();
-                TransformMatrix.m12 = Reader.ReadSingle();
-                TransformMatrix.m13 = Reader.ReadSingle();
-
-                TransformMatrix.m21 = Reader.ReadSingle();
-                TransformMatrix.m22 = Reader.ReadSingle();
-                TransformMatrix.m23 = Reader.ReadSingle();
-
-                TransformMatrix.m31 = Reader.ReadSingle();
-                TransformMatrix.m32 = Reader.ReadSingle();
-                TransformMatrix.m33 = Reader.ReadSingle();
-
-                TransformMatrix.m41 = Reader.ReadSingle();
-                TransformMatrix.m42 = Reader.ReadSingle();
-                TransformMatrix.m43 = Reader.ReadSingle();
+                TransformMatrix = Matrix4x3.Read(Reader);
             }
         }
 
@@ -572,11 +556,11 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Beta
                 FirstChildIndex = Reader.ReadInt16();
                 NextSiblingIndex = Reader.ReadInt16();
                 Reader.ReadInt16();
-                Position = new RealQuat(
+                Position = new Vector(
                     Reader.ReadSingle(), 
                     Reader.ReadSingle(),
                     Reader.ReadSingle());
-                Rotation = new RealQuat(
+                Rotation = new Vector(
                     Reader.ReadSingle(),
                     Reader.ReadSingle(),
                     Reader.ReadSingle(),
@@ -584,23 +568,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Beta
 
                 TransformScale = Reader.ReadSingle();
 
-                TransformMatrix = new Matrix();
-
-                TransformMatrix.m11 = Reader.ReadSingle();
-                TransformMatrix.m12 = Reader.ReadSingle();
-                TransformMatrix.m13 = Reader.ReadSingle();
-
-                TransformMatrix.m21 = Reader.ReadSingle();
-                TransformMatrix.m22 = Reader.ReadSingle();
-                TransformMatrix.m23 = Reader.ReadSingle();
-
-                TransformMatrix.m31 = Reader.ReadSingle();
-                TransformMatrix.m32 = Reader.ReadSingle();
-                TransformMatrix.m33 = Reader.ReadSingle();
-
-                TransformMatrix.m41 = Reader.ReadSingle();
-                TransformMatrix.m42 = Reader.ReadSingle();
-                TransformMatrix.m43 = Reader.ReadSingle();
+                TransformMatrix = Matrix4x3.Read(Reader);
 
                 DistanceFromParent = Reader.ReadSingle();
             }
@@ -632,11 +600,11 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Beta
                     PermutationIndex = Reader.ReadByte();
                     NodeIndex = Reader.ReadByte();
                     Reader.ReadByte();
-                    Position = new RealQuat(
+                    Position = new Vector(
                         Reader.ReadSingle(),
                         Reader.ReadSingle(),
                         Reader.ReadSingle());
-                    Rotation = new RealQuat(
+                    Rotation = new Vector(
                         Reader.ReadSingle(),
                         Reader.ReadSingle(),
                         Reader.ReadSingle(),
@@ -738,11 +706,11 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.Halo3Beta
                 Reader.SeekTo(Address);
 
                 Reader.ReadInt32();
-                XBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                YBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                ZBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                UBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                VBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
+                XBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                YBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                ZBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                UBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                VBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
             }
         }
 

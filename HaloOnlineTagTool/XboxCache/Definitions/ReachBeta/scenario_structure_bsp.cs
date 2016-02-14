@@ -62,9 +62,9 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.ReachBeta
             #endregion
 
             Reader.SeekTo(Address + 236);
-            XBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-            YBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-            ZBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
+            XBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+            YBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+            ZBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
 
             #region Clusters Block
             Reader.SeekTo(Address + 308);
@@ -123,9 +123,9 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.ReachBeta
                 EndianReader Reader = Cache.Reader;
                 Reader.SeekTo(Address);
 
-                XBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                YBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
-                ZBounds = new RealBounds(Reader.ReadSingle(), Reader.ReadSingle());
+                XBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                YBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
+                ZBounds = new Range<float>(Reader.ReadSingle(), Reader.ReadSingle());
 
                 Reader.SeekTo(Address + 208);
                 SectionIndex = Reader.ReadInt16();
@@ -141,23 +141,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions.ReachBeta
 
                 TransformScale = Reader.ReadSingle();
 
-                TransformMatrix = new Matrix();
-
-                TransformMatrix.m11 = Reader.ReadSingle();
-                TransformMatrix.m12 = Reader.ReadSingle();
-                TransformMatrix.m13 = Reader.ReadSingle();
-
-                TransformMatrix.m21 = Reader.ReadSingle();
-                TransformMatrix.m22 = Reader.ReadSingle();
-                TransformMatrix.m23 = Reader.ReadSingle();
-
-                TransformMatrix.m31 = Reader.ReadSingle();
-                TransformMatrix.m32 = Reader.ReadSingle();
-                TransformMatrix.m33 = Reader.ReadSingle();
-
-                TransformMatrix.m41 = Reader.ReadSingle();
-                TransformMatrix.m42 = Reader.ReadSingle();
-                TransformMatrix.m43 = Reader.ReadSingle();
+                TransformMatrix = Matrix4x3.Read(Reader);
 
                 SectionIndex = Reader.ReadInt16();
 

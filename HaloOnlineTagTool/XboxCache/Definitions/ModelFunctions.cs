@@ -49,15 +49,20 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
             VertexValue vv;
             if (v.TryGetValue("position", 0, out vv))
             {
-                if (bb.XBounds.Length != 0) vv.Data.x = (float)(vv.Data.x * bb.XBounds.Length + bb.XBounds.Min);
-                if (bb.YBounds.Length != 0) vv.Data.y = (float)(vv.Data.y * bb.YBounds.Length + bb.YBounds.Min);
-                if (bb.ZBounds.Length != 0) vv.Data.z = (float)(vv.Data.z * bb.ZBounds.Length + bb.ZBounds.Min);
+                var bbXLength = bb.XBounds.Max - bb.XBounds.Min;
+                var bbYLength = bb.YBounds.Max - bb.YBounds.Min;
+                var bbZLength = bb.ZBounds.Max - bb.ZBounds.Min;
+                if (bbXLength != 0) vv.Data.X = (float)(vv.Data.X * bbXLength + bb.XBounds.Min);
+                if (bbYLength != 0) vv.Data.Y = (float)(vv.Data.Y * bbYLength + bb.YBounds.Min);
+                if (bbZLength != 0) vv.Data.Z = (float)(vv.Data.Z * bbZLength + bb.ZBounds.Min);
             }
 
             if (v.TryGetValue("texcoords", 0, out vv))
             {
-                if (bb.UBounds.Length != 0) vv.Data.x = (float)(vv.Data.x * bb.UBounds.Length + bb.UBounds.Min);
-                vv.Data.y = 1f - ((bb.VBounds.Length == 0) ? vv.Data.y : (float)(vv.Data.y * bb.VBounds.Length + bb.VBounds.Min));
+                var bbULength = bb.UBounds.Max - bb.UBounds.Min;
+                var bbVLength = bb.VBounds.Max - bb.VBounds.Min;
+                if (bbULength != 0) vv.Data.X = (float)(vv.Data.X * bbULength + bb.UBounds.Min);
+                vv.Data.Y = 1f - ((bbVLength == 0) ? vv.Data.Y : (float)(vv.Data.Y * bbVLength + bb.VBounds.Min));
                 //vv.Data.y = 1f - vv.Data.y;
             }
         }
@@ -69,48 +74,23 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                 VertexValue vv;
                 if (vArray[i].TryGetValue("position", 0, out vv))
                 {
-                    if (bb.XBounds.Length != 0) vv.Data.x = (float)(vv.Data.x * bb.XBounds.Length + bb.XBounds.Min);
-                    if (bb.YBounds.Length != 0) vv.Data.y = (float)(vv.Data.y * bb.YBounds.Length + bb.YBounds.Min);
-                    if (bb.ZBounds.Length != 0) vv.Data.z = (float)(vv.Data.z * bb.ZBounds.Length + bb.ZBounds.Min);
+                    var bbXLength = bb.XBounds.Max - bb.XBounds.Min;
+                    var bbYLength = bb.YBounds.Max - bb.YBounds.Min;
+                    var bbZLength = bb.ZBounds.Max - bb.ZBounds.Min;
+                    if (bbXLength != 0) vv.Data.X = (float)(vv.Data.X * bbXLength + bb.XBounds.Min);
+                    if (bbYLength != 0) vv.Data.Y = (float)(vv.Data.Y * bbYLength + bb.YBounds.Min);
+                    if (bbZLength != 0) vv.Data.Z = (float)(vv.Data.Z * bbZLength + bb.ZBounds.Min);
                 }
 
                 if (vArray[i].TryGetValue("texcoords", 0, out vv))
                 {
-                    if (bb.UBounds.Length != 0) vv.Data.x = (float)(vv.Data.x * bb.UBounds.Length + bb.UBounds.Min);
-                    vv.Data.y = 1f - ((bb.VBounds.Length == 0) ? vv.Data.y : (float)(vv.Data.y * bb.VBounds.Length + bb.VBounds.Min));
+                    var bbULength = bb.UBounds.Max - bb.UBounds.Min;
+                    var bbVLength = bb.VBounds.Max - bb.VBounds.Min;
+                    if (bbULength != 0) vv.Data.X = (float)(vv.Data.X * bbULength + bb.UBounds.Min);
+                    vv.Data.Y = 1f - ((bbVLength == 0) ? vv.Data.Y : (float)(vv.Data.Y * bbVLength + bb.VBounds.Min));
                     //vv.Data.y = 1f - vv.Data.y;
                 }
             }
-        }
-
-        public static Matrix MatrixFromBounds(RealBoundingBox bb)
-        {
-            Matrix m = Matrix.Identity;
-
-            if (bb.XBounds.Length != 0) m.m11 = bb.XBounds.Length;
-            if (bb.YBounds.Length != 0) m.m22 = bb.YBounds.Length;
-            if (bb.ZBounds.Length != 0) m.m33 = bb.ZBounds.Length;
-
-            m.m41 = bb.XBounds.Min;
-            m.m42 = bb.YBounds.Min;
-            m.m43 = bb.ZBounds.Min;
-
-            return m;
-        }
-
-        public static Matrix MatrixFromBounds(RealQuat Min, RealQuat Max)
-        {
-            Matrix m = Matrix.Identity;
-
-            if (Max.x - Min.x != 0) m.m11 = Max.x - Min.x;
-            if (Max.y - Min.y != 0) m.m22 = Max.y - Min.y;
-            if (Max.z - Min.z != 0) m.m33 = Max.z - Min.z;
-
-            m.m41 = Min.x;
-            m.m42 = Min.y;
-            m.m43 = Min.z;
-
-            return m;
         }
 
         #region Geometry Recovery
@@ -340,13 +320,13 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
             {
                 bw.Write((node.Name + "\0").ToCharArray());
                 bw.Write((short)node.ParentIndex);
-                bw.Write(node.Position.x);
-                bw.Write(node.Position.y);
-                bw.Write(node.Position.z);
-                bw.Write(node.Rotation.i);
-                bw.Write(node.Rotation.j);
-                bw.Write(node.Rotation.k);
-                bw.Write(node.Rotation.w);
+                bw.Write(node.Position.X);
+                bw.Write(node.Position.Y);
+                bw.Write(node.Position.Z);
+                bw.Write(node.Rotation.I);
+                bw.Write(node.Rotation.J);
+                bw.Write(node.Rotation.K);
+                bw.Write(node.Rotation.W);
             }
             #endregion
             #region Markers
@@ -360,13 +340,13 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     bw.Write((byte)marker.RegionIndex);
                     bw.Write((byte)marker.PermutationIndex);
                     bw.Write((byte)marker.NodeIndex);
-                    bw.Write(marker.Position.x);
-                    bw.Write(marker.Position.y);
-                    bw.Write(marker.Position.z);
-                    bw.Write(marker.Rotation.i);
-                    bw.Write(marker.Rotation.j);
-                    bw.Write(marker.Rotation.k);
-                    bw.Write(marker.Rotation.w);
+                    bw.Write(marker.Position.X);
+                    bw.Write(marker.Position.Y);
+                    bw.Write(marker.Position.Z);
+                    bw.Write(marker.Rotation.I);
+                    bw.Write(marker.Rotation.J);
+                    bw.Write(marker.Rotation.K);
+                    bw.Write(marker.Rotation.W);
                     bw.Write(marker.Scale);
                 }
             }
@@ -412,32 +392,32 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     foreach (Vertex vert in part.Vertices)
                     {
                         vert.TryGetValue("position", 0, out v);
-                        bw.Write(v.Data.x);
-                        bw.Write(v.Data.y);
-                        bw.Write(v.Data.z);
+                        bw.Write(v.Data.X);
+                        bw.Write(v.Data.Y);
+                        bw.Write(v.Data.Z);
 
                         vert.TryGetValue("normal", 0, out v);
-                        bw.Write(v.Data.i);
-                        bw.Write(v.Data.j);
-                        bw.Write(v.Data.k);
+                        bw.Write(v.Data.I);
+                        bw.Write(v.Data.J);
+                        bw.Write(v.Data.K);
 
                         vert.TryGetValue("texcoords", 0, out v);
-                        bw.Write(v.Data.x);
-                        bw.Write(v.Data.y);
+                        bw.Write(v.Data.X);
+                        bw.Write(v.Data.Y);
 
                         if (hasNodes)
                         {
                             vert.TryGetValue("blendindices", 0, out v);
-                            bw.Write((byte)v.Data.a);
-                            bw.Write((byte)v.Data.b);
-                            bw.Write((byte)v.Data.c);
-                            bw.Write((byte)v.Data.d);
+                            bw.Write((byte)v.Data.A);
+                            bw.Write((byte)v.Data.B);
+                            bw.Write((byte)v.Data.C);
+                            bw.Write((byte)v.Data.D);
 
                             vert.TryGetValue("blendweight", 0, out v);
-                            bw.Write(v.Data.a);
-                            bw.Write(v.Data.b);
-                            bw.Write(v.Data.c);
-                            bw.Write(v.Data.d);
+                            bw.Write(v.Data.A);
+                            bw.Write(v.Data.B);
+                            bw.Write(v.Data.C);
+                            bw.Write(v.Data.D);
                         }
                     }
 
@@ -642,19 +622,19 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     foreach (var vert in part.Vertices)
                     {
                         vert.TryGetValue("position", 0, out v);
-                        sw.WriteLine("v  {0} {1} {2}", v.Data.x * 100, v.Data.y * 100, v.Data.z * 100);
+                        sw.WriteLine("v  {0} {1} {2}", v.Data.X * 100, v.Data.Y * 100, v.Data.Z * 100);
                     }
 
                     foreach (var vert in part.Vertices)
                     {
                         vert.TryGetValue("texcoords", 0, out v);
-                        sw.WriteLine("vt {0} {1}", v.Data.x, v.Data.y);
+                        sw.WriteLine("vt {0} {1}", v.Data.X, v.Data.Y);
                     }
 
                     foreach (var vert in part.Vertices)
                     {
                         vert.TryGetValue("normal", 0, out v);
-                        sw.WriteLine("vn {0} {1} {2}", v.Data.i, v.Data.j, v.Data.k);
+                        sw.WriteLine("vn {0} {1} {2}", v.Data.I, v.Data.J, v.Data.K);
                     }
                 }
             }
@@ -805,20 +785,20 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                             vert.TryGetValue("normal", 0, out vNorm);
                             vert.TryGetValue("texcoords", 0, out vTex);
 
-                            if (hasNodes) sw.WriteLine(vNodes.Data.a.ToString());
+                            if (hasNodes) sw.WriteLine(vNodes.Data.A.ToString());
                             else sw.WriteLine("0");
 
                             sw.WriteLine((vPos.Data * 100).ToString(3, "\t"));
                             sw.WriteLine(vNorm.Data.ToString(3, "\t"));
 
-                            if (hasNodes) sw.WriteLine(vNodes.Data.b.ToString());
+                            if (hasNodes) sw.WriteLine(vNodes.Data.B.ToString());
                             else sw.WriteLine("0");
 
-                            if (hasWeights) sw.WriteLine(vWeights.Data.b.ToString("F6"));
+                            if (hasWeights) sw.WriteLine(vWeights.Data.B.ToString("F6"));
                             else sw.WriteLine("0.000000");
 
-                            sw.WriteLine(vTex.Data.x.ToString("F6"));
-                            sw.WriteLine(vTex.Data.y.ToString("F6"));
+                            sw.WriteLine(vTex.Data.X.ToString("F6"));
+                            sw.WriteLine(vTex.Data.Y.ToString("F6"));
                             sw.WriteLine("0.000000"); //unknown, W coord?
                         }
                     }
@@ -940,13 +920,13 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                 bw.Write((short)node.ParentIndex);
                 bw.Write((short)node.FirstChildIndex);
                 bw.Write((short)node.NextSiblingIndex);
-                bw.Write(node.Position.x * 100);
-                bw.Write(node.Position.y * 100);
-                bw.Write(node.Position.z * 100);
-                bw.Write(node.Rotation.i);
-                bw.Write(node.Rotation.j);
-                bw.Write(node.Rotation.k);
-                bw.Write(node.Rotation.w);
+                bw.Write(node.Position.X * 100);
+                bw.Write(node.Position.Y * 100);
+                bw.Write(node.Position.Z * 100);
+                bw.Write(node.Rotation.I);
+                bw.Write(node.Rotation.J);
+                bw.Write(node.Rotation.K);
+                bw.Write(node.Rotation.W);
                 //bw.Write(node.TransformScale);
                 //bw.Write(node.SkewX.x);
                 //bw.Write(node.SkewX.y);
@@ -982,13 +962,13 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     bw.Write((byte)marker.RegionIndex);
                     bw.Write((byte)marker.PermutationIndex);
                     bw.Write((short)marker.NodeIndex);
-                    bw.Write(marker.Position.x * 100);
-                    bw.Write(marker.Position.y * 100);
-                    bw.Write(marker.Position.z * 100);
-                    bw.Write(marker.Rotation.i);
-                    bw.Write(marker.Rotation.j);
-                    bw.Write(marker.Rotation.k);
-                    bw.Write(marker.Rotation.w);
+                    bw.Write(marker.Position.X * 100);
+                    bw.Write(marker.Position.Y * 100);
+                    bw.Write(marker.Position.Z * 100);
+                    bw.Write(marker.Rotation.I);
+                    bw.Write(marker.Rotation.J);
+                    bw.Write(marker.Rotation.K);
+                    bw.Write(marker.Rotation.W);
                 }
             }
             #endregion
@@ -1068,18 +1048,18 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                 foreach (Vertex vert in part.Vertices)
                 {
                     vert.TryGetValue("position", 0, out v);
-                    bw.Write(v.Data.x * 100);
-                    bw.Write(v.Data.y * 100);
-                    bw.Write(v.Data.z * 100);
+                    bw.Write(v.Data.X * 100);
+                    bw.Write(v.Data.Y * 100);
+                    bw.Write(v.Data.Z * 100);
 
                     vert.TryGetValue("normal", 0, out v);
-                    bw.Write(v.Data.i);
-                    bw.Write(v.Data.j);
-                    bw.Write(v.Data.k);
+                    bw.Write(v.Data.I);
+                    bw.Write(v.Data.J);
+                    bw.Write(v.Data.K);
 
                     vert.TryGetValue("texcoords", 0, out v);
-                    bw.Write(v.Data.x);
-                    bw.Write(v.Data.y);
+                    bw.Write(v.Data.X);
+                    bw.Write(v.Data.Y);
 
                     if (isBoned)
                     {
@@ -1087,10 +1067,10 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                         var indices = new List<int>();
                         vert.TryGetValue("blendindices", 0, out i);
 
-                        if (!indices.Contains((int)i.Data.a) && i.Data.a != 0) indices.Add((int)i.Data.a);
-                        if (!indices.Contains((int)i.Data.b) && i.Data.a != 0) indices.Add((int)i.Data.b);
-                        if (!indices.Contains((int)i.Data.c) && i.Data.a != 0) indices.Add((int)i.Data.c);
-                        if (!indices.Contains((int)i.Data.d) && i.Data.a != 0) indices.Add((int)i.Data.d);
+                        if (!indices.Contains((int)i.Data.A) && i.Data.A != 0) indices.Add((int)i.Data.A);
+                        if (!indices.Contains((int)i.Data.B) && i.Data.A != 0) indices.Add((int)i.Data.B);
+                        if (!indices.Contains((int)i.Data.C) && i.Data.A != 0) indices.Add((int)i.Data.C);
+                        if (!indices.Contains((int)i.Data.D) && i.Data.A != 0) indices.Add((int)i.Data.D);
 
                         if (indices.Count == 0) indices.Add(0);
 
@@ -1107,24 +1087,24 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                         vert.TryGetValue("blendindices", 0, out i);
                         vert.TryGetValue("blendweight", 0, out w);
                         int count = 0;
-                        if (w.Data.a > 0)
+                        if (w.Data.A > 0)
                         {
-                            bw.Write((byte)i.Data.a);
+                            bw.Write((byte)i.Data.A);
                             count++;
                         }
-                        if (w.Data.b > 0)
+                        if (w.Data.B > 0)
                         {
-                            bw.Write((byte)i.Data.b);
+                            bw.Write((byte)i.Data.B);
                             count++;
                         }
-                        if (w.Data.c > 0)
+                        if (w.Data.C > 0)
                         {
-                            bw.Write((byte)i.Data.c);
+                            bw.Write((byte)i.Data.C);
                             count++;
                         }
-                        if (w.Data.d > 0)
+                        if (w.Data.D > 0)
                         {
-                            bw.Write((byte)i.Data.d);
+                            bw.Write((byte)i.Data.D);
                             count++;
                         }
 
@@ -1139,10 +1119,10 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
 
                         if (count != 4) bw.Write((byte)255);
 
-                        if (w.Data.a > 0) bw.Write(w.Data.a);
-                        if (w.Data.b > 0) bw.Write(w.Data.b);
-                        if (w.Data.c > 0) bw.Write(w.Data.c);
-                        if (w.Data.d > 0) bw.Write(w.Data.d);
+                        if (w.Data.A > 0) bw.Write(w.Data.A);
+                        if (w.Data.B > 0) bw.Write(w.Data.B);
+                        if (w.Data.C > 0) bw.Write(w.Data.C);
+                        if (w.Data.D > 0) bw.Write(w.Data.D);
                     }
                 }
             }
@@ -1456,18 +1436,18 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                 foreach (Vertex vert in part.Vertices)
                 {
                     vert.TryGetValue("position", 0, out v);
-                    bw.Write(v.Data.x);
-                    bw.Write(v.Data.y);
-                    bw.Write(v.Data.z);
+                    bw.Write(v.Data.X);
+                    bw.Write(v.Data.Y);
+                    bw.Write(v.Data.Z);
 
                     vert.TryGetValue("normal", 0, out v);
-                    bw.Write(v.Data.i);
-                    bw.Write(v.Data.j);
-                    bw.Write(v.Data.k);
+                    bw.Write(v.Data.I);
+                    bw.Write(v.Data.J);
+                    bw.Write(v.Data.K);
 
                     vert.TryGetValue("texcoords", 0, out v);
-                    bw.Write(v.Data.x);
-                    bw.Write(v.Data.y);
+                    bw.Write(v.Data.X);
+                    bw.Write(v.Data.Y);
                 }
 
                 bw.Write(1);
@@ -1516,20 +1496,20 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     vert.TryGetValue("position", 0, out v);
                     v.Data *= geom.TransformScale;
                     v.Data.Point3DTransform(geom.TransformMatrix);
-                    bw.Write(v.Data.x);
-                    bw.Write(v.Data.y);
-                    bw.Write(v.Data.z);
+                    bw.Write(v.Data.X);
+                    bw.Write(v.Data.Y);
+                    bw.Write(v.Data.Z);
 
                     vert.TryGetValue("normal", 0, out v);
                     v.Data *= geom.TransformScale;
                     v.Data.Vector3DTransform(geom.TransformMatrix);
-                    bw.Write(v.Data.i);
-                    bw.Write(v.Data.j);
-                    bw.Write(v.Data.k);
+                    bw.Write(v.Data.I);
+                    bw.Write(v.Data.J);
+                    bw.Write(v.Data.K);
 
                     vert.TryGetValue("texcoords", 0, out v);
-                    bw.Write(v.Data.x);
-                    bw.Write(v.Data.y);
+                    bw.Write(v.Data.X);
+                    bw.Write(v.Data.Y);
                 }
 
                 bw.Write(1);
@@ -1702,19 +1682,19 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                 foreach (var vert in part.Vertices)
                 {
                     vert.TryGetValue("position", 0, out v);
-                    sw.WriteLine("v  {0} {1} {2}", v.Data.x * 100, v.Data.y * 100, v.Data.z * 100);
+                    sw.WriteLine("v  {0} {1} {2}", v.Data.X * 100, v.Data.Y * 100, v.Data.Z * 100);
                 }
 
                 foreach (var vert in part.Vertices)
                 {
                     vert.TryGetValue("texcoords", 0, out v);
-                    sw.WriteLine("vt {0} {1}", v.Data.x, v.Data.y);
+                    sw.WriteLine("vt {0} {1}", v.Data.X, v.Data.Y);
                 }
 
                 foreach (var vert in part.Vertices)
                 {
                     vert.TryGetValue("normal", 0, out v);
-                    sw.WriteLine("vn {0} {1} {2}", v.Data.i, v.Data.j, v.Data.k);
+                    sw.WriteLine("vn {0} {1} {2}", v.Data.I, v.Data.J, v.Data.K);
                 }
             }
 
@@ -1734,13 +1714,13 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     vert.TryGetValue("position", 0, out v);
                     v.Data *= geom.TransformScale;
                     v.Data.Point3DTransform(geom.TransformMatrix);
-                    sw.WriteLine("v  {0} {1} {2}", v.Data.x * 100, v.Data.y * 100, v.Data.z * 100);
+                    sw.WriteLine("v  {0} {1} {2}", v.Data.X * 100, v.Data.Y * 100, v.Data.Z * 100);
                 }
 
                 foreach (var vert in verts)
                 {
                     vert.TryGetValue("texcoords", 0, out v);
-                    sw.WriteLine("vt {0} {1}", v.Data.x, v.Data.y);
+                    sw.WriteLine("vt {0} {1}", v.Data.X, v.Data.Y);
                 }
 
                 foreach (var vert in verts)
@@ -1748,7 +1728,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     vert.TryGetValue("normal", 0, out v);
                     v.Data *= geom.TransformScale;
                     v.Data.Vector3DTransform(geom.TransformMatrix);
-                    sw.WriteLine("vn {0} {1} {2}", v.Data.i, v.Data.j, v.Data.k);
+                    sw.WriteLine("vn {0} {1} {2}", v.Data.I, v.Data.J, v.Data.K);
                 }
             }
 
@@ -1987,18 +1967,18 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                 foreach (Vertex vert in part.Vertices)
                 {
                     vert.TryGetValue("position", 0, out v);
-                    bw.Write(v.Data.x * 100);
-                    bw.Write(v.Data.y * 100);
-                    bw.Write(v.Data.z * 100);
+                    bw.Write(v.Data.X * 100);
+                    bw.Write(v.Data.Y * 100);
+                    bw.Write(v.Data.Z * 100);
 
                     vert.TryGetValue("normal", 0, out v);
-                    bw.Write(v.Data.i);
-                    bw.Write(v.Data.j);
-                    bw.Write(v.Data.k);
+                    bw.Write(v.Data.I);
+                    bw.Write(v.Data.J);
+                    bw.Write(v.Data.K);
 
                     vert.TryGetValue("texcoords", 0, out v);
-                    bw.Write(v.Data.x);
-                    bw.Write(v.Data.y);
+                    bw.Write(v.Data.X);
+                    bw.Write(v.Data.Y);
                 }
             }
             #endregion
@@ -2021,8 +2001,8 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
 
                 //part.Vertices[0].FormatName == "s_rigid_vertex"
                 //var bb = new render_model.BoundingBox();
-                //bb.XBounds = bb.YBounds = bb.ZBounds = new RealBounds(0, 1);
-                //bb.UBounds = bb.VBounds = new RealBounds(-1, 1);
+                //bb.XBounds = bb.YBounds = bb.ZBounds = new Range<float>(0, 1);
+                //bb.UBounds = bb.VBounds = new Range<float>(-1, 1);
                 //if (geom.SectionIndex < BSP.BoundingBoxes.Count) bb = BSP.BoundingBoxes[geom.SectionIndex];
 
                 //bool compress = part.Vertices[0].FormatName == "s_rigid_vertex";
@@ -2064,18 +2044,18 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     //else
                     {
                         vert.TryGetValue("position", 0, out v);
-                        bw.Write(v.Data.x);
-                        bw.Write(v.Data.y);
-                        bw.Write(v.Data.z);
+                        bw.Write(v.Data.X);
+                        bw.Write(v.Data.Y);
+                        bw.Write(v.Data.Z);
 
                         vert.TryGetValue("normal", 0, out v);
-                        bw.Write(v.Data.i);
-                        bw.Write(v.Data.j);
-                        bw.Write(v.Data.k);
+                        bw.Write(v.Data.I);
+                        bw.Write(v.Data.J);
+                        bw.Write(v.Data.K);
 
                         vert.TryGetValue("texcoords", 0, out v);
-                        bw.Write(v.Data.x);
-                        bw.Write(v.Data.y);
+                        bw.Write(v.Data.X);
+                        bw.Write(v.Data.Y);
                     }
                 }
             }
@@ -2206,10 +2186,10 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                 bool isTransparent = false;
                 bool ccOnly = false;
 
-                var baseMaps = new List<KeyValuePair<string, RealQuat>>();
-                var bumpMaps = new List<KeyValuePair<string, RealQuat>>();
-                var detailMaps = new List<KeyValuePair<string, RealQuat>>();
-                var blendmap = new KeyValuePair<string, RealQuat>();
+                var baseMaps = new List<KeyValuePair<string, Vector>>();
+                var bumpMaps = new List<KeyValuePair<string, Vector>>();
+                var detailMaps = new List<KeyValuePair<string, Vector>>();
+                var blendmap = new KeyValuePair<string, Vector>();
 
                 //Halo4 fucked this up
                 if (Cache.Version >= DefinitionSet.Halo3Beta && Cache.Version <= DefinitionSet.HaloReachRetail)
@@ -2228,16 +2208,16 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                             var bitmTag = Cache.IndexItems.GetItemByID(map.BitmapTagID);
 
                             if (s == "blend_map" && bitmTag != null)
-                                blendmap = new KeyValuePair<string, RealQuat>(bitmTag.Filename + "\0", new RealQuat(tileInfo.UTiling, tileInfo.VTiling));
+                                blendmap = new KeyValuePair<string, Vector>(bitmTag.Filename + "\0", new Vector(tileInfo.UTiling, tileInfo.VTiling));
 
                             if (s.Contains("base_map_m_") && bitmTag != null)
-                                baseMaps.Add(new KeyValuePair<string, RealQuat>(bitmTag.Filename + "\0", new RealQuat(tileInfo.UTiling, tileInfo.VTiling)));
+                                baseMaps.Add(new KeyValuePair<string, Vector>(bitmTag.Filename + "\0", new Vector(tileInfo.UTiling, tileInfo.VTiling)));
 
                             if (s.Contains("bump_map_m_") && bitmTag != null)
-                                bumpMaps.Add(new KeyValuePair<string, RealQuat>(bitmTag.Filename + "\0", new RealQuat(tileInfo.UTiling, tileInfo.VTiling)));
+                                bumpMaps.Add(new KeyValuePair<string, Vector>(bitmTag.Filename + "\0", new Vector(tileInfo.UTiling, tileInfo.VTiling)));
 
                             if (s.Contains("detail_map_m_") && bitmTag != null)
-                                detailMaps.Add(new KeyValuePair<string, RealQuat>(bitmTag.Filename + "\0", new RealQuat(tileInfo.UTiling, tileInfo.VTiling)));
+                                detailMaps.Add(new KeyValuePair<string, Vector>(bitmTag.Filename + "\0", new Vector(tileInfo.UTiling, tileInfo.VTiling)));
                         }
                     }
                     else // default shaders
@@ -2333,8 +2313,8 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     else
                     {
                         bw.Write(blendmap.Key.ToCharArray());
-                        bw.Write(blendmap.Value.a);
-                        bw.Write(blendmap.Value.b);
+                        bw.Write(blendmap.Value.A);
+                        bw.Write(blendmap.Value.B);
                     }
 
                     bw.Write((byte)baseMaps.Count);
@@ -2344,22 +2324,22 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     foreach (var map in baseMaps)
                     {
                         bw.Write(map.Key.ToCharArray());
-                        bw.Write(map.Value.a);
-                        bw.Write(map.Value.b);
+                        bw.Write(map.Value.A);
+                        bw.Write(map.Value.B);
                     }
 
                     foreach (var map in bumpMaps)
                     {
                         bw.Write(map.Key.ToCharArray());
-                        bw.Write(map.Value.a);
-                        bw.Write(map.Value.b);
+                        bw.Write(map.Value.A);
+                        bw.Write(map.Value.B);
                     }
 
                     foreach (var map in detailMaps)
                     {
                         bw.Write(map.Key.ToCharArray());
-                        bw.Write(map.Value.a);
-                        bw.Write(map.Value.b);
+                        bw.Write(map.Value.A);
+                        bw.Write(map.Value.B);
                     }
                 }
                 else
@@ -2551,13 +2531,13 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                 bw.Write((short)pIdx);
                 bw.Write((short)-1);
                 bw.Write((short)-1);
-                bw.Write(node._FA02.Data.x);
-                bw.Write(node._FA02.Data.y);
-                bw.Write(node._FA02.Data.z);
-                bw.Write(node._FB02.Data.i);
-                bw.Write(node._FB02.Data.j);
-                bw.Write(node._FB02.Data.k);
-                bw.Write(node._FB02.Data.w);
+                bw.Write(node._FA02.Data.X);
+                bw.Write(node._FA02.Data.Y);
+                bw.Write(node._FA02.Data.Z);
+                bw.Write(node._FB02.Data.I);
+                bw.Write(node._FB02.Data.J);
+                bw.Write(node._FB02.Data.K);
+                bw.Write(node._FB02.Data.W);
             }
             #endregion
             #region Marker Groups
@@ -2672,7 +2652,7 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                     meshAddressList.Add((int)bw.BaseStream.Position);
                     bw.Write(0);
 
-                    var mat = new Matrix(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0);
+                    var mat = new Matrix4x3(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0);
                     //mat = Matrix.Identity;
 
                     //bw.Write(float.NaN); //no transforms (render_models are pre-transformed)
@@ -2707,10 +2687,10 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
 
                     vertValueList.Add((int)bw.BaseStream.Position);
 
-                    var bb = new RealBoundingBox();
-                    RealBounds UBounds, VBounds;
-                    bb.XBounds = bb.YBounds = bb.ZBounds = new RealBounds(0, 1);
-                    UBounds = VBounds = new RealBounds(0, (obj._2F01 != null) ? obj._2F01.unkC0 : 1);
+                    var bb = new BoundingBox();
+                    Range<float> UBounds, VBounds;
+                    bb.XBounds = bb.YBounds = bb.ZBounds = new Range<float>(0, 1);
+                    UBounds = VBounds = new Range<float>(0, (obj._2F01 != null) ? obj._2F01.unkC0 : 1);
                     if (obj.BoundingBox.Data.Length > 0 && !obj.isInheritor) bb = obj.BoundingBox.Data;
 
                     bool compress = (vObj._2E01.geomUnk01 != 0x86);
@@ -2743,9 +2723,9 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                         if (compress)
                         {
                             vert.TryGetValue("position", 0, out v);
-                            bw.Write((short)v.Data.x);
-                            bw.Write((short)v.Data.y);
-                            bw.Write((short)v.Data.z);
+                            bw.Write((short)v.Data.X);
+                            bw.Write((short)v.Data.Y);
+                            bw.Write((short)v.Data.Z);
 
                             vert.TryGetValue("normal", 0, out v);
                             bw.Write(0);
@@ -2754,24 +2734,24 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                             //bw.Write(v.Data.j);
 
                             vert.TryGetValue("texcoords", 0, out v);
-                            bw.Write((short)Math.Round(v.Data.x * 0x7FFF, 0));
-                            bw.Write((short)Math.Round((1f - v.Data.y) * 0x7FFF, 0));
+                            bw.Write((short)Math.Round(v.Data.X * 0x7FFF, 0));
+                            bw.Write((short)Math.Round((1f - v.Data.Y) * 0x7FFF, 0));
                         }
                         else
                         {
                             vert.TryGetValue("position", 0, out v);
-                            bw.Write(v.Data.x);
-                            bw.Write(v.Data.y);
-                            bw.Write(v.Data.z);
+                            bw.Write(v.Data.X);
+                            bw.Write(v.Data.Y);
+                            bw.Write(v.Data.Z);
 
                             vert.TryGetValue("normal", 0, out v);
-                            bw.Write(v.Data.i);
-                            bw.Write(v.Data.k);
-                            bw.Write(v.Data.j);
+                            bw.Write(v.Data.I);
+                            bw.Write(v.Data.K);
+                            bw.Write(v.Data.J);
 
                             vert.TryGetValue("texcoords", 0, out v);
-                            bw.Write(v.Data.x);
-                            bw.Write(v.Data.y);
+                            bw.Write(v.Data.X);
+                            bw.Write(v.Data.Y);
                         } 
                         #endregion
 
@@ -2782,10 +2762,10 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                             var indices = new List<int>();
                             vert.TryGetValue("blendindices", 0, out i);
 
-                            if (!indices.Contains((int)i.Data.a) && i.Data.a != 0) indices.Add((int)i.Data.a);
-                            if (!indices.Contains((int)i.Data.b) && i.Data.a != 0) indices.Add((int)i.Data.b);
-                            if (!indices.Contains((int)i.Data.c) && i.Data.a != 0) indices.Add((int)i.Data.c);
-                            if (!indices.Contains((int)i.Data.d) && i.Data.a != 0) indices.Add((int)i.Data.d);
+                            if (!indices.Contains((int)i.Data.A) && i.Data.A != 0) indices.Add((int)i.Data.A);
+                            if (!indices.Contains((int)i.Data.B) && i.Data.A != 0) indices.Add((int)i.Data.B);
+                            if (!indices.Contains((int)i.Data.C) && i.Data.A != 0) indices.Add((int)i.Data.C);
+                            if (!indices.Contains((int)i.Data.D) && i.Data.A != 0) indices.Add((int)i.Data.D);
 
                             if (indices.Count == 0) indices.Add(0);
 
@@ -2806,31 +2786,31 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
                             vert.TryGetValue("blendweight", 0, out w);
                             int count = 0;
 
-                            RealQuat boneIndex = new RealQuat();
-                            boneIndex.a = ATPL.ObjectByID((int)i.Data.a + obj._3301.FirstNodeID).BoneIndex;
-                            boneIndex.b = ATPL.ObjectByID((int)i.Data.b + obj._3301.FirstNodeID).BoneIndex;
-                            boneIndex.c = ATPL.ObjectByID((int)i.Data.c + obj._3301.FirstNodeID).BoneIndex;
-                            boneIndex.d = ATPL.ObjectByID((int)i.Data.d + obj._3301.FirstNodeID).BoneIndex;
+                            Vector boneIndex = new Vector();
+                            boneIndex.A = ATPL.ObjectByID((int)i.Data.A + obj._3301.FirstNodeID).BoneIndex;
+                            boneIndex.B = ATPL.ObjectByID((int)i.Data.B + obj._3301.FirstNodeID).BoneIndex;
+                            boneIndex.C = ATPL.ObjectByID((int)i.Data.C + obj._3301.FirstNodeID).BoneIndex;
+                            boneIndex.D = ATPL.ObjectByID((int)i.Data.D + obj._3301.FirstNodeID).BoneIndex;
 
 
-                            if (w.Data.a > 0)
+                            if (w.Data.A > 0)
                             {
-                                bw.Write((byte)boneIndex.a);
+                                bw.Write((byte)boneIndex.A);
                                 count++;
                             }
-                            if (w.Data.b > 0)
+                            if (w.Data.B > 0)
                             {
-                                bw.Write((byte)boneIndex.b);
+                                bw.Write((byte)boneIndex.B);
                                 count++;
                             }
-                            if (w.Data.c > 0)
+                            if (w.Data.C > 0)
                             {
-                                bw.Write((byte)boneIndex.c);
+                                bw.Write((byte)boneIndex.C);
                                 count++;
                             }
-                            if (w.Data.d > 0)
+                            if (w.Data.D > 0)
                             {
-                                bw.Write((byte)boneIndex.d);
+                                bw.Write((byte)boneIndex.D);
                                 count++;
                             }
 
@@ -2838,10 +2818,10 @@ namespace HaloOnlineTagTool.XboxCache.Definitions
 
                             if (count != 4) bw.Write((byte)255);
 
-                            if (w.Data.a > 0) bw.Write(w.Data.a);
-                            if (w.Data.b > 0) bw.Write(w.Data.b);
-                            if (w.Data.c > 0) bw.Write(w.Data.c);
-                            if (w.Data.d > 0) bw.Write(w.Data.d);  
+                            if (w.Data.A > 0) bw.Write(w.Data.A);
+                            if (w.Data.B > 0) bw.Write(w.Data.B);
+                            if (w.Data.C > 0) bw.Write(w.Data.C);
+                            if (w.Data.D > 0) bw.Write(w.Data.D);  
                         }
 	                    #endregion                      
                     }
