@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections;
 using HaloOnlineTagTool.Serialization;
-using HaloOnlineTagTool.TagStructures;
 
 namespace HaloOnlineTagTool.Commands.Editing
 {
