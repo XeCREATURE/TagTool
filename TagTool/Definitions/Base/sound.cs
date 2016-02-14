@@ -1,5 +1,5 @@
 ﻿using TagTool.Common;
-using TagTool.Resources.Sounds;
+using TagTool.Sounds;
 
 namespace TagTool.Definitions
 {

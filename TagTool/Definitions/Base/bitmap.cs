@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using TagTool.Common;
-using TagTool.Resources.Bitmaps;
+using TagTool.Bitmaps;
 
 namespace TagTool.Definitions
 {

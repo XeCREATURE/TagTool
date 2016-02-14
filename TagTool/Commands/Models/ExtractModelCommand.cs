@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TagTool.Resources;
-using TagTool.Resources.Geometry;
+using TagTool.Cache;
+using TagTool.Geometry;
 using TagTool.Serialization;
 using TagTool.TagStructures;
 

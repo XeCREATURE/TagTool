@@ -7,6 +7,7 @@ using TagTool.Commands.Unicode;
 using TagTool.Commands.VFiles;
 using TagTool.Serialization;
 using TagTool.TagStructures;
+using TagTool.Tags;
 
 namespace TagTool.Commands.Editing
 {

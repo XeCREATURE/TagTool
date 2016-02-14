@@ -4,11 +4,12 @@ using System.IO;
 using System.Linq;
 using Assimp;
 using TagTool.Common;
-using TagTool.Resources;
-using TagTool.Resources.Geometry;
+using TagTool.Cache;
+using TagTool.Geometry;
 using TagTool.Serialization;
 using TagTool.TagStructures;
-using PrimitiveType = TagTool.Resources.Geometry.PrimitiveType;
+using PrimitiveType = TagTool.Geometry.PrimitiveType;
+using TagTool.Tags;
 
 namespace TagTool.Commands.Tags
 {

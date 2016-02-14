@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TagTool.IO;
-using TagTool.Resources;
-using TagTool.Resources.Bitmaps;
-using TagTool.Resources.Geometry;
+using TagTool.Cache;
+using TagTool.Bitmaps;
+using TagTool.Geometry;
+using TagTool.Tags;
+using TagTool.Common;
 
 namespace TagTool.Serialization
 {

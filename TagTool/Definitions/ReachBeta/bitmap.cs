@@ -1,7 +1,7 @@
 ﻿using TagTool.IO;
 using TagTool.Common;
 using bitm = TagTool.Definitions.bitmap;
-using TagTool.Resources.Bitmaps;
+using TagTool.Bitmaps;
 
 namespace TagTool.Definitions.ReachBeta
 {

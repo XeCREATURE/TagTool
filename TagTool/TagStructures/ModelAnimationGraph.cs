@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using TagTool.Common;
-using TagTool.Resources;
+using TagTool.Cache;
 using TagTool.Serialization;
+using TagTool.Tags;
 
 namespace TagTool.TagStructures
 {

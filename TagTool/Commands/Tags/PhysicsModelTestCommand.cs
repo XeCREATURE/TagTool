@@ -1,7 +1,8 @@
-﻿using TagTool.Resources.Geometry;
+﻿using TagTool.Geometry;
 using System;
 using System.Collections.Generic;
 using TagTool.Serialization;
+using TagTool.Tags;
 
 namespace TagTool.Commands.Tags
 {

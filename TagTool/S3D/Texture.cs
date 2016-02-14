@@ -1,6 +1,6 @@
 ﻿using System;
 using TagTool.IO;
-using TagTool.Resources.Bitmaps;
+using TagTool.Bitmaps;
 
 namespace TagTool.S3D
 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using TagTool.Serialization;
+using TagTool.Tags;
 using TagTool.TagStructures;
 
 namespace TagTool.Commands.RenderMethods

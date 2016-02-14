@@ -1,5 +1,5 @@
 using TagTool.Definitions;
-using TagTool.Resources;
+using TagTool.Cache;
 using TagTool.Serialization;
 
 namespace TagTool.TagStructures

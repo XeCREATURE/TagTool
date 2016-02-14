@@ -1,7 +1,7 @@
 ﻿using TagTool.IO;
 using TagTool.Common;
 using snd_ = TagTool.Definitions.sound;
-using TagTool.Resources.Sounds;
+using TagTool.Sounds;
 
 namespace TagTool.Definitions.Halo3Retail
 {

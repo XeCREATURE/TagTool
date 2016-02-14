@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using TagTool.Resources.Geometry;
+using TagTool.Geometry;
 using TagTool.Serialization;
+using TagTool.Tags;
 using TagTool.TagStructures;
 
 namespace TagTool.Commands.Tags

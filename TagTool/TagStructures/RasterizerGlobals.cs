@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TagTool.Serialization;
+using TagTool.Tags;
 
 namespace TagTool.TagStructures
 {

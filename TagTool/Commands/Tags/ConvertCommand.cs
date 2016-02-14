@@ -5,11 +5,12 @@ using System.Linq;
 using TagTool.Common;
 using TagTool.Definitions;
 using TagTool.IO;
-using TagTool.Resources;
-using TagTool.Resources.Geometry;
-using TagTool.Resources.Shaders;
+using TagTool.Cache;
+using TagTool.Geometry;
+using TagTool.Shaders;
 using TagTool.Serialization;
 using TagTool.TagStructures;
+using TagTool.Tags;
 
 namespace TagTool.Commands.Tags
 {

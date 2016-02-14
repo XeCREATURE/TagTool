@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TagTool.Resources.Sounds;
+using TagTool.Sounds;
 
 namespace TagTool.Definitions.Halo4Retail
 {

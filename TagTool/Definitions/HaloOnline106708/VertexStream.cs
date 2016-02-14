@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using TagTool.Common;
-using TagTool.Resources.Geometry;
+using TagTool.Geometry;
 
 namespace TagTool.Definitions.HaloOnline106708
 {

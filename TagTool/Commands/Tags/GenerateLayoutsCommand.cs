@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TagTool.Analysis;
+using TagTool.Cache;
 using TagTool.Layouts;
+using TagTool.Tags;
 
 namespace TagTool.Commands.Tags
 {

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TagTool.Cache;
 using TagTool.Common;
 using TagTool.Definitions;
 using TagTool.Serialization;
+using TagTool.Tags;
 using TagTool.TagStructures;
 
 namespace TagTool.Commands.Tags

@@ -1,4 +1,5 @@
-﻿using TagTool.TagStructures;
+﻿using TagTool.Tags;
+using TagTool.TagStructures;
 
 namespace TagTool.Commands.Models
 {

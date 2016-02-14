@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TagTool.Serialization;
+using TagTool.Tags;
 
 namespace TagTool.Commands.Editing
 {

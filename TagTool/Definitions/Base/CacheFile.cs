@@ -437,7 +437,7 @@ namespace TagTool.Definitions
         public static XmlNode GetBuildNode(string build)
         {
             XmlNode retNode = null;
-            using (var xml = new FileStream("Xbox\\Builds.xml", FileMode.Open, FileAccess.Read))
+            using (var xml = new FileStream("Definitions\\Builds.xml", FileMode.Open, FileAccess.Read))
             {
                 var xmlDoc = new XmlDocument();
                 xmlDoc.Load(xml);
@@ -467,7 +467,7 @@ namespace TagTool.Definitions
         public static XmlNode GetVersionNode(string ver)
         {
             XmlNode retNode = null;
-            using (var xml = new FileStream("Xbox\\Versions.xml", FileMode.Open, FileAccess.Read))
+            using (var xml = new FileStream("Definitions\\Versions.xml", FileMode.Open, FileAccess.Read))
             {
                 var xmlDoc = new XmlDocument();
                 xmlDoc.Load(xml);
@@ -494,7 +494,7 @@ namespace TagTool.Definitions
         public static XmlNode GetVertexNode(string ver)
         {
             XmlNode retNode = null;
-            using (var xml = new FileStream("Xbox\\VertexBuffer.xml", FileMode.Open, FileAccess.Read))
+            using (var xml = new FileStream("Definitions\\VertexBuffer.xml", FileMode.Open, FileAccess.Read))
             {
                 var xmlDoc = new XmlDocument();
                 xmlDoc.Load(xml);

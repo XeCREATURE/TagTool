@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using TagTool.Cache;
 
 namespace TagTool.Definitions
 {

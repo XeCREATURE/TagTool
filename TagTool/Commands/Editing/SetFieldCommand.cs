@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TagTool.Common;
 using TagTool.Serialization;
+using TagTool.Tags;
 
 namespace TagTool.Commands.Editing
 {

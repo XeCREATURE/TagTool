@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using TagTool.Resources;
-using TagTool.Resources.Bitmaps;
+using TagTool.Cache;
+using TagTool.Bitmaps;
 using TagTool.Serialization;
 using TagTool.TagStructures;
+using TagTool.Tags;
 
 namespace TagTool.Commands.Bitmaps
 {

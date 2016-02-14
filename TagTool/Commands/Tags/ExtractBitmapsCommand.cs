@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using TagTool.Resources;
-using TagTool.Resources.Bitmaps;
+using TagTool.Cache;
+using TagTool.Bitmaps;
 using TagTool.Serialization;
 
 namespace TagTool.Commands.Tags

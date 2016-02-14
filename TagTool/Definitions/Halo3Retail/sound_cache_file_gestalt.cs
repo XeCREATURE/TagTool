@@ -1,7 +1,7 @@
 ﻿using TagTool.IO;
 using TagTool.Common;
 using ugh_ = TagTool.Definitions.sound_cache_file_gestalt;
-using TagTool.Resources.Sounds;
+using TagTool.Sounds;
 
 namespace TagTool.Definitions.Halo3Retail
 {

@@ -1,4 +1,6 @@
-﻿namespace TagTool.Definitions.HaloOnline700123
+﻿using TagTool.Cache;
+
+namespace TagTool.Definitions.HaloOnline700123
 {
     /// <summary>
     /// StringID resolver for 12.1.700123.
