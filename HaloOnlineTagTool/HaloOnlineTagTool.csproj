@@ -68,11 +68,14 @@
     <Compile Include="Commands\Core\DumpLogCommand.cs" />
     <Compile Include="Commands\Core\EchoCommand.cs" />
     <Compile Include="Commands\Core\HelpCommand.cs" />
+    <Compile Include="Commands\Core\SetVarCommand.cs" />
     <Compile Include="Commands\Editing\AddToBlockCommand.cs" />
+    <Compile Include="Commands\Editing\CopyElementsCommand.cs" />
     <Compile Include="Commands\Editing\EditBlockCommand.cs" />
     <Compile Include="Commands\Editing\EditTagContextFactory.cs" />
     <Compile Include="Commands\Editing\ExitToCommand.cs" />
     <Compile Include="Commands\Editing\ListFieldsCommand.cs" />
+    <Compile Include="Commands\Editing\PasteElementsCommand.cs" />
     <Compile Include="Commands\Editing\RemoveFromBlockCommand.cs" />
     <Compile Include="Commands\Editing\SaveChangesCommand.cs" />
     <Compile Include="Commands\Editing\SetFieldCommand.cs" />
@@ -126,6 +129,7 @@
     <Compile Include="Common\Euler3.cs" />
     <Compile Include="Common\NamingConvention.cs" />
     <Compile Include="Common\ReadOnlySet.cs" />
+    <Compile Include="Common\RealQuaternion.cs" />
     <Compile Include="Common\SimpleJson.cs" />
     <Compile Include="Common\TagReferenceBlock.cs" />
     <Compile Include="ConsoleHistory.cs" />
@@ -639,6 +643,123 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="V1_106708\StringIdResolver.cs" />
+    <Compile Include="XboxCache\Composer\FormatIdentification.cs" />
+    <Compile Include="XboxCache\Composer\Info.cs" />
+    <Compile Include="XboxCache\Composer\SoundExtraction.cs" />
+    <Compile Include="XboxCache\Composer\SoundScanner.cs" />
+    <Compile Include="XboxCache\Composer\StreamUtil.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\IWwiseObject.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\IWwiseObjectVisitor.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\RIFX.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\RTPC.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundBank.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundBankAction.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundBankActorMixer.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundBankEvent.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundBankFile.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundBankMusicPlaylist.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundBankMusicSegment.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundBankMusicSwitchContainer.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundBankMusicTrack.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundBankSequenceContainer.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundBankSwitchContainer.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundBankVoice.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundInfo.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundPack.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundPackFile.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundPackFolder.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\SoundPath.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\StateGroup.cs" />
+    <Compile Include="XboxCache\Composer\Wwise\WwiseObjectCollection.cs" />
+    <Compile Include="XboxCache\DataTypes\DataTypes.cs" />
+    <Compile Include="XboxCache\DataTypes\Vertex.cs" />
+    <Compile Include="XboxCache\Definitions\AES.cs" />
+    <Compile Include="XboxCache\Definitions\Base\bink.cs" />
+    <Compile Include="XboxCache\Definitions\Base\bitmap.cs" />
+    <Compile Include="XboxCache\Definitions\Base\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\Base\cache_file_resource_gestalt.cs" />
+    <Compile Include="XboxCache\Definitions\Base\cache_file_resource_layout_table.cs" />
+    <Compile Include="XboxCache\Definitions\Base\multilingual_unicode_string_list.cs" />
+    <Compile Include="XboxCache\Definitions\Base\render_method_template.cs" />
+    <Compile Include="XboxCache\Definitions\Base\render_model.cs" />
+    <Compile Include="XboxCache\Definitions\Base\scenario_structure_bsp.cs" />
+    <Compile Include="XboxCache\Definitions\Base\shader.cs" />
+    <Compile Include="XboxCache\Definitions\Base\sound.cs" />
+    <Compile Include="XboxCache\Definitions\Base\sound_cache_file_gestalt.cs" />
+    <Compile Include="XboxCache\Definitions\CacheManager.cs" />
+    <Compile Include="XboxCache\Definitions\DefinitionsManager.cs" />
+    <Compile Include="XboxCache\Definitions\Enums.cs" />
+    <Compile Include="XboxCache\Definitions\Halo1AE\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\Halo1CE\bitmap.cs" />
+    <Compile Include="XboxCache\Definitions\Halo1CE\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\Halo1PC\bitmap.cs" />
+    <Compile Include="XboxCache\Definitions\Halo1PC\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\Halo1PC\gbxmodel.cs" />
+    <Compile Include="XboxCache\Definitions\Halo1PC\scenario_structure_bsp.cs" />
+    <Compile Include="XboxCache\Definitions\Halo1PC\shader_model.cs" />
+    <Compile Include="XboxCache\Definitions\Halo2Vista\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\Halo2Xbox\bitmap.cs" />
+    <Compile Include="XboxCache\Definitions\Halo2Xbox\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\Halo2Xbox\render_model.cs" />
+    <Compile Include="XboxCache\Definitions\Halo2Xbox\scenario_structure_bsp.cs" />
+    <Compile Include="XboxCache\Definitions\Halo2Xbox\shader.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Beta\bitmap.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Beta\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Beta\cache_file_resource_gestalt.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Beta\multilingual_unicode_string_list.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Beta\render_method_template.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Beta\render_model.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Beta\scenario_structure_bsp.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Beta\shader.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3ODST\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3ODST\render_model.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3ODST\scenario_structure_bsp.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3ODST\sound_cache_file_gestalt.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Retail\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Retail\cache_file_resource_gestalt.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Retail\cache_file_resource_layout_table.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Retail\scenario_structure_bsp.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Retail\sound.cs" />
+    <Compile Include="XboxCache\Definitions\Halo3Retail\sound_cache_file_gestalt.cs" />
+    <Compile Include="XboxCache\Definitions\Halo4Beta\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\Halo4Beta\cache_file_resource_gestalt.cs" />
+    <Compile Include="XboxCache\Definitions\Halo4Beta\cache_file_resource_layout_table.cs" />
+    <Compile Include="XboxCache\Definitions\Halo4Beta\material.cs" />
+    <Compile Include="XboxCache\Definitions\Halo4Beta\render_model.cs" />
+    <Compile Include="XboxCache\Definitions\Halo4Retail\bink.cs" />
+    <Compile Include="XboxCache\Definitions\Halo4Retail\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\Halo4Retail\cache_file_resource_gestalt.cs" />
+    <Compile Include="XboxCache\Definitions\Halo4Retail\material.cs" />
+    <Compile Include="XboxCache\Definitions\Halo4Retail\render_model.cs" />
+    <Compile Include="XboxCache\Definitions\Halo4Retail\scenario_structure_bsp.cs" />
+    <Compile Include="XboxCache\Definitions\Halo4Retail\sound.cs" />
+    <Compile Include="XboxCache\Definitions\ModelFunctions.cs" />
+    <Compile Include="XboxCache\Definitions\ReachBeta\bitmap.cs" />
+    <Compile Include="XboxCache\Definitions\ReachBeta\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\ReachBeta\multilingual_unicode_string_list.cs" />
+    <Compile Include="XboxCache\Definitions\ReachBeta\render_model.cs" />
+    <Compile Include="XboxCache\Definitions\ReachBeta\scenario_structure_bsp.cs" />
+    <Compile Include="XboxCache\Definitions\ReachBeta\shader.cs" />
+    <Compile Include="XboxCache\Definitions\ReachBeta\sound.cs" />
+    <Compile Include="XboxCache\Definitions\ReachBeta\sound_cache_file_gestalt.cs" />
+    <Compile Include="XboxCache\Definitions\ReachRetail\bitmap.cs" />
+    <Compile Include="XboxCache\Definitions\ReachRetail\CacheFile.cs" />
+    <Compile Include="XboxCache\Definitions\ReachRetail\render_model.cs" />
+    <Compile Include="XboxCache\Definitions\ReachRetail\scenario_structure_bsp.cs" />
+    <Compile Include="XboxCache\Definitions\ReachRetail\sound_cache_file_gestalt.cs" />
+    <Compile Include="XboxCache\Definitions\xcompress.cs" />
+    <Compile Include="Endian\EndianReader.cs" />
+    <Compile Include="Endian\EndianWriter.cs" />
+    <Compile Include="Endian\EndianFormat.cs" />
+    <Compile Include="XboxCache\S3D\Blocks.cs" />
+    <Compile Include="XboxCache\S3D\Enums.cs" />
+    <Compile Include="XboxCache\S3D\PakFile.cs" />
+    <Compile Include="XboxCache\S3D\Scene.cs" />
+    <Compile Include="XboxCache\S3D\SceneCDT.cs" />
+    <Compile Include="XboxCache\S3D\SceneData.cs" />
+    <Compile Include="XboxCache\S3D\Template.cs" />
+    <Compile Include="XboxCache\S3D\TemplateBase.cs" />
+    <Compile Include="XboxCache\S3D\Texture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -646,6 +767,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
+    <Content Include="XboxCache\Builds.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="XboxCache\Composer\README.txt" />
+    <Content Include="XboxCache\Versions.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="XboxCache\VertexBuffer.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

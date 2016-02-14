@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using HaloOnlineTagTool.Common;
 using HaloOnlineTagTool.Serialization;
 using HaloOnlineTagTool.TagStructures;
 

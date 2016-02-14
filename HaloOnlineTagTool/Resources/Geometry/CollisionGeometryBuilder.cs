@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HaloOnlineTagTool.TagStructures;
 using BSP = HaloOnlineTagTool.TagStructures.CollisionModel.Region.Permutation.Bsp;
 

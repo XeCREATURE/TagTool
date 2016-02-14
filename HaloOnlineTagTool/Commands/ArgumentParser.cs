@@ -8,6 +8,8 @@ namespace HaloOnlineTagTool.Commands
 {
     static class ArgumentParser
     {
+        public static Dictionary<string, string> Variables { get; } = new Dictionary<string, string>();
+
         public static List<string> ParseCommand(string command, out string redirectFile)
         {
             var results = new List<string>();
@@ -31,7 +33,16 @@ namespace HaloOnlineTagTool.Commands
                         if (partStart != -1)
                             currentArg.Append(command.Substring(partStart, i - partStart));
                         if (currentArg.Length > 0)
-                            results.Add(currentArg.ToString());
+                        {
+                            var arg = currentArg.ToString();
+                            if (arg.StartsWith("$"))
+                            {
+                                var arg2 = arg.Substring(1);
+                                if (arg2.Length != 0 && Variables.ContainsKey(arg2))
+                                    arg = Variables[arg2];
+                            }
+                            results.Add(arg);
+                        }
                         currentArg.Clear();
                         partStart = -1;
                         break;
@@ -50,7 +61,16 @@ namespace HaloOnlineTagTool.Commands
             if (partStart != -1)
                 currentArg.Append(command.Substring(partStart));
             if (currentArg.Length > 0)
-                results.Add(currentArg.ToString());
+            {
+                var arg = currentArg.ToString();
+                if (arg.StartsWith("$"))
+                {
+                    var arg2 = arg.Substring(1);
+                    if (arg2.Length != 0 && Variables.ContainsKey(arg2))
+                        arg = Variables[arg2];
+                }
+                results.Add(arg);
+            }
             if (redirectStart >= 0 && redirectStart < results.Count)
             {
                 redirectFile = string.Join(" ", results.Skip(redirectStart));
@@ -61,14 +81,21 @@ namespace HaloOnlineTagTool.Commands
 
         public static TagInstance ParseTagIndex(TagCache cache, string arg)
         {
+            if (arg == "*")
+                return cache.Tags.Last();
+            else if (arg == "null")
+                return null;
+
             int tagIndex;
             if (!int.TryParse(arg, NumberStyles.HexNumber, null, out tagIndex))
                 return null;
+
             if (!cache.Tags.Contains(tagIndex))
             {
                 Console.WriteLine("Unable to find tag {0:X8}.", tagIndex);
                 return null;
             }
+
             return cache.Tags[tagIndex];
         }
 

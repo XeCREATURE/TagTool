@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using HaloOnlineTagTool.Serialization;
 using HaloOnlineTagTool.TagStructures;
 
 namespace HaloOnlineTagTool.Commands.Unicode

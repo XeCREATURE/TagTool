@@ -1,6 +1,4 @@
-﻿using HaloOnlineTagTool.Common;
-using HaloOnlineTagTool.Serialization;
-using HaloOnlineTagTool.TagStructures;
+﻿using HaloOnlineTagTool.TagStructures;
 using SimpleJSON;
 using System;
 using System.Collections.Generic;

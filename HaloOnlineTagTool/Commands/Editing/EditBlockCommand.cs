@@ -128,6 +128,8 @@ namespace HaloOnlineTagTool.Commands.Editing
             blockContext.AddCommand(new EditBlockCommand(Stack, Info, Tag, blockValue));
             blockContext.AddCommand(new AddToBlockCommand(Stack, Info, Tag, blockStructure, blockValue));
             blockContext.AddCommand(new RemoveFromBlockCommand(Stack, Info, Tag, blockStructure, blockValue));
+            blockContext.AddCommand(new CopyElementsCommand(Stack, Info, Tag, blockStructure, blockValue));
+            blockContext.AddCommand(new PasteElementsCommand(Stack, Info, Tag, blockStructure, blockValue));
             blockContext.AddCommand(new ExitToCommand(Stack));
             Stack.Push(blockContext);
 

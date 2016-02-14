@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using HaloOnlineTagTool.Common;
 using HaloOnlineTagTool.Serialization;
 using HaloOnlineTagTool.TagStructures;

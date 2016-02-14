@@ -4,7 +4,6 @@ using System.Data.Entity.Design.PluralizationServices;
 using System.Globalization;
 using System.Linq;
 using System.Xml;
-using HaloOnlineTagTool.Common;
 
 namespace HaloOnlineTagTool.Layouts
 {

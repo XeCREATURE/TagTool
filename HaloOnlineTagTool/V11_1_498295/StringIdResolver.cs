@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HaloOnlineTagTool.V11_1_498295
+﻿namespace HaloOnlineTagTool.V11_1_498295
 {
     /// <summary>
     /// StringID resolver for 11.1.498295.

@@ -1,5 +1,4 @@
-﻿using System.IO;
-using HaloOnlineTagTool.Commands.Core;
+﻿using HaloOnlineTagTool.Commands.Core;
 
 namespace HaloOnlineTagTool.Commands.Tags
 {
