@@ -21,7 +21,9 @@ namespace TagTool.Geometry
         private RenderModel.Region _currentRegion;
         private RenderModel.Region.Permutation _currentPermutation;
         private MeshData _currentMesh;
-        private readonly List<MeshData> _meshes = new List<MeshData>();
+        public readonly List<MeshData> Meshes = new List<MeshData>();
+        private Mesh.Part _currentPart;
+        private readonly List<Mesh.SubPart> _subparts = new List<Mesh.SubPart>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderModelBuilder"/> class for a particular engine version.
@@ -33,7 +35,6 @@ namespace TagTool.Geometry
             _model.Nodes = new List<RenderModel.Node>();
             _model.RuntimeNodes = new List<RenderModel.RuntimeNode>();
             _model.Materials = new List<RenderMaterial>();
-            _model.Unknown1C = -1; // "Flair Starting Model Section Index" in Assembly
             _model.Geometry = new GeometryReference
             {
                 Meshes = new List<Mesh>(),
@@ -46,10 +47,10 @@ namespace TagTool.Geometry
         /// </summary>
         /// <param name="node">The node to add.</param>
         /// <returns>The node index.</returns>
-        public byte AddNode(RenderModel.Node node)
+        public sbyte AddNode(RenderModel.Node node)
         {
             _model.Nodes.Add(node);
-            
+
             // Generate runtime data
             _model.RuntimeNodes.Add(new RenderModel.RuntimeNode
             {
@@ -58,7 +59,7 @@ namespace TagTool.Geometry
                 Scale = node.DefaultScale,
             });
 
-            return (byte)(_model.Nodes.Count - 1);
+            return (sbyte)(_model.Nodes.Count - 1);
         }
 
         /// <summary>
@@ -71,6 +72,7 @@ namespace TagTool.Geometry
             _model.Materials.Add(material);
             return (short)(_model.Materials.Count - 1);
         }
+
 
         /// <summary>
         /// Begins building a new model region.
@@ -127,7 +129,7 @@ namespace TagTool.Geometry
             _currentPermutation = new RenderModel.Region.Permutation
             {
                 Name = name,
-                MeshIndex = (short)_meshes.Count,
+                MeshIndex = (short)Meshes.Count,
             };
         }
 
@@ -149,7 +151,7 @@ namespace TagTool.Geometry
                 throw new InvalidOperationException("Cannot end a permutation while a mesh is still active");
             if (_currentRegion == null)
                 throw new InvalidOperationException("Cannot end a permutation if no region is active");
-            
+
             _currentRegion.Permutations.Add(_currentPermutation);
             _currentPermutation = null;
         }
@@ -199,7 +201,7 @@ namespace TagTool.Geometry
             if (_currentPermutation == null)
                 throw new InvalidOperationException("Cannot end a mesh if no permutation is active");
 
-            _meshes.Add(_currentMesh);
+            Meshes.Add(_currentMesh);
             _model.Geometry.Meshes.Add(_currentMesh.Mesh);
             _currentPermutation.MeshCount++;
             _currentMesh = null;
@@ -211,7 +213,7 @@ namespace TagTool.Geometry
         /// <param name="vertices">The vertices to bind.</param>
         /// <param name="nodeIndex">The node to attach the vertices to.</param>
         /// <exception cref="System.InvalidOperationException">Cannot bind a rigid vertex buffer if no mesh is active</exception>
-        public void BindRigidVertexBuffer(IEnumerable<RigidVertex> vertices, byte nodeIndex)
+        public void BindRigidVertexBuffer(IEnumerable<RigidVertex> vertices, sbyte nodeIndex)
         {
             if (_currentMesh == null)
                 throw new InvalidOperationException("Cannot bind a rigid vertex buffer if no mesh is active");
@@ -221,6 +223,23 @@ namespace TagTool.Geometry
             _currentMesh.VertexFormat = VertexBufferFormat.Rigid;
             _currentMesh.Mesh.Type = VertexType.Rigid;
             _currentMesh.Mesh.RigidNodeIndex = nodeIndex;
+        }
+
+        /// <summary>
+        /// Binds a world vertex to the current mesh.
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <param name="nodeIndex"></param>
+        public void BindWorldVertexBuffer(IEnumerable<WorldVertex> vertices)
+        {
+            if (_currentMesh == null)
+                throw new InvalidOperationException("Cannot bind a world vertex buffer if no mesh is active");
+
+            _currentMesh.UnbindVertices();
+            _currentMesh.WorldVertices = vertices.ToArray();
+            _currentMesh.VertexFormat = VertexBufferFormat.World;
+            _currentMesh.Mesh.Type = VertexType.World;
+            _currentMesh.Mesh.RigidNodeIndex = -1;
         }
 
         /// <summary>
@@ -255,42 +274,67 @@ namespace TagTool.Geometry
         }
 
         /// <summary>
-        /// Defines a part in the current mesh.
+        /// Begins a new part in the current mesh.
         /// </summary>
         /// <param name="materialIndex">Index of the material.</param>
         /// <param name="firstIndex">The first index.</param>
         /// <param name="indexCount">The index count.</param>
         /// <param name="vertexCount">The vertex count.</param>
         /// <exception cref="System.InvalidOperationException">Cannot define a part if no mesh is active</exception>
-        public void DefinePart(short materialIndex, ushort firstIndex, ushort indexCount, ushort vertexCount)
+        public void BeginPart(short materialIndex, ushort firstIndex, ushort indexCount, ushort vertexCount)
         {
             if (_currentMesh == null)
                 throw new InvalidOperationException("Cannot define a part if no mesh is active");
 
-            var part = new Mesh.Part
+            _currentPart = new Mesh.Part
             {
                 MaterialIndex = materialIndex,
                 Unknown2 = -1,
                 FirstIndex = firstIndex,
                 IndexCount = indexCount,
-                FirstSubPartIndex = (short)_currentMesh.Mesh.SubParts.Count,
-                SubPartCount = 1,
+                FirstSubPartIndex = (short)(_currentMesh.Mesh.SubParts.Count - 1),
+                SubPartCount = 0,
                 // TODO: Unknown values here
                 VertexCount = vertexCount,
             };
+        }
 
-            // It doesn't seem like the game really ever uses subparts for
-            // most models, but define one anyway
-            var subPart = new Mesh.SubPart
-            {
-                FirstIndex = firstIndex,
-                IndexCount = indexCount,
-                PartIndex = (short)_currentMesh.Mesh.Parts.Count,
-                VertexCount = vertexCount,
-            };
+        public void EndPart()
+        {
+            if (_currentPart == null)
+                throw new InvalidOperationException("Cannot end a part if no part is active");
+            if (_currentMesh == null)
+                throw new InvalidOperationException("Cannot end a part if no mesh is active");
+            if (_currentPermutation == null)
+                throw new InvalidOperationException("Cannot end a part if no permutation is active");
 
-            _currentMesh.Mesh.Parts.Add(part);
-            _currentMesh.Mesh.SubParts.Add(subPart);
+            _currentPart.SubPartCount = (short)_subparts.Count;
+            _currentMesh.Mesh.SubParts.AddRange(_subparts);
+            _currentMesh.Mesh.Parts.Add(_currentPart);
+            _subparts.Clear();
+            _currentPart = null;
+        }
+
+        /// <summary>
+        /// Defines a subpart in the current mesh part.
+        /// </summary>
+        /// <param name="firstIndex">The part's first index.</param>
+        /// <param name="indexCount">The part's index count.</param>
+        /// <param name="vertexCount">The part's vertex count.</param>
+        /// <exception cref="System.InvalidOperationException">Cannot define a mesh subpart if no mesh part is active</exception>
+        public void DefineSubPart(ushort firstIndex, ushort indexCount, ushort vertexCount)
+        {
+            if (_currentMesh == null)
+                throw new InvalidOperationException("Cannot define a part if no mesh is active");
+
+            _currentMesh.Mesh.SubParts.Add(
+                new Mesh.SubPart
+                {
+                    FirstIndex = firstIndex,
+                    IndexCount = indexCount,
+                    PartIndex = (short)_currentMesh.Mesh.Parts.Count,
+                    VertexCount = vertexCount,
+                });
         }
 
         /// <summary>
@@ -317,7 +361,7 @@ namespace TagTool.Geometry
 
             // TODO: Refactor how vertices work, this is just ugly
 
-            foreach (var mesh in _meshes)
+            foreach (var mesh in Meshes)
             {
                 if (mesh.RigidVertices != null)
                 {
@@ -341,7 +385,7 @@ namespace TagTool.Geometry
         private GeometryCompressionInfo BuildCompressionInfo()
         {
             var result = new GeometryCompressionInfo();
-            foreach (var mesh in _meshes)
+            foreach (var mesh in Meshes)
             {
                 // TODO: Refactor how vertices work, this is just ugly
 
@@ -384,7 +428,7 @@ namespace TagTool.Geometry
             var definition = new RenderGeometryResourceDefinition();
             definition.VertexBuffers = new List<D3DPointer<VertexBufferDefinition>>();
             definition.IndexBuffers = new List<D3DPointer<IndexBufferDefinition>>();
-            foreach (var mesh in _meshes)
+            foreach (var mesh in Meshes)
             {
                 // Serialize the mesh's vertex buffer
                 var vertexBufferStart = (int)resourceDataStream.Position;
@@ -462,7 +506,7 @@ namespace TagTool.Geometry
             StreamUtil.Align(outStream, 4);
         }
 
-        private class MeshData
+        public class MeshData
         {
             public Mesh Mesh { get; set; }
 
@@ -472,6 +516,8 @@ namespace TagTool.Geometry
 
             public SkinnedVertex[] SkinnedVertices { get; set; }
 
+            public WorldVertex[] WorldVertices { get; set; }
+
             public ushort[] Indexes { get; set; }
 
             public void UnbindVertices()
@@ -479,6 +525,7 @@ namespace TagTool.Geometry
                 VertexFormat = VertexBufferFormat.Invalid;
                 RigidVertices = null;
                 SkinnedVertices = null;
+                WorldVertices = null;
             }
         }
 

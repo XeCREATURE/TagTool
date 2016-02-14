@@ -43,7 +43,7 @@ namespace TagTool.Geometry
         /// Gets or sets the index of the node to associate the mesh with.
         /// Only applies to rigid meshes.
         /// </summary>
-        public byte RigidNodeIndex;
+        public sbyte RigidNodeIndex;
 
         /// <summary>
         /// Gets or sets the type of each vertex in the mesh.

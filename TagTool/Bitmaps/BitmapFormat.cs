@@ -36,13 +36,13 @@
         A16B16G16R16,       // 0x1C, 48-bit color 16-bit alpha
         V16U16,             // 0x1D, v16u16 signed 16-bit
         Unused1E,           // 0x1E
-        DXT5a,              // 0x1F
+        Dxt5a,              // 0x1F
         Unused20,           // 0x20
         Dxn,                // 0x21, compressed normals: high quality ('ATI2')
         Ctx1,               // 0x22
         Dxt3aAlpha,         // 0x23
         Dxt3aMono,          // 0x24
-        Dxt5aApha,          // 0x25
+        Dxt5aAlpha,         // 0x25
         Dxt5aMono,          // 0x26
         DxnMonoAlpha,       // 0x27
         ReachDxt3aMono,     // 0x28, Reach Dxt3aMono

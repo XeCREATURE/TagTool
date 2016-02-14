@@ -1,11 +1,4 @@
-﻿using TagTool.Sounds;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TagTool.Sounds
+﻿namespace TagTool.Sounds
 {
     /// <summary>
     /// Provides methods for identifying Wwise sound formats.

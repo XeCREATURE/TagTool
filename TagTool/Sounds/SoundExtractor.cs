@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using TagTool.Sounds;
 using TagTool.IO;
 
 namespace TagTool.Sounds

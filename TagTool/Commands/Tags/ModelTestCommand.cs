@@ -130,8 +130,12 @@ namespace TagTool.Commands.Tags
                     {
                         RenderMethod = _cache.Tags[0x101F],
                     });
-                    builder.DefinePart(material, partStartIndex, (ushort)meshIndices.Length, (ushort)mesh.VertexCount);
 
+
+                    builder.BeginPart(material, partStartIndex, (ushort)meshIndices.Length, (ushort)mesh.VertexCount);
+                    builder.DefineSubPart(partStartIndex, (ushort)meshIndices.Length, (ushort)mesh.VertexCount);
+                    builder.EndPart();
+                    
                     // Move to the next part
                     partStartVertex += (ushort)mesh.VertexCount;
                     partStartIndex += (ushort)meshIndices.Length;

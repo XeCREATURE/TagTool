@@ -80,9 +80,9 @@ namespace TagTool.S3D
                     case BitmapFormat.Dxt1:
                     case BitmapFormat.Dxt3aMono:
                     case BitmapFormat.Dxt3aAlpha:
-                    case BitmapFormat.DXT5a:
+                    case BitmapFormat.Dxt5a:
                     case BitmapFormat.Dxt5aMono:
-                    case BitmapFormat.Dxt5aApha:
+                    case BitmapFormat.Dxt5aAlpha:
                         size = VirtualWidth * VirtualHeight / 2;
                         break;
                     case BitmapFormat.A8:
@@ -158,7 +158,7 @@ namespace TagTool.S3D
                     Format = BitmapFormat.Dxn;
                     break;
                 case 37:
-                    Format = BitmapFormat.DXT5a;
+                    Format = BitmapFormat.Dxt5a;
                     break;
                 default:
                     throw new Exception("CHECK THIS");
