@@ -3,19 +3,6 @@
     public enum DefinitionSet
     {
         Unknown = -1,
-        Halo1Xbox,
-        Halo1PC,
-        Halo1CE,
-        Halo1AE,
-        Halo2Xbox,
-        Halo2Vista,
-        Halo3Beta,
-        Halo3Retail,
-        Halo3ODST,
-        HaloReachBeta,
-        HaloReachRetail,
-        Halo4Beta,
-        Halo4Retail,
         HaloOnline106708,
         HaloOnline235640,
         HaloOnline301003,
@@ -30,6 +17,19 @@
         HaloOnline532911,
         HaloOnline554482,
         HaloOnline571627,
-        HaloOnline700123
+        HaloOnline700123,
+        Halo1Xbox,
+        Halo1PC,
+        Halo1CE,
+        Halo1AE,
+        Halo2Xbox,
+        Halo2Vista,
+        Halo3Beta,
+        Halo3Retail,
+        Halo3ODST,
+        HaloReachBeta,
+        HaloReachRetail,
+        Halo4Beta,
+        Halo4Retail
     }
 }
