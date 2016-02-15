@@ -13,13 +13,22 @@ namespace TagTool.Definitions.HaloOnline235640
             _stream = new VertexElementStream(stream);
         }
 
+        private Vector4 TransformTangent(Vector4 tangent)
+        {
+            return new Vector4(
+                tangent.X * 2.0f - 1.0f,
+                tangent.Y * 2.0f - 1.0f,
+                tangent.Z * 2.0f - 1.0f,
+                tangent.W * 2.0f - 1.0f);
+        }
+
         public WorldVertex ReadWorldVertex()
         {
             return new WorldVertex
             {
                 Position = _stream.ReadFloat4(),
                 Texcoord = _stream.ReadFloat2(),
-                Tangent = _stream.ReadUByte4N(),
+                Tangent = TransformTangent(_stream.ReadUByte4N()),
             };
         }
 
@@ -36,7 +45,7 @@ namespace TagTool.Definitions.HaloOnline235640
             {
                 Position = _stream.ReadShort4N(),
                 Texcoord = _stream.ReadShort2N(),
-                Tangent = _stream.ReadUByte4N(),
+                Tangent = TransformTangent(_stream.ReadUByte4N()),
             };
         }
 
@@ -53,7 +62,7 @@ namespace TagTool.Definitions.HaloOnline235640
             {
                 Position = _stream.ReadShort4N(),
                 Texcoord = _stream.ReadShort2N(),
-                Tangent = _stream.ReadUByte4N(),
+                Tangent = TransformTangent(_stream.ReadUByte4N()),
                 BlendIndices = _stream.ReadUByte4(),
                 BlendWeights = _stream.ReadUByte4N().ToArray(),
             };
@@ -91,7 +100,7 @@ namespace TagTool.Definitions.HaloOnline235640
             {
                 Position = _stream.ReadFloat4(),
                 Texcoord = _stream.ReadFloat2(),
-                Tangent = _stream.ReadUByte4N(),
+                Tangent = TransformTangent(_stream.ReadUByte4N()),
             };
         }
 
@@ -108,7 +117,7 @@ namespace TagTool.Definitions.HaloOnline235640
             {
                 Position = _stream.ReadShort4N(),
                 Texcoord = _stream.ReadShort2N(),
-                Tangent = _stream.ReadUByte4N(),
+                Tangent = TransformTangent(_stream.ReadUByte4N()),
             };
         }
 
@@ -125,7 +134,7 @@ namespace TagTool.Definitions.HaloOnline235640
             {
                 Position = _stream.ReadShort4N(),
                 Texcoord = _stream.ReadShort2N(),
-                Tangent = _stream.ReadUByte4N(),
+                Tangent = TransformTangent(_stream.ReadUByte4N()),
                 BlendIndices = _stream.ReadUByte4(),
                 BlendWeights = _stream.ReadUByte4N().ToArray(),
             };
@@ -441,7 +450,7 @@ namespace TagTool.Definitions.HaloOnline235640
             {
                 Position = _stream.ReadShort4N(),
                 Texcoord = _stream.ReadShort2N(),
-                Tangent = _stream.ReadUByte4N(),
+                Tangent = TransformTangent(_stream.ReadUByte4N()),
                 BlendIndices = _stream.ReadUByte4(),
                 BlendWeights = _stream.ReadUByte4N().ToArray(),
             };
@@ -463,7 +472,7 @@ namespace TagTool.Definitions.HaloOnline235640
                 Position = new Vector4(_stream.ReadFloat3(), 0),
                 Texcoord = _stream.ReadFloat2(),
                 Normal = _stream.ReadFloat3(),
-                Tangent = new Vector4(_stream.ReadFloat3(), 0),
+                Tangent = TransformTangent(new Vector4(_stream.ReadFloat3(), 0)),
                 Binormal = _stream.ReadFloat3(),
             };
         }
