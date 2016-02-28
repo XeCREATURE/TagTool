@@ -29,8 +29,10 @@ namespace TagTool.Commands.RenderModels
         {
             foreach (var material in Definition.Materials)
             {
-                Console.Write("Please enter the replacement {0:X8} index: ",
-                    material.RenderMethod.Index);
+                if (material.RenderMethod != null)
+                    Console.Write("Please enter the replacement {0:X8} index: ", material.RenderMethod.Index);
+                else
+                    Console.Write("Please enter the replace material #{0} index: ", Definition.Materials.IndexOf(material));
 
                 material.RenderMethod = ArgumentParser.ParseTagIndex(Info.Cache, Console.ReadLine());
             }
