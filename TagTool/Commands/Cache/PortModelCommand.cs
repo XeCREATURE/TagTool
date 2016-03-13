@@ -203,7 +203,7 @@ namespace TagTool.Commands.Cache
                     {
                         var section = mode.ModelSections[i];
 
-                        if (section.Submeshes.Count == 0)
+                        if (section.Submeshes.Count == 0 || section.Vertices == null)
                             continue;
 
                         //

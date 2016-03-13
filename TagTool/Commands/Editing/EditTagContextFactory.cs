@@ -17,8 +17,16 @@ namespace TagTool.Commands.Editing
         {
             var groupName = info.StringIDs.GetString(tag.Group.Name);
 
+            var tagName = $"0x{tag.Index:X4}";
+
+            if (info.TagNames.ContainsKey(tag.Index))
+            {
+                tagName = info.TagNames[tag.Index];
+                tagName = $"(0x{tag.Index:X4}) {tagName.Substring(tagName.LastIndexOf('\\') + 1)}";
+            }
+
             var context = new CommandContext(stack.Context,
-                string.Format("0x{0:X4}.{1}", tag.Index, groupName));
+                string.Format("{0}.{1}", tagName, groupName));
 
             switch (tag.Group.Tag.ToString())
             {

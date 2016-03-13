@@ -4,7 +4,7 @@
     {
         Mono,
         Stereo,
-        Unknown2,   // possibly surround stereo
-        Unknown3    // possibly surround stereo
+        Surround,
+        Surround_5_1
     }
 }

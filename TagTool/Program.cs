@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -103,7 +104,7 @@ namespace TagTool
                 Console.WriteLine("{0} strings loaded.", stringIds.Strings.Count);
                 Console.WriteLine();
             }
-
+            
             var info = new OpenTagCache
             {
                 Cache = cache,
@@ -114,6 +115,42 @@ namespace TagTool
                 Serializer = new TagSerializer(version),
                 Deserializer = new TagDeserializer(version),
             };
+
+            var tagNamesPath = "tagnames_" + Definition.GetVersionString(version) + ".csv";
+
+            if (File.Exists(tagNamesPath))
+            {
+                using (var tagNamesStream = File.Open(tagNamesPath, FileMode.Open, FileAccess.Read))
+                {
+                    var reader = new StreamReader(tagNamesStream);
+
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var separatorIndex = line.IndexOf(',');
+                        var indexString = line.Substring(2, separatorIndex - 2);
+
+                        int tagIndex;
+                        if (!int.TryParse(indexString, NumberStyles.HexNumber, null, out tagIndex))
+                            tagIndex = -1;
+
+                        if (tagIndex < 0 || tagIndex >= cache.Tags.Count)
+                            continue;
+
+                        var nameString = line.Substring(separatorIndex + 1);
+
+                        if (nameString.Contains(" "))
+                        {
+                            var lastSpaceIndex = nameString.LastIndexOf(' ');
+                            nameString = nameString.Substring(lastSpaceIndex + 1, nameString.Length - lastSpaceIndex - 1);
+                        }
+
+                        info.TagNames[tagIndex] = nameString;
+                    }
+
+                    reader.Close();
+                }
+            }
 
             // Create command context
             var contextStack = new CommandContextStack();

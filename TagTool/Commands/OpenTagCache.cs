@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using TagTool.Cache;
 using TagTool.Definitions;
 using TagTool.Serialization;
@@ -46,6 +47,11 @@ namespace TagTool.Commands
         /// Gets or sets the tag deserializer to use.
         /// </summary>
         public TagDeserializer Deserializer { get; set; }
+
+        /// <summary>
+        /// A dictionary of tag names.
+        /// </summary>
+        public Dictionary<int, string> TagNames { get; set; } = new Dictionary<int, string>();
 
         /// <summary>
         /// Opens the tag cache file for reading.
