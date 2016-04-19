@@ -17,6 +17,7 @@ namespace TagTool
     {
         static void Main(string[] args)
         {
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("en-US");
             ConsoleHistory.Initialize();
 
             // Get the file path from the first argument
