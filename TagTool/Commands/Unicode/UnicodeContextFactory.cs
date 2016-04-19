@@ -23,6 +23,7 @@ namespace TagTool.Commands.Unicode
                 return;
 
             context.AddCommand(new ListCommand(info, unic));
+            context.AddCommand(new GetCommand(info, tag, unic));
             context.AddCommand(new SetCommand(info, tag, unic));
         }
     }
