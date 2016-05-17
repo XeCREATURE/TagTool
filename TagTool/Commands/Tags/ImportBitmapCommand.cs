@@ -11,6 +11,7 @@ namespace TagTool.Commands.Tags
     class ImportBitmapCommand : Command
     {
         private readonly OpenTagCache _info;
+        private readonly TagCache _cache;
 
         public ImportBitmapCommand(OpenTagCache info) : base(
             CommandFlags.Inherit,
@@ -18,19 +19,22 @@ namespace TagTool.Commands.Tags
             "importbitmap",
             "Create a new bitmap tag from a DDS file",
 
-            "importbitmap <dds file>",
+            "importbitmap <tag> <dds file>",
 
             "The DDS file will be imported into textures.dat as a new resource.\n" +
             "Make sure to add the new bitmap tag as a dependency if you edit a shader!")
         {
+            _cache = cache;
             _info = info;
         }
 
         public override bool Execute(List<string> args)
         {
-            if (args.Count != 1)
+            if (args.Count != 2)
                 return false;
-            var imagePath = args[0];
+                
+            var tag = ArgumentParser.ParseTagIndex(_cache, args[0]);
+            var imagePath = args[1];
 
             Console.WriteLine("Loading textures.dat...");
             var resourceManager = new ResourceDataManager();
@@ -68,7 +72,7 @@ namespace TagTool.Commands.Tags
             }
 
             Console.WriteLine("Creating a new tag...");
-            var tag = _info.Cache.AllocateTag();
+
             using (var tagsStream = _info.OpenCacheReadWrite())
             {
                 var tagContext = new TagSerializationContext(tagsStream, _info.Cache, _info.StringIDs, tag);
