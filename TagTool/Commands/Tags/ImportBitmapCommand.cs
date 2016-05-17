@@ -24,7 +24,7 @@ namespace TagTool.Commands.Tags
             "The DDS file will be imported into textures.dat as a new resource.\n" +
             "Make sure to add the new bitmap tag as a dependency if you edit a shader!")
         {
-            _cache = cache;
+            _cache = info.Cache;
             _info = info;
         }
 
