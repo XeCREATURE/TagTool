@@ -9,6 +9,7 @@ namespace TagTool.Commands.Cache
             var context = new CommandContext(parent, blamCache.Build);
             context.AddCommand(new PortShaderCommand(info, blamCache));
             context.AddCommand(new PortModelCommand(info, blamCache));
+            context.AddCommand(new ListBitmapsCommand(info, blamCache));
             return context;
         }
     }
