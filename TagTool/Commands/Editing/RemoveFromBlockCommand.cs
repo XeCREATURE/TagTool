@@ -117,7 +117,7 @@ namespace TagTool.Commands.Editing
                     if (args[1] == "*")
                     {
                         genericIndex = true;
-                        index = blockValue.Count - 1;
+                        index = blockValue.Count;
                     }
                     else if (!int.TryParse(args[1], out index) || index < 0 || index >= blockValue.Count)
                     {
