@@ -64,6 +64,7 @@
     <Compile Include="Commands\Bitmaps\BitmapContextFactory.cs" />
     <Compile Include="Commands\Bitmaps\ImportCommand.cs" />
     <Compile Include="Commands\Cache\CacheContextFactory.cs" />
+    <Compile Include="Commands\Cache\ListBitmapsCommand.cs" />
     <Compile Include="Commands\Cache\PortModelCommand.cs" />
     <Compile Include="Commands\Cache\PortShaderCommand.cs" />
     <Compile Include="Commands\Command.cs" />
