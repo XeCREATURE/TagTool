@@ -23,6 +23,7 @@ namespace TagTool.Commands.Tags
             context.AddCommand(new ResourceDataCommand());
             context.AddCommand(new TestCommand(info));
             context.AddCommand(new NullTagCommand(info));
+            context.AddCommand(new ListUnreferencedTagsCommand(info));
             if (info.StringIDs != null)
             {
                 context.AddCommand(new EditCommand(stack, info));

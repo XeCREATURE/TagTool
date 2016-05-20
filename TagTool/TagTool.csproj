@@ -116,6 +116,7 @@
     <Compile Include="Commands\Tags\InfoCommand.cs" />
     <Compile Include="Commands\Tags\ListCommand.cs" />
     <Compile Include="Commands\Tags\ListStringsCommand.cs" />
+    <Compile Include="Commands\Tags\ListUnreferencedTagsCommand.cs" />
     <Compile Include="Commands\Tags\MapCommand.cs" />
     <Compile Include="Commands\Tags\MatchTagsCommand.cs" />
     <Compile Include="Commands\Tags\ModelTestCommand.cs" />
