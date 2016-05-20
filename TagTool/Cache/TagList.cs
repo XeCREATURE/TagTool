@@ -54,7 +54,11 @@ namespace TagTool.Cache
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns>The corresponding tag. Can be <c>null</c>.</returns>
-        public TagInstance this[int index] => _tags[index];
+        public TagInstance this[int index]
+        {
+            get { return _tags[index]; }
+            set { _tags[index] = value; }
+        }
 
         /// <summary>
         /// Finds the first tag in a given group.

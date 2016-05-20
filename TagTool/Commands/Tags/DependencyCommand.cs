@@ -11,8 +11,7 @@ namespace TagTool.Commands.Tags
     /// </summary>
     class DependencyCommand : Command
     {
-        private readonly TagCache _cache;
-        private readonly OpenTagCache _info;
+        public OpenTagCache Info { get; }
 
         public DependencyCommand(OpenTagCache info) : base(
             CommandFlags.None,
@@ -35,15 +34,16 @@ namespace TagTool.Commands.Tags
             "To add dependencies to a map, use the \"map\" command to get its scenario tag\n" +
             "index and then add dependencies to the scenario tag.")
         {
-            _cache = info.Cache;
-            _info = info;
+            Info = info;
         }
 
         public override bool Execute(List<string> args)
         {
             if (args.Count < 2)
                 return false;
-            var tag = ArgumentParser.ParseTagIndex(_cache, args[1]);
+
+            var tag = ArgumentParser.ParseTagIndex(Info.Cache, args[1]);
+
             if (tag == null)
                 return false;
 
@@ -52,11 +52,14 @@ namespace TagTool.Commands.Tags
                 case "add":
                 case "remove":
                     return ExecuteAddRemove(tag, args);
+
                 case "list":
                 case "listall":
                     return ExecuteList(tag, (args[0] == "listall"));
+
                 case "liston":
                     return ExecuteListDependsOn(tag);
+
                 default:
                     return false;
             }
@@ -66,12 +69,16 @@ namespace TagTool.Commands.Tags
         {
             if (args.Count < 3)
                 return false;
-            var dependencies = args.Skip(2).Select(a => ArgumentParser.ParseTagIndex(_cache, a)).ToList();
+
+            var dependencies = args.Skip(2).Select(a => ArgumentParser.ParseTagIndex(Info.Cache, a)).ToList();
+
             if (dependencies.Count == 0 || dependencies.Any(d => d == null))
                 return false;
-            using (var stream = _info.OpenCacheReadWrite())
+
+            using (var stream = Info.OpenCacheReadWrite())
             {
-                var data = _cache.ExtractTag(stream, tag);
+                var data = Info.Cache.ExtractTag(stream, tag);
+
                 if (args[0] == "add")
                 {
                     foreach (var dependency in dependencies)
@@ -79,8 +86,7 @@ namespace TagTool.Commands.Tags
                         if (data.Dependencies.Add(dependency.Index))
                             Console.WriteLine("Added dependency on tag {0:X8}.", dependency.Index);
                         else
-                            Console.Error.WriteLine("Tag {0:X8} already depends on tag {1:X8}.", tag.Index,
-                                dependency.Index);
+                            Console.Error.WriteLine("Tag {0:X8} already depends on tag {1:X8}.", tag.Index, dependency.Index);
                     }
                 }
                 else
@@ -90,12 +96,13 @@ namespace TagTool.Commands.Tags
                         if (data.Dependencies.Remove(dependency.Index))
                             Console.WriteLine("Removed dependency on tag {0:X8}.", dependency.Index);
                         else
-                            Console.Error.WriteLine("Tag {0:X8} does not depend on tag {1:X8}.", tag.Index,
-                                dependency.Index);
+                            Console.Error.WriteLine("Tag {0:X8} does not depend on tag {1:X8}.", tag.Index, dependency.Index);
                     }
                 }
-                _cache.SetTagData(stream, tag, data);
+
+                Info.Cache.SetTagData(stream, tag, data);
             }
+
             return true;
         }
 
@@ -106,19 +113,33 @@ namespace TagTool.Commands.Tags
                 Console.Error.WriteLine("Tag {0:X8} has no dependencies.", tag.Index);
                 return true;
             }
+
             IEnumerable<TagInstance> dependencies;
+
             if (all)
-                dependencies = _cache.Tags.FindDependencies(tag);
+                dependencies = Info.Cache.Tags.FindDependencies(tag);
             else
-                dependencies = tag.Dependencies.Where(i => _cache.Tags.Contains(i)).Select(i => _cache.Tags[i]);
-            TagPrinter.PrintTagsShort(dependencies);
+                dependencies = tag.Dependencies.Where(i => Info.Cache.Tags.Contains(i)).Select(i => Info.Cache.Tags[i]);
+
+            foreach (var dependency in dependencies)
+            {
+                Console.Write($"{Info.TagNames[dependency.Index]} ");
+                TagPrinter.PrintTagShort(dependency);
+            }
+
             return true;
         }
 
         private bool ExecuteListDependsOn(TagInstance tag)
         {
-            var dependsOn = _cache.Tags.NonNull().Where(t => t.Dependencies.Contains(tag.Index));
-            TagPrinter.PrintTagsShort(dependsOn);
+            var dependsOn = Info.Cache.Tags.NonNull().Where(t => t.Dependencies.Contains(tag.Index));
+
+            foreach (var dependency in dependsOn)
+            {
+                Console.Write($"{Info.TagNames[dependency.Index]} ");
+                TagPrinter.PrintTagShort(dependency);
+            }
+
             return true;
         }
     }

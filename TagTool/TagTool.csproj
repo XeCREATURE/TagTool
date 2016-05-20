@@ -119,6 +119,7 @@
     <Compile Include="Commands\Tags\MapCommand.cs" />
     <Compile Include="Commands\Tags\MatchTagsCommand.cs" />
     <Compile Include="Commands\Tags\ModelTestCommand.cs" />
+    <Compile Include="Commands\Tags\NullTagCommand.cs" />
     <Compile Include="Commands\Tags\OpenCacheCommand.cs" />
     <Compile Include="Commands\Tags\PhysicsModelTestCommand.cs" />
     <Compile Include="Commands\Tags\ResourceDataCommand.cs" />
