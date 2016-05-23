@@ -24,6 +24,11 @@ namespace TagTool.Commands.Tags
             context.AddCommand(new TestCommand(info));
             context.AddCommand(new NullTagCommand(info));
             context.AddCommand(new ListUnreferencedTagsCommand(info));
+            context.AddCommand(new ListNullTagsCommand(info));
+            context.AddCommand(new GenerateCacheCommand());
+            context.AddCommand(new NewTagCommand(info));
+            context.AddCommand(new ExportTagsCommand(info));
+
             if (info.StringIDs != null)
             {
                 context.AddCommand(new EditCommand(stack, info));

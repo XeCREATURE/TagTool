@@ -2,27 +2,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using TagTool.Serialization;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Editing
 {
     class PasteElementsCommand : Command
     {
         private CommandContextStack Stack { get; }
-
         private OpenTagCache Info { get; }
-
         private TagInstance Tag { get; }
-
         private TagStructureInfo Structure { get; set; }
-
         private object Owner { get; set; }
 
         public PasteElementsCommand(CommandContextStack stack, OpenTagCache info, TagInstance tag, TagStructureInfo structure, object owner)
             : base(CommandFlags.Inherit,
-                  "PasteElements",
+                  "paste_block_elements",
                   $"Pastes block element(s) to a specific tag block in the current {structure.Types[0].Name} definition.",
-                  "PasteElements <tag block name> [index = *]",
+                  "paste_block_elements <tag block name> [index = *]",
                   $"Pastes block element(s) to a specific tag block in the current {structure.Types[0].Name} definition.")
         {
             Stack = stack;
@@ -39,7 +35,7 @@ namespace TagTool.Commands.Editing
 
             if (CopyElementsCommand.Elements == null)
             {
-                Console.WriteLine("No elements are available in the clipboard.");
+                Console.WriteLine("ERROR: No elements are available in the clipboard.");
                 return false;
             }
 

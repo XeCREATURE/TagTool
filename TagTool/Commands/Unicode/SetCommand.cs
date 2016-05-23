@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using TagTool.Common;
 using TagTool.Serialization;
-using TagTool.Tags;
-using TagTool.TagStructures;
+using TagTool.TagGroups;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.Unicode
 {
@@ -14,17 +14,14 @@ namespace TagTool.Commands.Unicode
         private TagInstance Tag { get; }
         private MultilingualUnicodeStringList Definition { get; }
 
-        public SetCommand(OpenTagCache info, TagInstance tag, MultilingualUnicodeStringList unic) : base(
-            CommandFlags.None,
-
-            "set",
-            "Set the value of a string",
-
-            "set <language> <stringid> <value>",
-
-            "Sets the string associated with a stringID in a language.\n" +
-            "Remember to put the string value in quotes if it contains spaces.\n" +
-            "If the string does not exist, it will be added.")
+        public SetCommand(OpenTagCache info, TagInstance tag, MultilingualUnicodeStringList unic)
+            : base(CommandFlags.None,
+                  "set",
+                  "Set the value of a string",
+                  "set <language> <stringid> <value>",
+                  "Sets the string associated with a stringID in a language.\n" +
+                  "Remember to put the string value in quotes if it contains spaces.\n" +
+                  "If the string does not exist, it will be added.")
         {
             Info = info;
             Tag = tag;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TagTool.TagStructures;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.VFiles
 {
@@ -10,16 +10,13 @@ namespace TagTool.Commands.VFiles
     {
         private readonly VFilesList Definition;
 
-        public ListCommand(VFilesList definition) : base(
-            CommandFlags.Inherit,
-
-            "list",
-            "List files stored in the tag",
-
-            "list [filter]",
-
-            "If a filter is specified, only files which contain the filter in their path\n" +
-            "will be listed.")
+        public ListCommand(VFilesList definition)
+            : base(CommandFlags.Inherit,
+                  "list",
+                  "List files stored in the tag.",
+                  "list [filter]",
+                  "If a filter is specified, only files which contain the filter in their path\n" +
+                  "will be listed.")
         {
             Definition = definition;
         }

@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using System.Collections;
 using TagTool.Serialization;
 using TagTool.Common;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Editing
 {
     class ListFieldsCommand : Command
     {
         private OpenTagCache Info { get; }
-
         private TagStructureInfo Structure { get; }
-
         private object Value { get; }
 
         public ListFieldsCommand(OpenTagCache info, TagStructureInfo structure, object value)
             : base(CommandFlags.Inherit,
-                  "ListFields",
+                  "list_fields",
                   $"Lists the fields in the current {structure.Types[0].Name} definition.",
-                  "ListFields",
+                  "list_fields",
                   $"Lists the fields in the current {structure.Types[0].Name} definition.")
         {
             Info = info;
@@ -62,6 +61,8 @@ namespace TagTool.Commands.Editing
                         "null";
                 else if (fieldType == typeof(StringID))
                     valueString = Info.StringIDs.GetString((StringID)fieldValue);
+                else if (fieldType == typeof(TagInstance))
+                    valueString = $"[0x{((TagInstance)fieldValue).Index}:X4] {Info.TagNames[((TagInstance)fieldValue).Index]}.{Info.StringIDs.GetString(((TagInstance)fieldValue).Group.Name)}";
                 else
                     valueString = fieldValue.ToString();
                 

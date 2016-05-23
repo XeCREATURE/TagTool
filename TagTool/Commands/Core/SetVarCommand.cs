@@ -8,10 +8,10 @@ namespace TagTool.Commands.Core
 
         public SetVarCommand(OpenTagCache info)
             : base(CommandFlags.Inherit,
-                  "SetVar",
-                  "Assigns a value to a variable",
-                  "SetVar <name> <value>",
-                  "Assigns a value to a variable, which can be accessed via $var")
+                  "set_var",
+                  "Assigns a value to a variable.",
+                  "set_var <name> <value>",
+                  "Assigns a value to a tag tool global variable, which can be accessed via $name")
         {
             Info = info;
         }

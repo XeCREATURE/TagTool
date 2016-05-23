@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TagTool.Common;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Tags
 {

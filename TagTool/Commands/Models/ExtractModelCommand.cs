@@ -5,7 +5,7 @@ using System.Linq;
 using TagTool.Cache;
 using TagTool.Geometry;
 using TagTool.Serialization;
-using TagTool.TagStructures;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.Models
 {
@@ -14,19 +14,15 @@ namespace TagTool.Commands.Models
         private OpenTagCache Info { get; }
         private Model Definition { get; }
 
-        public ExtractModelCommand(OpenTagCache info, Model model) : base(
-            CommandFlags.Inherit,
-
-            "extractmodel",
-            "Extracts a render model from the current model definition.",
-
-            "extractmodel <variant> <filetype> <filename>",
-
-            "Extracts a variant of the render model to a file.\n" +
-            "Use the \"listvariants\" command to list available variants.\n" +
-            "If the model does not have any variants, just use \"default\"." +
-            "\n" +
-            "Supported file types: obj")
+        public ExtractModelCommand(OpenTagCache info, Model model)
+            : base(CommandFlags.Inherit,
+                  "extract_model",
+                  "Extracts a render model from the current model definition.",
+                  "extract_model <variant> <filetype> <filename>",
+                  "Extracts a variant of the render model to a file.\n" +
+                  "Use the \"listvariants\" command to list available variants.\n" +
+                  "If the model does not have any variants, just use \"default\".\n" +
+                  "Supported file types: obj")
         {
             Info = info;
             Definition = model;

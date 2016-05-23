@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TagTool.Common;
-using TagTool.Tags;
-using TagTool.TagStructures;
+using TagTool.TagGroups;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.Unicode
 {
@@ -16,7 +16,11 @@ namespace TagTool.Commands.Unicode
         private MultilingualUnicodeStringList Definition { get; }
 
         public GetCommand(OpenTagCache info, TagInstance tag, MultilingualUnicodeStringList unic)
-            : base(CommandFlags.Inherit, "get", "", "get <language> <string_id>", "")
+            : base(CommandFlags.Inherit,
+                  "get",
+                  "",
+                  "get <language> <string_id>",
+                  "")
         {
             Info = info;
             Tag = tag;

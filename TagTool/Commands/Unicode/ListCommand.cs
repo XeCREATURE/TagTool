@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TagTool.Common;
-using TagTool.TagStructures;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.Unicode
 {
@@ -10,21 +10,18 @@ namespace TagTool.Commands.Unicode
         private OpenTagCache Info { get; }
         private MultilingualUnicodeStringList Definition { get; }
 
-        public ListCommand(OpenTagCache info, MultilingualUnicodeStringList definition) : base(
-            CommandFlags.Inherit,
-
-            "list",
-            "List strings",
-
-            "list <language> [filter]",
-
-            "Lists the strings belonging to a language.\n" +
-            "If a filter is specified, only strings containing the filter will be listed.\n" +
-            "\n" +
-            "Available languages:\n" +
-            "\n" +
-            "english, japanese, german, french, spanish, mexican, italian, korean,\n" +
-            "chinese-trad, chinese-simp, portuguese, russian")
+        public ListCommand(OpenTagCache info, MultilingualUnicodeStringList definition)
+            : base(CommandFlags.Inherit,
+                  "list",
+                  "List strings",
+                  "list <language> [filter]",
+                  "Lists the strings belonging to a language.\n" +
+                  "If a filter is specified, only strings containing the filter will be listed.\n" +
+                  "\n" +
+                  "Available languages:\n" +
+                  "\n" +
+                  "english, japanese, german, french, spanish, mexican, italian, korean,\n" +
+                  "chinese-trad, chinese-simp, portuguese, russian")
         {
             // TODO: Can we dynamically generate the language list from the dictionary in ArgumentParser?
             Info = info;

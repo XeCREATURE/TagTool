@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TagTool.IO;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Cache
 {
@@ -382,7 +382,7 @@ namespace TagTool.Cache
             writer.Write((uint)offsetTableOffset); // 0x4  uint32 offset table offset
             writer.Write(_tags.Count);             // 0x8  uint32 number of tags
             writer.Write(0);                       // 0xC  uint32 unknown
-            writer.Write(Timestamp);               // 0x10 uint32 timestamp
+            writer.Write(Timestamp);               // 0x10 uint64 timestamp
             writer.Write(0);                       // 0x18 uint32 unknown
             writer.Write(0);                       // 0x1C uint32 unknown
         }

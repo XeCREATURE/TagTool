@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using TagTool.Geometry;
 using TagTool.Serialization;
-using TagTool.Tags;
-using TagTool.TagStructures;
+using TagTool.TagGroups;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.Tags
 {

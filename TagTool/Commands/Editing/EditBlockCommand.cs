@@ -3,27 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TagTool.Serialization;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Editing
 {
     class EditBlockCommand : Command
     {
         private CommandContextStack Stack { get; }
-
         private OpenTagCache Info { get; }
-
         private TagInstance Tag { get; }
 
         public TagStructureInfo Structure { get; set; }
-
         public object Owner { get; set; }
         
         public EditBlockCommand(CommandContextStack stack, OpenTagCache info, TagInstance tag, object value)
             : base(CommandFlags.Inherit,
-                  "Edit",
+                  "edit",
                   "Edit the fields of a particular block element.",
-                  "Edit <block name> [block index (if block)]",
+                  "edit <block name> [block index (if block)]",
                   "Edit the fields of a particular block element.")
         {
             Info = info;
@@ -127,8 +124,8 @@ namespace TagTool.Commands.Editing
             blockContext.AddCommand(new ListFieldsCommand(Info, blockStructure, blockValue));
             blockContext.AddCommand(new SetFieldCommand(Stack, Info, Tag, blockStructure, blockValue));
             blockContext.AddCommand(new EditBlockCommand(Stack, Info, Tag, blockValue));
-            blockContext.AddCommand(new AddToBlockCommand(Stack, Info, Tag, blockStructure, blockValue));
-            blockContext.AddCommand(new RemoveFromBlockCommand(Stack, Info, Tag, blockStructure, blockValue));
+            blockContext.AddCommand(new AddToCommand(Stack, Info, Tag, blockStructure, blockValue));
+            blockContext.AddCommand(new RemoveFromCommand(Stack, Info, Tag, blockStructure, blockValue));
             blockContext.AddCommand(new CopyElementsCommand(Stack, Info, Tag, blockStructure, blockValue));
             blockContext.AddCommand(new PasteElementsCommand(Stack, Info, Tag, blockStructure, blockValue));
             blockContext.AddCommand(new ExitToCommand(Stack));

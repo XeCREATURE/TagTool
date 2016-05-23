@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using TagTool.Serialization;
-using TagTool.Tags;
-using TagTool.TagStructures;
+using TagTool.TagGroups;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.RenderMethods
 {
@@ -15,9 +15,9 @@ namespace TagTool.Commands.RenderMethods
 
         public ListBitmapsCommand(OpenTagCache info, TagInstance tag, RenderMethod definition)
             : base(CommandFlags.Inherit,
-                 "ListBitmaps",
+                 "list_bitmaps",
                  "Lists the bitmaps used by the render_method.",
-                 "ListBitmaps",
+                 "list_bitmaps",
                  "Lists the bitmaps used by the render_method.")
         {
             Info = info;

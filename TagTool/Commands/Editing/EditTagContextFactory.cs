@@ -6,8 +6,8 @@ using TagTool.Commands.Scenarios;
 using TagTool.Commands.Unicode;
 using TagTool.Commands.VFiles;
 using TagTool.Serialization;
-using TagTool.TagStructures;
-using TagTool.Tags;
+using TagTool.TagDefinitions;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Editing
 {
@@ -81,8 +81,8 @@ namespace TagTool.Commands.Editing
             context.AddCommand(new ListFieldsCommand(info, structure, value));
             context.AddCommand(new SetFieldCommand(stack, info, tag, structure, value));
             context.AddCommand(new EditBlockCommand(stack, info, tag, value));
-            context.AddCommand(new AddToBlockCommand(stack, info, tag, structure, value));
-            context.AddCommand(new RemoveFromBlockCommand(stack, info, tag, structure, value));
+            context.AddCommand(new AddToCommand(stack, info, tag, structure, value));
+            context.AddCommand(new RemoveFromCommand(stack, info, tag, structure, value));
             context.AddCommand(new CopyElementsCommand(stack, info, tag, structure, value));
             context.AddCommand(new PasteElementsCommand(stack, info, tag, structure, value));
             context.AddCommand(new SaveChangesCommand(info, tag, value));

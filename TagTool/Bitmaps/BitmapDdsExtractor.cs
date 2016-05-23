@@ -5,7 +5,7 @@ using TagTool.Cache;
 using TagTool.Common;
 using TagTool.IO;
 using TagTool.Serialization;
-using TagTool.TagStructures;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Bitmaps
 {

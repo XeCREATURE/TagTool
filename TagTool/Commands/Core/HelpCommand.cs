@@ -8,16 +8,13 @@ namespace TagTool.Commands.Core
     {
         private CommandContextStack ContextStack { get; }
  
-        public HelpCommand(CommandContextStack contextStack) : base(
-            CommandFlags.Inherit,
-
-            "help",
-            "Display help",
-
-            "help [command]",
-
-            "Displays help on how to use a command.\n" +
-            "If no command is given, help will list all available commands.")
+        public HelpCommand(CommandContextStack contextStack)
+            : base(CommandFlags.Inherit,
+                  "help",
+                  "Display help",
+                  "help [command]",
+                  "Displays help on how to use a command.\n" +
+                  "If no command is given, help will list all available commands.")
         {
             ContextStack = contextStack;
         }

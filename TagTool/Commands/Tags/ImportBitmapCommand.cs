@@ -41,28 +41,28 @@ namespace TagTool.Commands.Tags
             resourceManager.LoadCacheFromDirectory(_info.CacheFile.DirectoryName, ResourceLocation.Textures);
 
             Console.WriteLine("Importing image...");
-            var bitmap = new TagStructures.Bitmap
+            var bitmap = new TagDefinitions.Bitmap
             {
-                Flags = TagStructures.Bitmap.RuntimeFlags.UseResource,
-                Sequences = new List<TagStructures.Bitmap.Sequence>
+                Flags = TagDefinitions.Bitmap.RuntimeFlags.UseResource,
+                Sequences = new List<TagDefinitions.Bitmap.Sequence>
                 {
-                    new TagStructures.Bitmap.Sequence
+                    new TagDefinitions.Bitmap.Sequence
                     {
                         FirstBitmapIndex = 0,
                         BitmapCount = 1
                     }
                 },
-                Images = new List<TagStructures.Bitmap.Image>
+                Images = new List<TagDefinitions.Bitmap.Image>
                 {
-                    new TagStructures.Bitmap.Image
+                    new TagDefinitions.Bitmap.Image
                     {
                         Signature = new Tag("bitm").Value,
                         Unknown28 = -1,
                     }
                 },
-                Resources = new List<TagStructures.Bitmap.BitmapResource>
+                Resources = new List<TagDefinitions.Bitmap.BitmapResource>
                 {
-                    new TagStructures.Bitmap.BitmapResource()
+                    new TagDefinitions.Bitmap.BitmapResource()
                 }
             };
             using (var imageStream = File.OpenRead(imagePath))

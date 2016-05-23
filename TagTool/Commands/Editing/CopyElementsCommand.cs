@@ -2,33 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using TagTool.Serialization;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Editing
 {
     class CopyElementsCommand : Command
     {
         private CommandContextStack Stack { get; }
-
         private OpenTagCache Info { get; }
-
         private TagInstance Tag { get; }
-
         private TagStructureInfo Structure { get; set; }
-
         private object Owner { get; set; }
-
-        #region Element Clipboard
+        
         public static Type ElementType { get; set; } = null;
-
         public static List<object> Elements { get; set; } = null;
-        #endregion
 
         public CopyElementsCommand(CommandContextStack stack, OpenTagCache info, TagInstance tag, TagStructureInfo structure, object owner)
             : base(CommandFlags.None,
-                  "CopyElements",
+                  "copy_block_elements",
                   "Copies block elements from one tag to another.",
-                  "CopyElements <block name> [count = *] [index = 0]",
+                  "copy_block_elements <block name> [count = *] [index = 0]",
                   "Copies block elements from one tag to another.")
         {
             Stack = stack;

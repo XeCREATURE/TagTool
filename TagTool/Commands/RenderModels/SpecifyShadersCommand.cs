@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using TagTool.Serialization;
-using TagTool.Tags;
-using TagTool.TagStructures;
+using TagTool.TagGroups;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.RenderModels
 {
@@ -15,9 +15,9 @@ namespace TagTool.Commands.RenderModels
 
         public SpecifyShadersCommand(OpenTagCache info, TagInstance tag, RenderModel definition)
             : base(CommandFlags.Inherit,
-                  "SpecifyShaders",
+                  "specify_shaders",
                   "Allows the shaders of a render_model to be respecified.",
-                  "SpecifyShaders",
+                  "specify_shaders",
                   "Allows the shaders of a render_model to be respecified.")
         {
             Info = info;

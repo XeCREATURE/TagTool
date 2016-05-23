@@ -9,8 +9,8 @@ using TagTool.Cache;
 using TagTool.Geometry;
 using TagTool.Shaders;
 using TagTool.Serialization;
-using TagTool.TagStructures;
-using TagTool.Tags;
+using TagTool.TagDefinitions;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Tags
 {
@@ -79,16 +79,15 @@ namespace TagTool.Commands.Tags
             // Set up version-specific objects
             destInfo.Serializer = new TagSerializer(destInfo.Version);
             destInfo.Deserializer = new TagDeserializer(destInfo.Version);
-            StringIDResolverBase resolver;
-            if (Definition.Compare(destInfo.Version, DefinitionSet.HaloOnline498295) >= 0)
-                resolver = new Definitions.HaloOnline498295.StringIDResolver();
-            else
-                resolver = new Definitions.HaloOnline106708.StringIDResolver();
 
             // Load stringIDs
             Console.WriteLine("Loading the target string_ids.dat...");
+
+            var resolver = StringIDResolverFactory.Create(destInfo.Version);
+
             var destStringIDsPath = Path.Combine(targetDir, "string_ids.dat");
             destInfo.StringIDsFile = new FileInfo(destStringIDsPath);
+
             using (var stream = destInfo.StringIDsFile.OpenRead())
                 destInfo.StringIDs = new StringIDCache(stream, resolver);
 

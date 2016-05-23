@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Serialization
 {

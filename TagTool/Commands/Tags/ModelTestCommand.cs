@@ -7,9 +7,9 @@ using TagTool.Common;
 using TagTool.Cache;
 using TagTool.Geometry;
 using TagTool.Serialization;
-using TagTool.TagStructures;
+using TagTool.TagDefinitions;
 using PrimitiveType = TagTool.Geometry.PrimitiveType;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Tags
 {

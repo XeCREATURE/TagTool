@@ -8,25 +8,29 @@ using TagTool.Commands.Tags;
 using TagTool.Common;
 using TagTool.Definitions;
 using TagTool.Geometry;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Cache
 {
     class PortModelCommand : Command
     {
-        OpenTagCache _info;
-        CacheBase _blamCache;
+        private OpenTagCache Info { get; }
+        private CacheBase BlamCache { get; }
 
         public PortModelCommand(OpenTagCache info, CacheBase blamCache)
-            : base(CommandFlags.Inherit, "portmodel", "", "portmodel [new] <blam tag path> <eldorado tag>", "")
+            : base(CommandFlags.Inherit,
+                  "port_model",
+                  "",
+                  "port_model [new] <blam tag path> <eldorado tag index>",
+                  "")
         {
-            _info = info;
-            _blamCache = blamCache;
+            Info = info;
+            BlamCache = blamCache;
         }
 
         public override bool Execute(List<string> args)
         {
-            var initialStringIDCount = _info.StringIDs.Strings.Count;
+            var initialStringIDCount = Info.StringIDs.Strings.Count;
 
             bool isNew = false;
             if (args.Count == 3)
@@ -50,7 +54,7 @@ namespace TagTool.Commands.Cache
 
             Console.WriteLine("Verifying Blam tag...");
 
-            foreach (var tag in _blamCache.IndexItems)
+            foreach (var tag in BlamCache.IndexItems)
             {
                 if (tag.ClassCode == "mode" && tag.Filename == renderModelName)
                 {
@@ -74,15 +78,15 @@ namespace TagTool.Commands.Cache
             int edRenderModelIndex;
 
             if (!int.TryParse(args[1], NumberStyles.HexNumber, null, out edRenderModelIndex) ||
-                (edRenderModelIndex >= _info.Cache.Tags.Count))
+                (edRenderModelIndex >= Info.Cache.Tags.Count))
             {
                 Console.WriteLine("Invalid tag index: " + args[1]);
                 return false;
             }
 
-            var edTag = _info.Cache.Tags[edRenderModelIndex];
+            var edTag = Info.Cache.Tags[edRenderModelIndex];
 
-            if (edTag.Group.Name != _info.StringIDs.GetStringID("render_model"))
+            if (edTag.Group.Name != Info.StringIDs.GetStringID("render_model"))
             {
                 Console.WriteLine("Specified tag index is not a render_model: " + args[1]);
                 return false;
@@ -94,14 +98,14 @@ namespace TagTool.Commands.Cache
 
             Console.WriteLine("Loading ED render_model tag...");
 
-            TagStructures.RenderModel renderModel;
+            TagDefinitions.RenderModel renderModel;
 
-            using (var cacheStream = _info.CacheFile.Open(FileMode.Open, FileAccess.ReadWrite))
+            using (var cacheStream = Info.CacheFile.Open(FileMode.Open, FileAccess.ReadWrite))
             {
                 try
                 {
-                    var context = new Serialization.TagSerializationContext(cacheStream, _info.Cache, _info.StringIDs, _info.Cache.Tags[(int)edRenderModelIndex]);
-                    renderModel = _info.Deserializer.Deserialize<TagStructures.RenderModel>(context);
+                    var context = new Serialization.TagSerializationContext(cacheStream, Info.Cache, Info.StringIDs, Info.Cache.Tags[(int)edRenderModelIndex]);
+                    renderModel = Info.Deserializer.Deserialize<TagDefinitions.RenderModel>(context);
                 }
                 catch
                 {
@@ -114,7 +118,7 @@ namespace TagTool.Commands.Cache
             // Load the Blam render_model tag raw
             //
             
-            var mode = DefinitionsManager.mode(_blamCache, item);
+            var mode = DefinitionsManager.mode(BlamCache, item);
             mode.LoadRaw();
 
             //
@@ -127,13 +131,13 @@ namespace TagTool.Commands.Cache
             {
                 Console.WriteLine("Duplicating selected render_model tag...");
 
-                if (!new DuplicateTagCommand(_info).Execute(new List<string> { edRenderModelIndex.ToString("X8") }))
+                if (!new DuplicateTagCommand(Info).Execute(new List<string> { edRenderModelIndex.ToString("X8") }))
                 {
                     Console.WriteLine("Failed to duplicate render_model tag: " + edRenderModelIndex);
                     return false;
                 }
 
-                newTag = _info.Cache.Tags[_info.Cache.Tags.Count - 1];
+                newTag = Info.Cache.Tags[Info.Cache.Tags.Count - 1];
             }
             else
             {
@@ -148,12 +152,12 @@ namespace TagTool.Commands.Cache
             
             foreach (var node in mode.Nodes)
             {
-                var nodeNameId = _info.StringIDs.GetStringID(node.Name);
+                var nodeNameId = Info.StringIDs.GetStringID(node.Name);
 
                 builder.AddNode(
-                    new TagStructures.RenderModel.Node
+                    new TagDefinitions.RenderModel.Node
                     {
-                        Name = nodeNameId.Index == 0 && node.Name != "" ? nodeNameId = _info.StringIDs.Add(node.Name) : nodeNameId,
+                        Name = nodeNameId.Index == 0 && node.Name != "" ? nodeNameId = Info.StringIDs.Add(node.Name) : nodeNameId,
                         ParentNode = (short)node.ParentIndex,
                         FirstChildNode = (short)node.FirstChildIndex,
                         NextSiblingNode = (short)node.NextSiblingIndex,
@@ -177,7 +181,7 @@ namespace TagTool.Commands.Cache
                 builder.AddMaterial(
                     new RenderMaterial
                     {
-                        RenderMethod = _info.Cache.Tags[0x101F]
+                        RenderMethod = Info.Cache.Tags[0x101F]
                     });
 
             //
@@ -186,18 +190,18 @@ namespace TagTool.Commands.Cache
 
             foreach (var region in mode.Regions)
             {
-                var regionNameId = _info.StringIDs.GetStringID(region.Name);
+                var regionNameId = Info.StringIDs.GetStringID(region.Name);
 
-                builder.BeginRegion(regionNameId.Index == 0 && region.Name != "" ? regionNameId = _info.StringIDs.Add(region.Name) : regionNameId);
+                builder.BeginRegion(regionNameId.Index == 0 && region.Name != "" ? regionNameId = Info.StringIDs.Add(region.Name) : regionNameId);
 
                 foreach (var permutation in region.Permutations)
                 {
                     if (permutation.PieceCount <= 0 || permutation.PieceIndex == -1)
                         continue;
 
-                    var permutationNameId = _info.StringIDs.GetStringID(permutation.Name);
+                    var permutationNameId = Info.StringIDs.GetStringID(permutation.Name);
 
-                    builder.BeginPermutation(permutationNameId.Index == 0 && permutation.Name != "" ? permutationNameId = _info.StringIDs.Add(permutation.Name) : permutationNameId);
+                    builder.BeginPermutation(permutationNameId.Index == 0 && permutation.Name != "" ? permutationNameId = Info.StringIDs.Add(permutation.Name) : permutationNameId);
 
                     for (var i = permutation.PieceIndex; i < permutation.PieceIndex + permutation.PieceCount; i++)
                     {
@@ -342,33 +346,33 @@ namespace TagTool.Commands.Cache
             //
 
             var resourceStream = new MemoryStream();
-            var newRenderModel = builder.Build(_info.Serializer, resourceStream);
+            var newRenderModel = builder.Build(Info.Serializer, resourceStream);
 
-            var renderModelNameStringID = _info.StringIDs.GetStringID(mode.Name);
+            var renderModelNameStringID = Info.StringIDs.GetStringID(mode.Name);
 
             newRenderModel.Name = renderModelNameStringID.Index == -1 ?
-                renderModelNameStringID = _info.StringIDs.Add(mode.Name) :
+                renderModelNameStringID = Info.StringIDs.Add(mode.Name) :
                 renderModelNameStringID;
 
             //
             // Add the markers to the new render_model
             //
 
-            newRenderModel.MarkerGroups = new List<TagStructures.RenderModel.MarkerGroup>();
+            newRenderModel.MarkerGroups = new List<TagDefinitions.RenderModel.MarkerGroup>();
             
             foreach (var markerGroup in mode.MarkerGroups)
             {
-                var markerGroupNameId = _info.StringIDs.GetStringID(markerGroup.Name);
+                var markerGroupNameId = Info.StringIDs.GetStringID(markerGroup.Name);
 
                 if (markerGroupNameId.Index == -1)
-                    markerGroupNameId = _info.StringIDs.Add(markerGroup.Name);
+                    markerGroupNameId = Info.StringIDs.Add(markerGroup.Name);
 
                 newRenderModel.MarkerGroups.Add(
-                    new TagStructures.RenderModel.MarkerGroup
+                    new TagDefinitions.RenderModel.MarkerGroup
                     {
                         Name = markerGroupNameId,
                         Markers = markerGroup.Markers.Select(marker =>
-                            new TagStructures.RenderModel.MarkerGroup.Marker
+                            new TagDefinitions.RenderModel.MarkerGroup.Marker
                             {
                                 RegionIndex = (sbyte)marker.RegionIndex,
                                 PermutationIndex = (sbyte)marker.PermutationIndex,
@@ -396,18 +400,18 @@ namespace TagTool.Commands.Cache
             Console.WriteLine("Writing resource data...");
 
             var resources = new ResourceDataManager();
-            resources.LoadCachesFromDirectory(_info.CacheFile.DirectoryName);
+            resources.LoadCachesFromDirectory(Info.CacheFile.DirectoryName);
             resourceStream.Position = 0;
             resources.Add(newRenderModel.Geometry.Resource, ResourceLocation.Resources, resourceStream);
 
-            using (var cacheStream = _info.CacheFile.Open(FileMode.Open, FileAccess.ReadWrite))
+            using (var cacheStream = Info.CacheFile.Open(FileMode.Open, FileAccess.ReadWrite))
             {
                 Console.WriteLine("Writing tag data...");
 
                 newRenderModel.Geometry.Resource.Owner = newTag;
 
-                var context = new Serialization.TagSerializationContext(cacheStream, _info.Cache, _info.StringIDs, newTag);
-                _info.Serializer.Serialize(context, newRenderModel);
+                var context = new Serialization.TagSerializationContext(cacheStream, Info.Cache, Info.StringIDs, newTag);
+                Info.Serializer.Serialize(context, newRenderModel);
             }
 
             resourceStream.Close();
@@ -416,12 +420,12 @@ namespace TagTool.Commands.Cache
             // Save new string_ids
             //
 
-            if (_info.StringIDs.Strings.Count != initialStringIDCount)
+            if (Info.StringIDs.Strings.Count != initialStringIDCount)
             {
                 Console.WriteLine("Saving string_ids...");
 
-                using (var stringIdStream = _info.StringIDsFile.Open(FileMode.Open, FileAccess.ReadWrite))
-                    _info.StringIDs.Save(stringIdStream);
+                using (var stringIdStream = Info.StringIDsFile.Open(FileMode.Open, FileAccess.ReadWrite))
+                    Info.StringIDs.Save(stringIdStream);
             }
 
             //

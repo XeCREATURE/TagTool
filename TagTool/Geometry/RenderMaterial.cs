@@ -2,7 +2,7 @@
 using TagTool.Common;
 using TagTool.Definitions;
 using TagTool.Serialization;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Geometry
 {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using TagTool.Common;
 using TagTool.Serialization;
-using TagTool.Tags;
-using TagTool.TagStructures;
+using TagTool.TagGroups;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.RenderMethods
 {
@@ -16,9 +16,9 @@ namespace TagTool.Commands.RenderMethods
 
         public ListArgumentsCommand(OpenTagCache info, TagInstance tag, RenderMethod definition)
             : base(CommandFlags.Inherit,
-                 "ListArguments",
+                 "list_arguments",
                  "Lists the arguments of the render_method.",
-                 "ListArguments",
+                 "list_arguments",
                  "Lists the arguments of the render_method.")
         {
             Info = info;

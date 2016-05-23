@@ -6,7 +6,7 @@ using TagTool.IO;
 using TagTool.Cache;
 using TagTool.Bitmaps;
 using TagTool.Geometry;
-using TagTool.Tags;
+using TagTool.TagGroups;
 using TagTool.Common;
 
 namespace TagTool.Serialization

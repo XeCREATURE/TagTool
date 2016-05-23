@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using TagTool.Serialization;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Tags
 {

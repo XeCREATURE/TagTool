@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using TagTool.Cache;
 using static TagTool.Commands.ArgumentParser;
 
 namespace TagTool.Commands.Tags
@@ -26,15 +28,23 @@ namespace TagTool.Commands.Tags
             var tag = ParseTagIndex(Info.Cache, args[0]);
 
             if (tag == null)
-                return false;
-
-            Info.Cache.Tags[tag.Index] = null;
-
-            using (var stream = Info.OpenCacheReadWrite())
-            using (var writer = new BinaryWriter(stream))
             {
-                Info.Cache.UpdateTagOffsets(writer);
+                Console.WriteLine($"ERROR: invalid tag index specified: {args[0]}");
+                return false;
             }
+
+            Console.Write($"Nulling {Info.StringIDs.GetString(tag.Group.Name)} tag 0x{tag.Index:X4}...");
+            
+            using (var stream = Info.OpenCacheReadWrite())
+            {
+                Info.Cache.SetTagDataRaw(stream, tag, new byte[] { });
+                Info.Cache.Tags[tag.Index] = null;
+
+                using (var writer = new BinaryWriter(stream))
+                    Info.Cache.UpdateTagOffsets(writer);
+            }
+
+            Console.WriteLine("done.");
 
             return true;
         }

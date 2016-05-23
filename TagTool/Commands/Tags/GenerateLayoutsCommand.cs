@@ -5,7 +5,7 @@ using System.Linq;
 using TagTool.Analysis;
 using TagTool.Cache;
 using TagTool.Layouts;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Tags
 {

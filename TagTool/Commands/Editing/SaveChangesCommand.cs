@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using TagTool.Serialization;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Editing
 {
     class SaveChangesCommand : Command
     {
-        public OpenTagCache Info { get; }
-
-        public TagInstance Tag { get; }
-
-        public object Value { get; }
+        private OpenTagCache Info { get; }
+        private TagInstance Tag { get; }
+        private object Value { get; }
 
         public SaveChangesCommand(OpenTagCache info, TagInstance tag, object value)
             : base(CommandFlags.Inherit,
-                  "savechanges",
+                  "save_changes",
                   $"Saves changes made to the current {info.StringIDs.GetString(tag.Group.Name)} definition.",
-                  "savechanges",
+                  "save_changes",
                   $"Saves changes made to the current {info.StringIDs.GetString(tag.Group.Name)} definition.")
         {
             Info = info;

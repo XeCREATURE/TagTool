@@ -5,32 +5,29 @@ using System.IO;
 using TagTool.Cache;
 using TagTool.Bitmaps;
 using TagTool.Serialization;
-using TagTool.TagStructures;
-using TagTool.Tags;
+using TagTool.TagDefinitions;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Bitmaps
 {
     class ImportCommand : Command
     {
-        private readonly OpenTagCache _info;
-        private readonly TagInstance _tag;
-        private readonly Bitmap _bitmap;
+        private OpenTagCache Info { get; }
+        private TagInstance Tag { get; }
+        private Bitmap Bitmap { get; }
 
-        public ImportCommand(OpenTagCache info, TagInstance tag, Bitmap bitmap) : base(
-            CommandFlags.None,
-
-            "import",
-            "Import an image from a DDS file",
-
-            "import <image index> <path>",
-
-            "The image index must be in hexadecimal.\n" +
-            "No conversion will be done on the data in the DDS file.\n" +
-            "The pixel format must be supported by the game.")
+        public ImportCommand(OpenTagCache info, TagInstance tag, Bitmap bitmap)
+            : base(CommandFlags.None,
+                  "import",
+                  "Imports an image from a DDS file.",
+                  "import <image index> <path>",
+                  "The image index must be in hexadecimal.\n" +
+                  "No conversion will be done on the data in the DDS file.\n" +
+                  "The pixel format must be supported by the game.")
         {
-            _info = info;
-            _tag = tag;
-            _bitmap = bitmap;
+            Info = info;
+            Tag = tag;
+            Bitmap = bitmap;
         }
 
         public override bool Execute(List<string> args)
@@ -40,7 +37,7 @@ namespace TagTool.Commands.Bitmaps
             int imageIndex;
             if (!int.TryParse(args[0], NumberStyles.HexNumber, null, out imageIndex))
                 return false;
-            if (imageIndex < 0 || imageIndex >= _bitmap.Images.Count)
+            if (imageIndex < 0 || imageIndex >= Bitmap.Images.Count)
             {
                 Console.Error.WriteLine("Invalid image index.");
                 return true;
@@ -51,7 +48,7 @@ namespace TagTool.Commands.Bitmaps
             var resourceManager = new ResourceDataManager();
             try
             {
-                resourceManager.LoadCachesFromDirectory(_info.CacheFile.DirectoryName);
+                resourceManager.LoadCachesFromDirectory(Info.CacheFile.DirectoryName);
             }
             catch
             {
@@ -65,12 +62,12 @@ namespace TagTool.Commands.Bitmaps
                 using (var imageStream = File.OpenRead(imagePath))
                 {
                     var injector = new BitmapDdsInjector(resourceManager);
-                    injector.InjectDds(_info.Serializer, _info.Deserializer, _bitmap, imageIndex, imageStream);
+                    injector.InjectDds(Info.Serializer, Info.Deserializer, Bitmap, imageIndex, imageStream);
                 }
-                using (var tagsStream = _info.OpenCacheReadWrite())
+                using (var tagsStream = Info.OpenCacheReadWrite())
                 {
-                    var tagContext = new TagSerializationContext(tagsStream, _info.Cache, _info.StringIDs, _tag);
-                    _info.Serializer.Serialize(tagContext, _bitmap);
+                    var tagContext = new TagSerializationContext(tagsStream, Info.Cache, Info.StringIDs, Tag);
+                    Info.Serializer.Serialize(tagContext, Bitmap);
                 }
             }
             catch (Exception ex)

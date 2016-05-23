@@ -4,27 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using TagTool.Common;
 using TagTool.Serialization;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Editing
 {
     class SetFieldCommand : Command
     {
-        public CommandContextStack Stack { get; }
-
-        public OpenTagCache Info { get; }
-
-        public TagInstance Tag { get; }
+        private CommandContextStack Stack { get; }
+        private OpenTagCache Info { get; }
+        private TagInstance Tag { get; }
 
         public TagStructureInfo Structure { get; set; }
-
         public object Owner { get; set; }
 
         public SetFieldCommand(CommandContextStack stack, OpenTagCache info, TagInstance tag, TagStructureInfo structure, object owner)
             : base(CommandFlags.Inherit,
-                  "SetField",
+                  "set_field",
                   $"Sets the value of a specific field in the current {structure.Types[0].Name} definition.",
-                  "SetField <field name> <field value>",
+                  "set_field <field name> <field value>",
                   $"Sets the value of a specific field in the current {structure.Types[0].Name} definition.")
         {
             Stack = stack;

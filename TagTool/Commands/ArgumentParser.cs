@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using TagTool.Cache;
 using TagTool.Common;
-using TagTool.Tags;
+using TagTool.TagGroups;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands
 {
@@ -102,24 +103,29 @@ namespace TagTool.Commands
             return cache.Tags[tagIndex];
         }
 
-        public static Tag ParseTagClass(TagCache cache, string className)
+        public static Tag ParseGroupTag(StringIDCache stringIDs, string groupName)
         {
-            if (className.Length == 4)
-                return new Tag(className);
-            Console.WriteLine("Invalid tag class: {0}", className);
-            return new Tag(-1);
+            if (TagStructureTypes.IsGroupTag(groupName))
+                return new Tag(groupName);
+
+            foreach (var pair in TagGroup.Instances)
+            {
+                if (groupName == stringIDs.GetString(pair.Value.Name))
+                    return pair.Value.Tag;
+            }
+
+            return Tag.Null;
         }
 
-        public static List<Tag> ParseTagClasses(TagCache cache, IEnumerable<string> classNames)
+        public static List<Tag> ParseGroupTags(StringIDCache stringIDs, IEnumerable<string> classNames)
         {
-            var searchClasses = classNames.Select(a => ParseTagClass(cache, a)).ToList();
+            var searchClasses = classNames.Select(a => ParseGroupTag(stringIDs, a)).ToList();
+
             return (searchClasses.Any(c => c.Value == -1)) ? null : searchClasses;
         }
 
-        public static bool ParseLanguage(string name, out GameLanguage result)
-        {
-            return _languages.TryGetValue(name, out result);
-        }
+        public static bool ParseLanguage(string name, out GameLanguage result) =>
+            _languages.TryGetValue(name, out result);
 
         public static string Unescape(string str)
         {

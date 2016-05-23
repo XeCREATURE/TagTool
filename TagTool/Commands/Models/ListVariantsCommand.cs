@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TagTool.TagStructures;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.Models
 {
@@ -12,12 +12,9 @@ namespace TagTool.Commands.Models
 
         public ListVariantsCommand(OpenTagCache info, Model model) : base(
             CommandFlags.Inherit,
-
-            "listvariants",
+            "list_variants",
             "List available variants of the current model definition.",
-
-            "listvariants",
-
+            "list_variants",
             "Lists available variants of the current model definition which can be used with \"extractmodel\".")
         {
             Info = info;

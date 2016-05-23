@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using TagTool.Serialization;
-using TagTool.Tags;
-using TagTool.TagStructures;
+using TagTool.TagGroups;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.VFiles
 {
@@ -13,15 +13,12 @@ namespace TagTool.Commands.VFiles
         private TagInstance Tag { get; }
         private VFilesList Definition { get; }
 
-        public ImportCommand(OpenTagCache info, TagInstance tag, VFilesList definition) : base(
-            CommandFlags.None,
-            
-            "import",
-            "Replace a file stored in the tag",
-
-            "import <virtual path> [filename]",
-            
-            "Replaces a file stored in the tag. The tag will be resized as necessary.")
+        public ImportCommand(OpenTagCache info, TagInstance tag, VFilesList definition)
+            : base(CommandFlags.None,
+                  "import",
+                  "Replace a file stored in the tag",
+                  "import <virtual path> [filename]",
+                  "Replaces a file stored in the tag. The tag will be resized as necessary.")
         {
             Info = info;
             Tag = tag;

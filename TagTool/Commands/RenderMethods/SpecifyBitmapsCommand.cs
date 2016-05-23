@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using TagTool.Common;
 using TagTool.Serialization;
-using TagTool.Tags;
-using TagTool.TagStructures;
+using TagTool.TagGroups;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.RenderMethods
 {
@@ -16,9 +16,9 @@ namespace TagTool.Commands.RenderMethods
 
         public SpecifyBitmapsCommand(OpenTagCache info, TagInstance tag, RenderMethod definition)
             : base(CommandFlags.Inherit,
-                 "SpecifyBitmaps",
+                 "specify_bitmaps",
                  "Allows the bitmaps of the render_method to be respecified.",
-                 "SpecifyBitmaps",
+                 "specify_bitmaps",
                  "Allows the bitmaps of the render_method to be respecified.")
         {
             Info = info;

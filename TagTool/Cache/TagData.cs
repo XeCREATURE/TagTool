@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Cache
 {

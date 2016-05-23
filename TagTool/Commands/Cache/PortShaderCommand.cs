@@ -11,14 +11,18 @@ namespace TagTool.Commands.Cache
 {
     class PortShaderCommand : Command
     {
-        private readonly OpenTagCache _info;
-        private readonly CacheBase _blamCache;
+        private OpenTagCache Info { get; }
+        private CacheBase BlamCache { get; }
 
         public PortShaderCommand(OpenTagCache info, CacheBase blamCache)
-            : base(CommandFlags.None, "portshader", "", "portshader <blam tag path>", "")
+            : base(CommandFlags.None,
+                  "port_shader",
+                  "",
+                  "port_shader <blam tag path>",
+                  "")
         {
-            _info = info;
-            _blamCache = blamCache;
+            Info = info;
+            BlamCache = blamCache;
         }
 
         public override bool Execute(List<string> args)
@@ -36,7 +40,7 @@ namespace TagTool.Commands.Cache
 
             Console.WriteLine("Verifying blam shader tag...");
 
-            foreach (var tag in _blamCache.IndexItems)
+            foreach (var tag in BlamCache.IndexItems)
             {
                 if ((tag.ParentClass == "rm") && tag.Filename == shaderName)
                 {
@@ -51,12 +55,12 @@ namespace TagTool.Commands.Cache
                 return false;
             }
 
-            var renderMethod = DefinitionsManager.rmsh(_blamCache, item);
+            var renderMethod = DefinitionsManager.rmsh(BlamCache, item);
 
-            var templateItem = _blamCache.IndexItems.Find(i =>
+            var templateItem = BlamCache.IndexItems.Find(i =>
                 i.ID == renderMethod.Properties[0].TemplateTagID);
 
-            var template = DefinitionsManager.rmt2(_blamCache, templateItem);
+            var template = DefinitionsManager.rmt2(BlamCache, templateItem);
 
             //
             // Determine the blam shader's base bitmap
@@ -83,29 +87,29 @@ namespace TagTool.Commands.Cache
             // Load and decode the blam shader's base bitmap
             //
 
-            var bitmItem = _blamCache.IndexItems.Find(i =>
+            var bitmItem = BlamCache.IndexItems.Find(i =>
                 i.ID == renderMethod.Properties[0].ShaderMaps[bitmapIndex].BitmapTagID);
 
-            var bitm = DefinitionsManager.bitm(_blamCache, bitmItem);
+            var bitm = DefinitionsManager.bitm(BlamCache, bitmItem);
             var submap = bitm.Bitmaps[0];
 
             byte[] raw;
 
-            if (_blamCache.Version <= DefinitionSet.Halo2Vista)
-                raw = _blamCache.GetRawFromID(submap.PixelsOffset, submap.RawSize);
+            if (BlamCache.Version <= DefinitionSet.Halo2Vista)
+                raw = BlamCache.GetRawFromID(submap.PixelsOffset, submap.RawSize);
             else
             {
                 if (bitm.RawChunkBs.Count > 0)
                 {
                     int rawID = bitm.RawChunkBs[submap.InterleavedIndex].RawID;
-                    byte[] buffer = _blamCache.GetRawFromID(rawID);
+                    byte[] buffer = BlamCache.GetRawFromID(rawID);
                     raw = new byte[submap.RawSize];
                     Array.Copy(buffer, submap.Index2 * submap.RawSize, raw, 0, submap.RawSize);
                 }
                 else
                 {
                     int rawID = bitm.RawChunkAs[0].RawID;
-                    raw = _blamCache.GetRawFromID(rawID, submap.RawSize);
+                    raw = BlamCache.GetRawFromID(rawID, submap.RawSize);
                 }
             }
 
@@ -137,40 +141,40 @@ namespace TagTool.Commands.Cache
             // ElDorado Serialization
             //
 
-            using (var cacheStream = _info.CacheFile.Open(FileMode.Open, FileAccess.ReadWrite))
+            using (var cacheStream = Info.CacheFile.Open(FileMode.Open, FileAccess.ReadWrite))
             {
                 //
                 // Create the new eldorado bitmap
                 //
 
                 var resourceManager = new ResourceDataManager();
-                resourceManager.LoadCachesFromDirectory(_info.CacheFile.DirectoryName);
+                resourceManager.LoadCachesFromDirectory(Info.CacheFile.DirectoryName);
 
-                var newBitm = _info.Cache.DuplicateTag(cacheStream, _info.Cache.Tags[0x101F]);
+                var newBitm = Info.Cache.DuplicateTag(cacheStream, Info.Cache.Tags[0x101F]);
 
-                var bitmap = new TagStructures.Bitmap
+                var bitmap = new TagDefinitions.Bitmap
                 {
-                    Flags = TagStructures.Bitmap.RuntimeFlags.UseResource,
-                    Sequences = new List<TagStructures.Bitmap.Sequence>
+                    Flags = TagDefinitions.Bitmap.RuntimeFlags.UseResource,
+                    Sequences = new List<TagDefinitions.Bitmap.Sequence>
                     {
-                        new TagStructures.Bitmap.Sequence
+                        new TagDefinitions.Bitmap.Sequence
                         {
                             Name = "",
                             FirstBitmapIndex = 0,
                             BitmapCount = 1
                         }
                     },
-                    Images = new List<TagStructures.Bitmap.Image>
+                    Images = new List<TagDefinitions.Bitmap.Image>
                     {
-                        new TagStructures.Bitmap.Image
+                        new TagDefinitions.Bitmap.Image
                         {
                             Signature = new Tag("bitm").Value,
                             Unknown28 = -1
                         }
                     },
-                    Resources = new List<TagStructures.Bitmap.BitmapResource>
+                    Resources = new List<TagDefinitions.Bitmap.BitmapResource>
                     {
-                        new TagStructures.Bitmap.BitmapResource()
+                        new TagDefinitions.Bitmap.BitmapResource()
                     }
                 };
 
@@ -178,23 +182,23 @@ namespace TagTool.Commands.Cache
                 {
                     var injector = new BitmapDdsInjector(resourceManager);
                     imageStream.Seek(0, SeekOrigin.Begin);
-                    injector.InjectDds(_info.Serializer, _info.Deserializer, bitmap, 0, imageStream);
+                    injector.InjectDds(Info.Serializer, Info.Deserializer, bitmap, 0, imageStream);
                 }
 
-                var context = new TagSerializationContext(cacheStream, _info.Cache, _info.StringIDs, newBitm);
-                _info.Serializer.Serialize(context, bitmap);
+                var context = new TagSerializationContext(cacheStream, Info.Cache, Info.StringIDs, newBitm);
+                Info.Serializer.Serialize(context, bitmap);
 
                 //
                 // Create the new eldorado shader
                 //
 
-                var newRmsh = _info.Cache.DuplicateTag(cacheStream, _info.Cache.Tags[0x331A]);
-                context = new TagSerializationContext(cacheStream, _info.Cache, _info.StringIDs, newRmsh);
-                var shader = _info.Deserializer.Deserialize<TagStructures.Shader>(context);
+                var newRmsh = Info.Cache.DuplicateTag(cacheStream, Info.Cache.Tags[0x331A]);
+                context = new TagSerializationContext(cacheStream, Info.Cache, Info.StringIDs, newRmsh);
+                var shader = Info.Deserializer.Deserialize<TagDefinitions.Shader>(context);
 
                 shader.ShaderProperties[0].ShaderMaps[0].Bitmap = newBitm;
 
-                _info.Serializer.Serialize(context, shader);
+                Info.Serializer.Serialize(context, shader);
 
                 Console.WriteLine("Done! New shader tag is 0x" + newRmsh.Index.ToString("X8"));
             }

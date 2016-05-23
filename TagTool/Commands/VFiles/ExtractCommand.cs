@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using TagTool.TagStructures;
+using TagTool.TagDefinitions;
 
 namespace TagTool.Commands.VFiles
 {
@@ -9,18 +9,15 @@ namespace TagTool.Commands.VFiles
     {
         private VFilesList Definition { get; }
 
-        public ExtractCommand(VFilesList definition) : base(
-            CommandFlags.Inherit,
-
-            "extract",
-            "Extract a file from the tag",
-
-            "extract <virtual path> [output path]",
-
-            "Extracts a file stored in the tag. If the output path is not specified, it will\n" +
-            "be the same as the file's virtual path.\n" +
-            "\n" +
-            "Use \"list\" to find files in the tag.")
+        public ExtractCommand(VFilesList definition)
+            : base(CommandFlags.Inherit,
+                  "extract",
+                  "Extract a file from the tag.",
+                  "extract <virtual path> [output path]",
+                  "Extracts a file stored in the tag. If the output path is not specified, it will\n" +
+                  "be the same as the file's virtual path.\n" +
+                  "\n" +
+                  "Use \"list\" to find files in the tag.")
         {
             Definition = definition;
         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TagTool.Cache;
-using TagTool.Tags;
+using TagTool.TagGroups;
 
 namespace TagTool.Commands.Tags
 {
@@ -10,25 +10,24 @@ namespace TagTool.Commands.Tags
     {
         private OpenTagCache Info { get; }
 
-        public ListCommand(OpenTagCache info) : base(
-            CommandFlags.Inherit,
-
-            "list",
-            "List tags",
-            
-            "list [class...]",
-            
-            "class is a 4-character string identifying the tag class, e.g. \"proj\".\n" +
-            "Multiple classes to list tags from can be specified.\n" +
-            "Tags which inherit from the given classes will also be printed.\n" +
-            "If no class is specified, all tags in the file will be listed.")
+        public ListCommand(OpenTagCache info)
+            : base(CommandFlags.Inherit,
+                  "list",
+                  "Lists tag instances that are of the specified tag group.",
+                  "list <group tag 1> ... <group tag n>",
+                  "Lists tag instances that are of the specified tag group." +
+                  "Multiple group tags to list tags from can be specified.\n" +
+                  "Tags of a group which inherit from the given group tags will also\n" +
+                  "be printed. If no group tag is specified, all tags in the current\n" +
+                  "tag cache file will be listed.")
         {
             Info = info;
         }
 
         public override bool Execute(List<string> args)
         {
-            var searchClasses = ArgumentParser.ParseTagClasses(Info.Cache, args);
+            var searchClasses = ArgumentParser.ParseGroupTags(Info.StringIDs, args);
+
             if (searchClasses == null)
                 return false;
 
@@ -46,15 +45,11 @@ namespace TagTool.Commands.Tags
 
             foreach (var tag in tags)
             {
-                var tagName = $"0x{tag.Index:X4}";
+                var tagName = Info.TagNames.ContainsKey(tag.Index) ?
+                    Info.TagNames[tag.Index] :
+                    $"0x{tag.Index:X4}";
 
-                if (Info.TagNames.ContainsKey(tag.Index))
-                {
-                    tagName = Info.TagNames[tag.Index];
-                    tagName = $"(0x{tag.Index:X4}) {tagName}";
-                }
-
-                Console.WriteLine("{0} {1} [Offset = 0x{2:X}, Size = 0x{3:X}]", tag.Group.Tag, tagName, tag.HeaderOffset, tag.TotalSize);
+                Console.WriteLine($"[Index: 0x{tag.Index:X4}, Offset: 0x{tag.HeaderOffset:X8}, Size: 0x{tag.TotalSize:X4}] {tagName}.{Info.StringIDs.GetString(tag.Group.Name)}");
             }
 
             return true;
