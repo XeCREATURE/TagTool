@@ -153,6 +153,10 @@ namespace TagTool
                 }
             }
 
+            foreach (var tag in info.Cache.Tags)
+                if (tag != null && !info.TagNames.ContainsKey(tag.Index))
+                    info.TagNames[tag.Index] = $"0x{tag.Index:X4}";
+
             // Create command context
             var contextStack = new CommandContextStack();
             var tagsContext = TagCacheContextFactory.Create(contextStack, info);
@@ -244,6 +248,7 @@ namespace TagTool
         {
             if (command.Execute(args))
                 return;
+
             Console.WriteLine("{0}: {1}", command.Name, command.Description);
             Console.WriteLine();
             Console.WriteLine("Usage:");
