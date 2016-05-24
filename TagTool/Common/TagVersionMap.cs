@@ -11,13 +11,7 @@ namespace TagTool.Common
     /// </summary>
     public class TagVersionMap
     {
-        public class Entry
-        {
-            public string Name { get; set; }
-            public DefinitionSet Definition { get; set; }
-        }
-
-        private readonly Dictionary<Entry, VersionMap> _versionMaps = new Dictionary<Entry, VersionMap>();
+        private readonly Dictionary<DefinitionSet, VersionMap> _versionMaps = new Dictionary<DefinitionSet, VersionMap>();
         private int _nextGlobalTagIndex = 0;
 
         /// <summary>
@@ -27,7 +21,7 @@ namespace TagTool.Common
         /// <param name="index1">The tag index in the first version.</param>
         /// <param name="version2">The second version.</param>
         /// <param name="index2">The tag index in the second version.</param>
-        public void Add(string version1, int index1, string version2, int index2)
+        public void Add(DefinitionSet version1, int index1, DefinitionSet version2, int index2)
         {
             // Get both version maps, creating them if they don't exist
             VersionMap map1, map2;
@@ -64,7 +58,7 @@ namespace TagTool.Common
         /// <param name="index1">The tag index.</param>
         /// <param name="version2">The version to get the equivalent tag index in.</param>
         /// <returns>The equivalent tag index if found, or -1 otherwise.</returns>
-        public int Translate(Entry version1, int index1, Entry version2)
+        public int Translate(DefinitionSet version1, int index1, DefinitionSet version2)
         {
             // Get both version maps and fail if one doesn't exist
             VersionMap map1, map2;
@@ -87,8 +81,11 @@ namespace TagTool.Common
         public void WriteCsv(TextWriter writer)
         {
             // Write a list of versions being represented
-            writer.WriteLine(string.Join(",", _versionMaps.Keys));
-            
+            writer.WriteLine(string.Join(",", _versionMaps.Keys.Select(Definition.GetVersionString)));
+
+            // Write a list of timestamps for the versions
+            writer.WriteLine(string.Join(",", _versionMaps.Keys.Select(v => Definition.GetTimestamp(v).ToString("X16"))));
+
             // Now write out each tag
             for (var i = 0; i < _nextGlobalTagIndex; i++)
             {
