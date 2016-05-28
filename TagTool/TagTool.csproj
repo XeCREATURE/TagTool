@@ -108,6 +108,7 @@
     <Compile Include="Commands\Tags\DuplicateTagCommand.cs" />
     <Compile Include="Commands\Tags\EditCommand.cs" />
     <Compile Include="Commands\Tags\ExportTagsCommand.cs" />
+    <Compile Include="Commands\Tags\ExtractBitmapCommand.cs" />
     <Compile Include="Commands\Tags\ExtractBitmapsCommand.cs" />
     <Compile Include="Commands\Tags\ExtractCommand.cs" />
     <Compile Include="Commands\Tags\GenerateCacheCommand.cs" />

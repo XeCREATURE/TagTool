@@ -32,6 +32,7 @@ namespace TagTool.Commands.Tags
             if (info.StringIDs != null)
             {
                 context.AddCommand(new EditCommand(stack, info));
+                context.AddCommand(new ExtractBitmapCommand(info));
                 context.AddCommand(new ExtractBitmapsCommand(info));
                 context.AddCommand(new ImportBitmapCommand(info));
                 context.AddCommand(new CollisionGeometryTestCommand(info));
