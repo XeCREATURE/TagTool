@@ -7,8 +7,16 @@ namespace TagTool.TagGroups
     /// <summary>
     /// Describes the type of data in a tag.
     /// </summary>
-    public struct TagGroup : IEquatable<TagGroup>
+    public class TagGroup : IEquatable<TagGroup>
     {
+        /// <summary>
+        /// Constructs an empty tag group description.
+        /// </summary>
+        public TagGroup()
+            : this(Tag.Null, Tag.Null, Tag.Null, StringID.Null)
+        {
+        }
+
         /// <summary>
         /// Constructs a new tag group description.
         /// </summary>
@@ -22,12 +30,22 @@ namespace TagTool.TagGroups
             ParentTag = parentTag;
             GrandparentTag = grandparentTag;
             Name = name;
+
+            if (Instances == null)
+                Instances = new Dictionary<Tag, TagGroup>();
+
+            Instances[Tag] = this;
         }
 
         /// <summary>
         /// Represents a "null" tag group.
         /// </summary>
         public static readonly TagGroup Null = new TagGroup(new Tag(-1), new Tag(-1), new Tag(-1), StringID.Null);
+
+        /// <summary>
+        /// A dictionary of available tag groups.
+        /// </summary>
+        public static Dictionary<Tag, TagGroup> Instances { get; set; }
 
         /// <summary>
         /// Gets the group's tag. Can be -1.
@@ -111,9 +129,5 @@ namespace TagTool.TagGroups
         }
 
         public override string ToString() => Tag.ToString();
-
-        public static Dictionary<Tag, TagGroup> Instances { get; } = new Dictionary<Tag, TagGroup>
-        {
-        };
     }
 }

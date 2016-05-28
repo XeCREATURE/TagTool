@@ -19,7 +19,7 @@ namespace TagTool.Commands.Tags
             : base(CommandFlags.Inherit,
                   "new_tag",
                   "Creates a new tag of the specified tag group in the current tag cache.",
-                  "new_tag <group tag> <group name>",
+                  "new_tag <group tag>",
                   "Creates a new tag of the specified tag group in the current tag cache.")
         {
             Info = info;
@@ -27,25 +27,29 @@ namespace TagTool.Commands.Tags
 
         public override bool Execute(List<string> args)
         {
-            if (args.Count != 2)
+            if (args.Count != 1)
                 return false;
 
             var groupTag = ArgumentParser.ParseGroupTag(Info.StringIDs, args[0]);
 
-            if (groupTag == null)
+            if (groupTag == null || !TagGroup.Instances.ContainsKey(groupTag))
                 return false;
 
-            var groupName = Info.StringIDs.GetStringID(args[1]);
-
-            var group = new TagGroup(groupTag, Tag.Null, Tag.Null, groupName);
+            TagInstance instance;
 
             using (var stream = Info.OpenCacheReadWrite())
             {
-                var instance = Info.Cache.AllocateTag(group);
+                instance = Info.Cache.AllocateTag(TagGroup.Instances[groupTag]);
                 var context = new TagSerializationContext(stream, Info.Cache, Info.StringIDs, instance);
                 var data = Activator.CreateInstance(TagStructureTypes.FindByGroupTag(groupTag));
                 Info.Serializer.Serialize(context, data);
             }
+
+            var tagName = Info.TagNames.ContainsKey(instance.Index) ?
+                Info.TagNames[instance.Index] :
+                $"0x{instance.Index:X4}";
+
+            Console.WriteLine($"[Index: 0x{instance.Index:X4}, Offset: 0x{instance.HeaderOffset:X8}, Size: 0x{instance.TotalSize:X4}] {tagName}.{Info.StringIDs.GetString(instance.Group.Name)}");
 
             return true;
         }

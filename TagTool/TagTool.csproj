@@ -150,6 +150,7 @@
     <Compile Include="Common\ReadOnlySet.cs" />
     <Compile Include="Common\RealQuaternion.cs" />
     <Compile Include="Common\SimpleJson.cs" />
+    <Compile Include="Common\TagCacheMap.cs" />
     <Compile Include="Common\TagReferenceBlock.cs" />
     <Compile Include="Common\Vector.cs" />
     <Compile Include="Common\Vertex.cs" />

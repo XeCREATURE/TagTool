@@ -49,9 +49,9 @@ namespace TagTool.Commands.Tags
 
             // Load the CSV
             Console.WriteLine("Reading {0}...", csvPath);
-            TagVersionMap tagMap;
+            TagCacheMap tagMap;
             using (var reader = new StreamReader(File.OpenRead(csvPath)))
-                tagMap = TagVersionMap.ParseCsv(reader);
+                tagMap = TagCacheMap.ParseCsv(reader);
 
             // Load destination files
             Console.WriteLine("Loading the target tags.dat...");
@@ -135,7 +135,7 @@ namespace TagTool.Commands.Tags
             return true;
         }
 
-        private TagInstance ConvertTag(TagInstance srcTag, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagVersionMap tagMap)
+        private TagInstance ConvertTag(TagInstance srcTag, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap)
         {
             TagPrinter.PrintTagShort(srcTag);
 
@@ -144,7 +144,7 @@ namespace TagTool.Commands.Tags
                 return destInfo.Cache.Tags[0x101F];*/
 
             // Check if the tag is in the map, and just return the translated tag if so
-            var destIndex = tagMap.Translate(srcInfo.Version, srcTag.Index, destInfo.Version);
+            var destIndex = tagMap.Translate(srcInfo.CacheFile.FullName, srcTag.Index, destInfo.CacheFile.FullName);
             if (destIndex >= 0)
             {
                 Console.WriteLine("- Using already-known index {0:X4}", destIndex);
@@ -169,7 +169,7 @@ namespace TagTool.Commands.Tags
 
             // Allocate a new tag and create a mapping for it
             var newTag = destInfo.Cache.AllocateTag(srcTag.Group);
-            tagMap.Add(srcInfo.Version, srcTag.Index, destInfo.Version, newTag.Index);
+            tagMap.Add(srcInfo.CacheFile.FullName, srcTag.Index, destInfo.CacheFile.FullName, newTag.Index);
 
             if (srcTag.IsInGroup("decs") || srcTag.IsInGroup("rmd "))
                 _isDecalShader = true;
@@ -186,7 +186,7 @@ namespace TagTool.Commands.Tags
             return newTag;
         }
 
-        private object Convert(object data, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagVersionMap tagMap)
+        private object Convert(object data, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap)
         {
             if (data == null)
                 return null;
@@ -210,7 +210,7 @@ namespace TagTool.Commands.Tags
             return data;
         }
 
-        private Array ConvertArray(Array array, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagVersionMap tagMap)
+        private Array ConvertArray(Array array, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap)
         {
             if (array.GetType().GetElementType().IsPrimitive)
                 return array;
@@ -223,7 +223,7 @@ namespace TagTool.Commands.Tags
             return array;
         }
 
-        private object ConvertList(object list, Type type, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagVersionMap tagMap)
+        private object ConvertList(object list, Type type, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap)
         {
             if (type.GenericTypeArguments[0].IsPrimitive)
                 return list;
@@ -239,7 +239,7 @@ namespace TagTool.Commands.Tags
             return list;
         }
 
-        private object ConvertStructure(object data, Type type, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagVersionMap tagMap)
+        private object ConvertStructure(object data, Type type, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap)
         {
             // Convert each field
             var enumerator = new TagFieldEnumerator(new TagStructureInfo(type, destInfo.Version));
