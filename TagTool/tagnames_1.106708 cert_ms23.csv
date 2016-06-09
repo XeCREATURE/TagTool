@@ -481,11 +481,11 @@
 0x000001E0,objects\characters\elite\mp_elite\fp\fp
 0x000001E1,objects\characters\elite\mp_elite\fp_body\fp_body
 0x000001E2,objects\characters\elite\mp_elite\mp_elite
-0x000001E3,objects\characters\masterchief\mp_masterchief\mp_masterchief
+0x000001E3,objects\characters\masterchief\mp_masterchief\mp_masterchief_ui
 0x000001E4,objects\characters\elite\mp_elite\mp_elite_ui
-0x000001E5,objects\characters\masterchief\mp_masterchief\mp_masterchief
-0x000001E6,objects\characters\elite\mp_elite\mp_elite
-0x000001E7,objects\characters\masterchief\mp_masterchief\mp_masterchief
+0x000001E5,objects\characters\masterchief\mp_masterchief\mp_masterchief_mannequin
+0x000001E6,objects\characters\elite\mp_elite\mp_elite_mannequin
+0x000001E7,objects\characters\masterchief\mp_masterchief\mp_masterchief_podium
 0x000001E8,objects\characters\elite\mp_elite\mp_elite_podium
 0x000001E9,globals\falling
 0x000001EA,globals\collision_damage\landing_soft
@@ -3089,7 +3089,7 @@
 0x00000C10,objects\characters\masterchief\flashlight_1p
 0x00000C11,objects\characters\masterchief\flashlight_3p
 0x00000C12,objects\characters\masterchief\fx\flaming_ninja
-0x00000C13,objects\characters\masterchief\mp_masterchief\mp_masterchief
+0x00000C13,objects\characters\masterchief\mp_masterchief\mp_masterchief_hologram
 0x00000C14,camera\biped_support_camera
 0x00000C15,camera\biped_assassination_camera
 0x00000C16,globals\damage_responses\player_assassination
@@ -4804,7 +4804,7 @@
 0x000012C3,ui\chud\bitmaps\medals\medals
 0x000012C4,ui\chud\animations\medal_animation
 0x000012C5,ui\chud\bitmaps\cortana_channel
-0x000012C6,ui\chud\bitmaps\chud__elite_microtexture
+0x000012C6,ui\chud\bitmaps\chud_elite_microtexture
 0x000012C7,ui\chud\bitmaps\chud_directional_arrow
 0x000012C8,rasterizer\shaders\chud_simple
 0x000012C9,rasterizer\shaders\chud_simple
@@ -21225,7 +21225,7 @@
 0x00005329,h_ammo_crate_lg
 0x0000532A,0x532A
 0x0000532B,null_up
-0x0000532C,objects\characters\masterchief\mp_masterchief\mp_masterchief
+0x0000532C,objects\characters\masterchief\mp_masterchief\mp_masterchief_unused
 0x0000532D,objects\characters\masterchief\mp_masterchief\mp_masterchief
 0x0000532E,objects\characters\masterchief\masterchief
 0x0000532F,0x532F

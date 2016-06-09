@@ -123,8 +123,11 @@ namespace TagTool.Commands.Tags
 
             foreach (var dependency in dependencies)
             {
-                Console.Write($"{Info.TagNames[dependency.Index]} ");
-                TagPrinter.PrintTagShort(dependency);
+                var tagName = Info.TagNames.ContainsKey(dependency.Index) ?
+                    Info.TagNames[dependency.Index] :
+                    $"0x{dependency.Index:X4}";
+
+                Console.WriteLine($"[Index: 0x{dependency.Index:X4}, Offset: 0x{dependency.HeaderOffset:X8}, Size: 0x{dependency.TotalSize:X4}] {tagName}.{Info.StringIDs.GetString(dependency.Group.Name)}");
             }
 
             return true;
@@ -136,8 +139,11 @@ namespace TagTool.Commands.Tags
 
             foreach (var dependency in dependsOn)
             {
-                Console.Write($"{Info.TagNames[dependency.Index]} ");
-                TagPrinter.PrintTagShort(dependency);
+                var tagName = Info.TagNames.ContainsKey(dependency.Index) ?
+                    Info.TagNames[dependency.Index] :
+                    $"0x{dependency.Index:X4}";
+
+                Console.WriteLine($"[Index: 0x{dependency.Index:X4}, Offset: 0x{dependency.HeaderOffset:X8}, Size: 0x{dependency.TotalSize:X4}] {tagName}.{Info.StringIDs.GetString(dependency.Group.Name)}");
             }
 
             return true;
