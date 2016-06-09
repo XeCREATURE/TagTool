@@ -15,9 +15,9 @@ namespace TagTool.Commands.RenderMethods
 
         public ListBitmapsCommand(OpenTagCache info, TagInstance tag, RenderMethod definition)
             : base(CommandFlags.Inherit,
-                 "list_bitmaps",
+                 "listbitmaps",
                  "Lists the bitmaps used by the render_method.",
-                 "list_bitmaps",
+                 "listbitmaps",
                  "Lists the bitmaps used by the render_method.")
         {
             Info = info;

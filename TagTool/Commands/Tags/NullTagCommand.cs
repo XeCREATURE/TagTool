@@ -12,9 +12,9 @@ namespace TagTool.Commands.Tags
 
         public NullTagCommand(OpenTagCache info)
             : base(CommandFlags.None,
-                  "null_tag",
+                  "nulltag",
                   "Nulls a tag in the current tag cache.",
-                  "null_tag <tag index>",
+                  "nulltag <tag index>",
                   "Nulls a tag in the current tag index. The tag's data will be removed from cache.")
         {
             Info = info;
@@ -25,7 +25,7 @@ namespace TagTool.Commands.Tags
             if (args.Count != 1)
                 return false;
 
-            var tag = ParseTagIndex(Info.Cache, args[0]);
+            var tag = ParseTagIndex(Info, args[0]);
 
             if (tag == null)
             {

@@ -83,24 +83,62 @@ namespace TagTool.Commands
             return results;
         }
 
-        public static TagInstance ParseTagIndex(TagCache cache, string arg)
+        public static TagInstance ParseTagName(OpenTagCache info, string name)
         {
+            if (name.Length == 0 || !char.IsLetter(name[0]) || !name.Contains('.'))
+                throw new Exception($"Invalid tag name: {name}");
+
+            var namePieces = name.Split('.');
+
+            var groupTag = ParseGroupTag(info.StringIDs, namePieces[1]);
+            if (groupTag == Tag.Null)
+                throw new Exception($"Invalid tag name: {name}");
+
+            var tagName = namePieces[0];
+            
+            foreach (var nameEntry in info.TagNames)
+            {
+                if (nameEntry.Value == tagName)
+                {
+                    var instance = info.Cache.Tags[nameEntry.Key];
+
+                    if (instance.Group.Tag == groupTag)
+                        return instance;
+                }
+            }
+
+            Console.WriteLine($"Invalid tag name: {name}");
+            return null;
+        }
+
+        public static TagInstance ParseTagIndex(OpenTagCache info, string arg)
+        {
+            if (!(arg == "*" || arg == "null" || char.IsLetter(arg[0]) || arg.StartsWith("0x")))
+            {
+                Console.WriteLine($"Invalid tag index specifier: {arg}");
+                return null;
+            }
+
             if (arg == "*")
-                return cache.Tags.Last();
+                return info.Cache.Tags.Last();
             else if (arg == "null")
                 return null;
+            else if (char.IsLetter(arg[0]))
+                return ParseTagName(info, arg);
+            else if (arg.StartsWith("0x"))
+                arg = arg.Substring(2);
 
             int tagIndex;
             if (!int.TryParse(arg, NumberStyles.HexNumber, null, out tagIndex))
                 return null;
 
-            if (!cache.Tags.Contains(tagIndex))
+            if (!info.Cache.Tags.Contains(tagIndex))
             {
                 Console.WriteLine("Unable to find tag {0:X8}.", tagIndex);
                 return null;
             }
 
-            return cache.Tags[tagIndex];
+            return info.Cache.Tags[tagIndex];
         }
 
         public static Tag ParseGroupTag(StringIDCache stringIDs, string groupName)

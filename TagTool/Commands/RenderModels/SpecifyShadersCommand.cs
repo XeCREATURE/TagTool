@@ -15,9 +15,9 @@ namespace TagTool.Commands.RenderModels
 
         public SpecifyShadersCommand(OpenTagCache info, TagInstance tag, RenderModel definition)
             : base(CommandFlags.Inherit,
-                  "specify_shaders",
+                  "specifyshaders",
                   "Allows the shaders of a render_model to be respecified.",
-                  "specify_shaders",
+                  "specifyshaders",
                   "Allows the shaders of a render_model to be respecified.")
         {
             Info = info;
@@ -34,7 +34,7 @@ namespace TagTool.Commands.RenderModels
                 else
                     Console.Write("Please enter the replace material #{0} index: ", Definition.Materials.IndexOf(material));
 
-                material.RenderMethod = ArgumentParser.ParseTagIndex(Info.Cache, Console.ReadLine());
+                material.RenderMethod = ArgumentParser.ParseTagIndex(Info, Console.ReadLine());
             }
 
             using (var cacheStream = Info.CacheFile.Open(FileMode.Open, FileAccess.ReadWrite))

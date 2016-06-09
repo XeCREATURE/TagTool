@@ -16,9 +16,9 @@ namespace TagTool.Commands.Editing
 
         public RemoveFromCommand(CommandContextStack stack, OpenTagCache info, TagInstance tag, TagStructureInfo structure, object owner)
             : base(CommandFlags.Inherit,
-                  "remove_from",
+                  "removefrom",
                   $"Removes block element(s) from a specified index of a specific tag block in the current {structure.Types[0].Name} definition.",
-                  "remove_from <tag block name> [* | <tag block index> [* | amount = 1]]",
+                  "removefrom <tag block name> [* | <tag block index> [* | amount = 1]]",
                   $"Removes block element(s) from a specified index of a specific tag block in the current {structure.Types[0].Name} definition.")
         {
             Stack = stack;

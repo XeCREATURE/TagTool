@@ -6,7 +6,7 @@ namespace TagTool.Commands.Tags
 {
     class InfoCommand : Command
     {
-        private readonly TagCache _cache;
+        private OpenTagCache Info { get; }
 
         public InfoCommand(OpenTagCache info) : base(
             CommandFlags.Inherit,
@@ -18,14 +18,14 @@ namespace TagTool.Commands.Tags
 
             "Displays detailed information about a tag.")
         {
-            _cache = info.Cache;
+            Info = info;
         }
 
         public override bool Execute(List<string> args)
         {
             if (args.Count != 1)
                 return false;
-            var tag = ArgumentParser.ParseTagIndex(_cache, args[0]);
+            var tag = ArgumentParser.ParseTagIndex(Info, args[0]);
             if (tag == null)
                 return false;
 

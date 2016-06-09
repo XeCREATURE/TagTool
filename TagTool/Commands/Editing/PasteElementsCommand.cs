@@ -16,9 +16,9 @@ namespace TagTool.Commands.Editing
 
         public PasteElementsCommand(CommandContextStack stack, OpenTagCache info, TagInstance tag, TagStructureInfo structure, object owner)
             : base(CommandFlags.Inherit,
-                  "paste_block_elements",
+                  "pasteelements",
                   $"Pastes block element(s) to a specific tag block in the current {structure.Types[0].Name} definition.",
-                  "paste_block_elements <tag block name> [index = *]",
+                  "pasteelements <tag block name> [index = *]",
                   $"Pastes block element(s) to a specific tag block in the current {structure.Types[0].Name} definition.")
         {
             Stack = stack;

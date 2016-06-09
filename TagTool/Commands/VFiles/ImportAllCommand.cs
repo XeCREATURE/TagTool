@@ -15,9 +15,9 @@ namespace TagTool.Commands.VFiles
 
         public ImportAllCommand(OpenTagCache info, TagInstance tag, VFilesList definition)
             : base(CommandFlags.None,
-                  "import_all",
+                  "importall",
                   "Replace all files stored in the tag",
-                  "import_all [directory]",
+                  "importall [directory]",
                   "Replaces all file stored in the tag. The tag will be resized as necessary.\n" +
                   "If no directory is specified, files will be loaded from the current directory.")
         {

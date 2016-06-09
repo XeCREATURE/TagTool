@@ -12,9 +12,9 @@ namespace TagTool.Commands.Tags
 
         public ListNullTagsCommand(OpenTagCache info)
             : base(CommandFlags.None,
-                  "list_null_tags",
+                  "listnulltags",
                   "Lists all null tag indices in the current tag cache",
-                  "list_null_tags",
+                  "listnulltags",
                   "Lists all null tag indices in the current tag cache")
         {
             Info = info;

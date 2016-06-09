@@ -16,9 +16,9 @@ namespace TagTool.Commands.Cache
 
         public PortShaderCommand(OpenTagCache info, CacheBase blamCache)
             : base(CommandFlags.None,
-                  "port_shader",
+                  "portshader",
                   "",
-                  "port_shader <blam tag path>",
+                  "portshader <blam tag path>",
                   "")
         {
             Info = info;

@@ -16,9 +16,9 @@ namespace TagTool.Commands.RenderMethods
 
         public ListArgumentsCommand(OpenTagCache info, TagInstance tag, RenderMethod definition)
             : base(CommandFlags.Inherit,
-                 "list_arguments",
+                 "listarguments",
                  "Lists the arguments of the render_method.",
-                 "list_arguments",
+                 "listarguments",
                  "Lists the arguments of the render_method.")
         {
             Info = info;

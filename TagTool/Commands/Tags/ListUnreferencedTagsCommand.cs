@@ -12,9 +12,9 @@ namespace TagTool.Commands.Tags
 
         public ListUnreferencedTagsCommand(OpenTagCache info)
             : base(CommandFlags.None,
-                  "list_unreferenced_tags",
+                  "listunreferencedtags",
                   "Lists all unreferenced tags in the current tag cache",
-                  "list_unreferenced_tags",
+                  "listunreferencedtags",
                   "Lists all unreferenced tags in the current tag cache")
         {
             Info = info;

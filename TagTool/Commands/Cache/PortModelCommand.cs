@@ -19,9 +19,9 @@ namespace TagTool.Commands.Cache
 
         public PortModelCommand(OpenTagCache info, CacheBase blamCache)
             : base(CommandFlags.Inherit,
-                  "port_model",
+                  "portmodel",
                   "",
-                  "port_model [new] <blam tag path> <eldorado tag index>",
+                  "portmodel [new] <blam tag path> <eldorado tag index>",
                   "")
         {
             Info = info;

@@ -14,9 +14,9 @@ namespace TagTool.Commands.Tags
 
         public ExportTagsCommand(OpenTagCache info)
             : base(CommandFlags.None,
-                  "export_tags",
+                  "exporttags",
                   "Exports all tags in the current tag cache to a specific directory.",
-                  "export_tags <output directory>",
+                  "exporttags <output directory>",
                   "Exports all tags in the current tag cache to a specific directory.")
         {
             Info = info;

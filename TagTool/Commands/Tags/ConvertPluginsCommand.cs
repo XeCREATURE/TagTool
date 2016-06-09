@@ -16,9 +16,9 @@ namespace TagTool.Commands.Tags
 
         public ConvertPluginsCommand(OpenTagCache info)
             : base(CommandFlags.Inherit,
-                  "convert_plugins",
+                  "convertplugins",
                   "Convert Assembly plugins to tag layout structures",
-                  "convert_plugins <input dir> <output type> <output dir>",
+                  "convertplugins <input dir> <output type> <output dir>",
                   "Only plugins for groups that are actually used in the tag cache will be converted.\n" +
                   "Layouts will be written to the output directory in the chosen format.\n" +
                   "\n" +

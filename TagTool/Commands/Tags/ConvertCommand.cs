@@ -16,8 +16,9 @@ namespace TagTool.Commands.Tags
 {
     class ConvertCommand : Command
     {
-        private readonly OpenTagCache _info;
-        private bool _isDecalShader = false;
+        private OpenTagCache Info { get; }
+        private bool IsDecalShader { get; set; } = false;
+        private HashSet<int> Replaced { get; } = new HashSet<int>();
 
         public ConvertCommand(OpenTagCache info) : base(
             CommandFlags.None,
@@ -25,7 +26,7 @@ namespace TagTool.Commands.Tags
             "convert",
             "Convert a tag and its dependencies to another engine version",
 
-            "convert <tag index> <tag map csv> <output csv> <target directory>",
+            "convert [replace] <tag index> <tag map csv> <output csv> <target directory>",
 
             "The tag map CSV should be generated using the \"matchtags\" command.\n" +
             "If a tag is listed in the CSV file, it will not be converted.\n" +
@@ -33,16 +34,30 @@ namespace TagTool.Commands.Tags
             "Subsequent convert commands should use the new CSV.\n" +
             "The target directory should be the maps folder for the target engine.")
         {
-            _info = info;
+            Info = info;
         }
 
         public override bool Execute(List<string> args)
         {
-            if (args.Count != 4)
+            if (!(args.Count == 4 || args.Count == 5))
                 return false;
-            var srcTag = ArgumentParser.ParseTagIndex(_info.Cache, args[0]);
+
+            var replace = false;
+
+            if (args.Count == 5)
+            {
+                if (args[0] != "replace")
+                    return false;
+
+                replace = true;
+                args.RemoveAt(0);
+            }
+
+            var srcTag = ArgumentParser.ParseTagIndex(Info, args[0]);
+
             if (srcTag == null)
                 return false;
+
             var csvPath = args[1];
             var csvOutPath = args[2];
             var targetDir = args[3];
@@ -52,7 +67,7 @@ namespace TagTool.Commands.Tags
             TagCacheMap tagMap;
             using (var reader = new StreamReader(File.OpenRead(csvPath)))
                 tagMap = TagCacheMap.ParseCsv(reader);
-
+            
             // Load destination files
             Console.WriteLine("Loading the target tags.dat...");
             var destCachePath = Path.Combine(targetDir, "tags.dat");
@@ -70,7 +85,7 @@ namespace TagTool.Commands.Tags
             }
             Console.WriteLine("- Detected version {0}", Definition.GetVersionString(destInfo.Version));
 
-            if (_info.Version != DefinitionSet.HaloOnline498295 && destInfo.Version != DefinitionSet.HaloOnline106708)
+            if (Info.Version != DefinitionSet.HaloOnline498295 && destInfo.Version != DefinitionSet.HaloOnline106708)
             {
                 Console.Error.WriteLine("Conversion is only supported from 11.1.498295 Live to 1.106708 cert_ms23.");
                 return true;
@@ -99,15 +114,15 @@ namespace TagTool.Commands.Tags
             // Load resources for our build
             Console.WriteLine("Loading source resources...");
             var srcResources = new ResourceDataManager();
-            srcResources.LoadCachesFromDirectory(_info.CacheFile.DirectoryName);
+            srcResources.LoadCachesFromDirectory(Info.CacheFile.DirectoryName);
 
             Console.WriteLine();
-            Console.WriteLine("CONVERTING FROM VERSION {0} TO {1}", Definition.GetVersionString(_info.Version), Definition.GetVersionString(destInfo.Version));
+            Console.WriteLine("CONVERTING FROM VERSION {0} TO {1}", Definition.GetVersionString(Info.Version), Definition.GetVersionString(destInfo.Version));
             Console.WriteLine();
 
             TagInstance resultTag;
-            using (Stream srcStream = _info.OpenCacheRead(), destStream = destInfo.OpenCacheReadWrite())
-                resultTag = ConvertTag(srcTag, _info, srcStream, srcResources, destInfo, destStream, destResources, tagMap);
+            using (Stream srcStream = Info.OpenCacheRead(), destStream = destInfo.OpenCacheReadWrite())
+                resultTag = ConvertTag(srcTag, Info, srcStream, srcResources, destInfo, destStream, destResources, tagMap, replace);
 
             Console.WriteLine();
             Console.WriteLine("Repairing decal systems...");
@@ -121,34 +136,36 @@ namespace TagTool.Commands.Tags
             Console.WriteLine("Writing {0}...", csvOutPath);
             using (var stream = new StreamWriter(File.Open(csvOutPath, FileMode.Create, FileAccess.ReadWrite)))
                 tagMap.WriteCsv(stream);
-
-            // Uncomment this to add the new tag as a dependency to cfgt to make testing easier
-            /*using (var stream = destInfo.OpenCacheReadWrite())
-            {
-                destInfo.Cache.Tags[0].Dependencies.Add(resultTag.Index);
-                destInfo.Cache.UpdateTag(stream, destInfo.Cache.Tags[0]);
-            }*/
-
+            
             Console.WriteLine();
             Console.WriteLine("All done! The converted tag is:");
             TagPrinter.PrintTagShort(resultTag);
             return true;
         }
 
-        private TagInstance ConvertTag(TagInstance srcTag, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap)
+        private TagInstance ConvertTag(TagInstance srcTag, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap, bool replace)
         {
             TagPrinter.PrintTagShort(srcTag);
-
-            // Uncomment this to use 0x101F for all shaders
-            /*if (srcTag.IsClass("rm  "))
-                return destInfo.Cache.Tags[0x101F];*/
-
-            // Check if the tag is in the map, and just return the translated tag if so
+            
+            // Check if the tag is in the map, and just return the translated tag if it shouldn't be replaced
             var destIndex = tagMap.Translate(srcInfo.CacheFile.FullName, srcTag.Index, destInfo.CacheFile.FullName);
             if (destIndex >= 0)
             {
-                Console.WriteLine("- Using already-known index {0:X4}", destIndex);
-                return destInfo.Cache.Tags[destIndex];
+                if (!replace || Replaced.Contains(destIndex))
+                {
+                    Console.WriteLine("- Using already-known index {0:X4}", destIndex);
+                    return destInfo.Cache.Tags[destIndex];
+                }
+            }
+
+            if (replace && (destIndex < 0))
+            {
+            EnterDestIndex:
+                Console.Write($"Please enter destination index for 0x{srcTag.Index:X4}: ");
+                var destInstance = ArgumentParser.ParseTagIndex(destInfo, Console.ReadLine());
+                if (destInstance == null)
+                    goto EnterDestIndex;
+                destIndex = destInstance.Index;
             }
 
             // Deserialize the tag from the source cache
@@ -156,37 +173,32 @@ namespace TagTool.Commands.Tags
             var srcContext = new TagSerializationContext(srcStream, srcInfo.Cache, srcInfo.StringIDs, srcTag);
             var tagData = srcInfo.Deserializer.Deserialize(srcContext, structureType);
 
-            // Uncomment this to use 0x101F in place of shaders that need conversion
-            /*if (tagData is RenderMethod)
-            {
-                var rm = (RenderMethod)tagData;
-                foreach (var prop in rm.ShaderProperties)
-                {
-                    if (tagMap.Translate(srcInfo.Version, prop.Template.Index, destInfo.Version) < 0)
-                        return destInfo.Cache.Tags[0x101F];
-                }
-            }*/
+            // Acquire the destination tag
+            var destTag = replace ?
+                (destIndex == -1 ? destInfo.Cache.AllocateTag(srcTag.Group) : destInfo.Cache.Tags[destIndex]) :
+                destInfo.Cache.AllocateTag(srcTag.Group);
 
-            // Allocate a new tag and create a mapping for it
-            var newTag = destInfo.Cache.AllocateTag(srcTag.Group);
-            tagMap.Add(srcInfo.CacheFile.FullName, srcTag.Index, destInfo.CacheFile.FullName, newTag.Index);
+            tagMap.Add(srcInfo.CacheFile.FullName, srcTag.Index, destInfo.CacheFile.FullName, destTag.Index);
 
             if (srcTag.IsInGroup("decs") || srcTag.IsInGroup("rmd "))
-                _isDecalShader = true;
-
-            // Convert it
-            tagData = Convert(tagData, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap);
+                IsDecalShader = true;
+            
+            // Convert the source tag
+            tagData = Convert(tagData, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap, replace);
 
             if (srcTag.IsInGroup("decs") || srcTag.IsInGroup("rmd "))
-                _isDecalShader = false;
+                IsDecalShader = false;
 
             // Re-serialize into the destination cache
-            var destContext = new TagSerializationContext(destStream, destInfo.Cache, destInfo.StringIDs, newTag);
+            var destContext = new TagSerializationContext(destStream, destInfo.Cache, destInfo.StringIDs, destTag);
             destInfo.Serializer.Serialize(destContext, tagData);
-            return newTag;
+
+            Replaced.Add(destIndex);
+
+            return destTag;
         }
 
-        private object Convert(object data, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap)
+        private object Convert(object data, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap, bool replace)
         {
             if (data == null)
                 return null;
@@ -196,34 +208,34 @@ namespace TagTool.Commands.Tags
             if (type == typeof(StringID))
                 return ConvertStringID((StringID)data, srcInfo, destInfo);
             if (type == typeof(TagInstance))
-                return ConvertTag((TagInstance)data, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap);
+                return ConvertTag((TagInstance)data, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap, replace);
             if (type == typeof(ResourceReference))
                 return ConvertResource((ResourceReference)data, srcInfo, srcResources, destInfo, destResources);
             if (type == typeof(GeometryReference))
                 return ConvertGeometry((GeometryReference)data, srcInfo, srcResources, destInfo, destResources);
             if (type.IsArray)
-                return ConvertArray((Array)data, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap);
+                return ConvertArray((Array)data, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap, replace);
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
-                return ConvertList(data, type, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap);
+                return ConvertList(data, type, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap, replace);
             if (type.GetCustomAttributes(typeof(TagStructureAttribute), false).Length > 0)
-                return ConvertStructure(data, type, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap);
+                return ConvertStructure(data, type, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap, replace);
             return data;
         }
 
-        private Array ConvertArray(Array array, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap)
+        private Array ConvertArray(Array array, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap, bool replace)
         {
             if (array.GetType().GetElementType().IsPrimitive)
                 return array;
             for (var i = 0; i < array.Length; i++)
             {
                 var oldValue = array.GetValue(i);
-                var newValue = Convert(oldValue, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap);
+                var newValue = Convert(oldValue, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap, replace);
                 array.SetValue(newValue, i);
             }
             return array;
         }
 
-        private object ConvertList(object list, Type type, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap)
+        private object ConvertList(object list, Type type, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap, bool replace)
         {
             if (type.GenericTypeArguments[0].IsPrimitive)
                 return list;
@@ -233,20 +245,20 @@ namespace TagTool.Commands.Tags
             for (var i = 0; i < count; i++)
             {
                 var oldValue = getItem.Invoke(list, new object[] { i });
-                var newValue = Convert(oldValue, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap);
+                var newValue = Convert(oldValue, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap, replace);
                 setItem.Invoke(list, new object[] { i, newValue });
             }
             return list;
         }
 
-        private object ConvertStructure(object data, Type type, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap)
+        private object ConvertStructure(object data, Type type, OpenTagCache srcInfo, Stream srcStream, ResourceDataManager srcResources, OpenTagCache destInfo, Stream destStream, ResourceDataManager destResources, TagCacheMap tagMap, bool replace)
         {
             // Convert each field
             var enumerator = new TagFieldEnumerator(new TagStructureInfo(type, destInfo.Version));
             while (enumerator.Next())
             {
                 var oldValue = enumerator.Field.GetValue(data);
-                var newValue = Convert(oldValue, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap);
+                var newValue = Convert(oldValue, srcInfo, srcStream, srcResources, destInfo, destStream, destResources, tagMap, replace);
                 enumerator.Field.SetValue(data, newValue);
             }
 
@@ -519,7 +531,7 @@ namespace TagTool.Commands.Tags
 
         private void FixShaders(object data)
         {
-            if (_info.Version <= DefinitionSet.HaloOnline235640)
+            if (Info.Version <= DefinitionSet.HaloOnline235640)
                 return;
 
             var template = data as RenderMethodTemplate;
@@ -628,7 +640,7 @@ namespace TagTool.Commands.Tags
                 var mode = ps.DrawModes[i];
                 for (var j = 0; j < mode.Count; j++)
                 {
-                    if (i != 0 || _isDecalShader)
+                    if (i != 0 || IsDecalShader)
                     {
                         Console.WriteLine("- Recompiling pixel shader {0}...", mode.Index + j);
                         var shader = ps.PixelShaders[mode.Index + j];

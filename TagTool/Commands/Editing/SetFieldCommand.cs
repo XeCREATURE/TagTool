@@ -19,9 +19,9 @@ namespace TagTool.Commands.Editing
 
         public SetFieldCommand(CommandContextStack stack, OpenTagCache info, TagInstance tag, TagStructureInfo structure, object owner)
             : base(CommandFlags.Inherit,
-                  "set_field",
+                  "setfield",
                   $"Sets the value of a specific field in the current {structure.Types[0].Name} definition.",
-                  "set_field <field name> <field value>",
+                  "setfield <field name> <field value>",
                   $"Sets the value of a specific field in the current {structure.Types[0].Name} definition.")
         {
             Stack = stack;
@@ -223,7 +223,7 @@ namespace TagTool.Commands.Editing
             {
                 if (args.Count != 1)
                     return false;
-                output = ArgumentParser.ParseTagIndex(Info.Cache, input);
+                output = ArgumentParser.ParseTagIndex(Info, input);
             }
             else if (type == typeof(StringID))
             {

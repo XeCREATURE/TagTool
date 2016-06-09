@@ -11,9 +11,9 @@ namespace TagTool.Commands.Tags
     {
         public GenerateCacheCommand()
             : base(CommandFlags.Inherit,
-                  "generate_cache",
+                  "generatecache",
                   "Generates an empty set of cache files.",
-                  "generate_cache <output directory>",
+                  "generatecache <output directory>",
                   "Generates an empty set of cache files.")
         {
         }

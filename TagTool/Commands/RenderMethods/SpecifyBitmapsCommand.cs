@@ -16,9 +16,9 @@ namespace TagTool.Commands.RenderMethods
 
         public SpecifyBitmapsCommand(OpenTagCache info, TagInstance tag, RenderMethod definition)
             : base(CommandFlags.Inherit,
-                 "specify_bitmaps",
+                 "specifybitmaps",
                  "Allows the bitmaps of the render_method to be respecified.",
-                 "specify_bitmaps",
+                 "specifybitmaps",
                  "Allows the bitmaps of the render_method to be respecified.")
         {
             Info = info;
@@ -48,7 +48,7 @@ namespace TagTool.Commands.RenderMethods
                     var mapTemplate = template.ShaderMaps[i];
 
                     Console.Write(string.Format("Please enter the {0} index: ", Info.StringIDs.GetString(mapTemplate.Name)));
-                    shaderMaps[mapTemplate.Name] = ArgumentParser.ParseTagIndex(Info.Cache, Console.ReadLine());
+                    shaderMaps[mapTemplate.Name] = ArgumentParser.ParseTagIndex(Info, Console.ReadLine());
                     property.ShaderMaps[i].Bitmap = shaderMaps[mapTemplate.Name];
                 }
             }

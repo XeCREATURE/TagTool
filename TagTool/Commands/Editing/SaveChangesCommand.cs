@@ -13,9 +13,9 @@ namespace TagTool.Commands.Editing
 
         public SaveChangesCommand(OpenTagCache info, TagInstance tag, object value)
             : base(CommandFlags.Inherit,
-                  "save_changes",
+                  "savechanges",
                   $"Saves changes made to the current {info.StringIDs.GetString(tag.Group.Name)} definition.",
-                  "save_changes",
+                  "savechanges",
                   $"Saves changes made to the current {info.StringIDs.GetString(tag.Group.Name)} definition.")
         {
             Info = info;

@@ -16,9 +16,9 @@ namespace TagTool.Commands.Tags
 
         public ExtractBitmapCommand(OpenTagCache info)
             : base(CommandFlags.None,
-                  "extract_bitmap",
+                  "extractbitmap",
                   "Extracts a bitmap to a file.",
-                  "extract_bitmap <tag index> <output directory>",
+                  "extractbitmap <tag index> <output directory>",
                   "Extracts a bitmap to a file.")
         {
             Info = info;
@@ -29,7 +29,7 @@ namespace TagTool.Commands.Tags
             if (args.Count != 2)
                 return false;
 
-            var tag = ArgumentParser.ParseTagIndex(Info.Cache, args[0]);
+            var tag = ArgumentParser.ParseTagIndex(Info, args[0]);
 
             if (tag == null)
                 return false;

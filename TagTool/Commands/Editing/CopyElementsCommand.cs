@@ -19,9 +19,9 @@ namespace TagTool.Commands.Editing
 
         public CopyElementsCommand(CommandContextStack stack, OpenTagCache info, TagInstance tag, TagStructureInfo structure, object owner)
             : base(CommandFlags.None,
-                  "copy_block_elements",
+                  "copyelements",
                   "Copies block elements from one tag to another.",
-                  "copy_block_elements <block name> [count = *] [index = 0]",
+                  "copyelements <block name> [count = *] [index = 0]",
                   "Copies block elements from one tag to another.")
         {
             Stack = stack;

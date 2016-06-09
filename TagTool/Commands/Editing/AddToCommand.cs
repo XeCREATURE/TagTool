@@ -16,9 +16,9 @@ namespace TagTool.Commands.Editing
 
         public AddToCommand(CommandContextStack stack, OpenTagCache info, TagInstance tag, TagStructureInfo structure, object owner)
             : base(CommandFlags.Inherit,
-                  "add_to",
+                  "addto",
                   $"Adds/inserts block element(s) to a specific tag block in the current {structure.Types[0].Name} definition.",
-                  "add_to <tag block name> [amount = 1] [index = *]",
+                  "addto <tag block name> [amount = 1] [index = *]",
                   $"Adds/inserts block element(s) to a specific tag block in the current {structure.Types[0].Name} definition.")
         {
             Stack = stack;

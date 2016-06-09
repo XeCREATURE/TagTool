@@ -15,9 +15,9 @@ namespace TagTool.Commands.Editing
 
         public ListFieldsCommand(OpenTagCache info, TagStructureInfo structure, object value)
             : base(CommandFlags.Inherit,
-                  "list_fields",
+                  "listfields",
                   $"Lists the fields in the current {structure.Types[0].Name} definition.",
-                  "list_fields",
+                  "listfields",
                   $"Lists the fields in the current {structure.Types[0].Name} definition.")
         {
             Info = info;
@@ -62,7 +62,7 @@ namespace TagTool.Commands.Editing
                 else if (fieldType == typeof(StringID))
                     valueString = Info.StringIDs.GetString((StringID)fieldValue);
                 else if (fieldType == typeof(TagInstance))
-                    valueString = $"[0x{((TagInstance)fieldValue).Index}:X4] {Info.TagNames[((TagInstance)fieldValue).Index]}.{Info.StringIDs.GetString(((TagInstance)fieldValue).Group.Name)}";
+                    valueString = $"[0x{((TagInstance)fieldValue).Index:X4}] {Info.TagNames[((TagInstance)fieldValue).Index]}.{Info.StringIDs.GetString(((TagInstance)fieldValue).Group.Name)}";
                 else
                     valueString = fieldValue.ToString();
                 

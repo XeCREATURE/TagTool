@@ -16,9 +16,9 @@ namespace TagTool.Commands.Cache
 
         public ListBitmapsCommand(OpenTagCache info, CacheBase blamCache)
             : base(CommandFlags.None,
-                  "list_bitmaps",
+                  "listbitmaps",
                   "",
-                  "list_bitmaps <blam tag path>",
+                  "listbitmaps <blam tag path>",
                   "")
         {
             Info = info;

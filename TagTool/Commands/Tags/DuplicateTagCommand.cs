@@ -26,7 +26,7 @@ namespace TagTool.Commands.Tags
         {
             if (args.Count != 1)
                 return false;
-            var tag = ArgumentParser.ParseTagIndex(_info.Cache, args[0]);
+            var tag = ArgumentParser.ParseTagIndex(_info, args[0]);
             if (tag == null)
                 return false;
 

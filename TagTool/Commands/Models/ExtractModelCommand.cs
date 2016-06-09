@@ -16,9 +16,9 @@ namespace TagTool.Commands.Models
 
         public ExtractModelCommand(OpenTagCache info, Model model)
             : base(CommandFlags.Inherit,
-                  "extract_model",
+                  "extractmodel",
                   "Extracts a render model from the current model definition.",
-                  "extract_model <variant> <filetype> <filename>",
+                  "extractmodel <variant> <filetype> <filename>",
                   "Extracts a variant of the render model to a file.\n" +
                   "Use the \"listvariants\" command to list available variants.\n" +
                   "If the model does not have any variants, just use \"default\".\n" +
@@ -271,6 +271,8 @@ namespace TagTool.Commands.Models
             {
                 // Extract the resource data
                 resourceManager.Extract(renderModel.Geometry.Resource, resourceStream);
+
+                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
 
                 using (var objFile = new StreamWriter(File.Open(fileName, FileMode.Create, FileAccess.Write)))
                 {

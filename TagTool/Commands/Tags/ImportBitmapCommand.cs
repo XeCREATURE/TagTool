@@ -10,8 +10,7 @@ namespace TagTool.Commands.Tags
 {
     class ImportBitmapCommand : Command
     {
-        private readonly OpenTagCache _info;
-        private readonly TagCache _cache;
+        private OpenTagCache Info { get; }
 
         public ImportBitmapCommand(OpenTagCache info) : base(
             CommandFlags.Inherit,
@@ -24,8 +23,7 @@ namespace TagTool.Commands.Tags
             "The DDS file will be imported into textures.dat as a new resource.\n" +
             "Make sure to add the new bitmap tag as a dependency if you edit a shader!")
         {
-            _cache = info.Cache;
-            _info = info;
+            Info = info;
         }
 
         public override bool Execute(List<string> args)
@@ -33,12 +31,12 @@ namespace TagTool.Commands.Tags
             if (args.Count != 2)
                 return false;
                 
-            var tag = ArgumentParser.ParseTagIndex(_cache, args[0]);
+            var tag = ArgumentParser.ParseTagIndex(Info, args[0]);
             var imagePath = args[1];
 
             Console.WriteLine("Loading textures.dat...");
             var resourceManager = new ResourceDataManager();
-            resourceManager.LoadCacheFromDirectory(_info.CacheFile.DirectoryName, ResourceLocation.Textures);
+            resourceManager.LoadCacheFromDirectory(Info.CacheFile.DirectoryName, ResourceLocation.Textures);
 
             Console.WriteLine("Importing image...");
             var bitmap = new TagDefinitions.Bitmap
@@ -68,15 +66,15 @@ namespace TagTool.Commands.Tags
             using (var imageStream = File.OpenRead(imagePath))
             {
                 var injector = new BitmapDdsInjector(resourceManager);
-                injector.InjectDds(_info.Serializer, _info.Deserializer, bitmap, 0, imageStream);
+                injector.InjectDds(Info.Serializer, Info.Deserializer, bitmap, 0, imageStream);
             }
 
             Console.WriteLine("Creating a new tag...");
 
-            using (var tagsStream = _info.OpenCacheReadWrite())
+            using (var tagsStream = Info.OpenCacheReadWrite())
             {
-                var tagContext = new TagSerializationContext(tagsStream, _info.Cache, _info.StringIDs, tag);
-                _info.Serializer.Serialize(tagContext, bitmap);
+                var tagContext = new TagSerializationContext(tagsStream, Info.Cache, Info.StringIDs, tag);
+                Info.Serializer.Serialize(tagContext, bitmap);
             }
 
             Console.WriteLine();

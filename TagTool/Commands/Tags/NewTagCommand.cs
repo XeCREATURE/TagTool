@@ -17,9 +17,9 @@ namespace TagTool.Commands.Tags
 
         public NewTagCommand(OpenTagCache info)
             : base(CommandFlags.Inherit,
-                  "new_tag",
+                  "newtag",
                   "Creates a new tag of the specified tag group in the current tag cache.",
-                  "new_tag <group tag>",
+                  "newtag <group tag>",
                   "Creates a new tag of the specified tag group in the current tag cache.")
         {
             Info = info;

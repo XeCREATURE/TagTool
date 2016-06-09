@@ -11,9 +11,9 @@ namespace TagTool.Commands.VFiles
 
         public ExtractAllCommand(VFilesList definition)
             : base(CommandFlags.Inherit,
-                  "extract_all",
+                  "extractall",
                   "Extract all files from the tag",
-                  "extract_all [output path]",
+                  "extractall [output path]",
                   "If not output path is specified, files will be extracted to the current\n" +
                   "directory.")
         {

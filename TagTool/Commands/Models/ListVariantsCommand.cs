@@ -12,9 +12,9 @@ namespace TagTool.Commands.Models
 
         public ListVariantsCommand(OpenTagCache info, Model model) : base(
             CommandFlags.Inherit,
-            "list_variants",
+            "listvariants",
             "List available variants of the current model definition.",
-            "list_variants",
+            "listvariants",
             "Lists available variants of the current model definition which can be used with \"extractmodel\".")
         {
             Info = info;

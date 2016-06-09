@@ -46,7 +46,7 @@ namespace TagTool.Commands.Tags
             }
             else
             {
-                tag = ArgumentParser.ParseTagIndex(Info.Cache, args[1]);
+                tag = ArgumentParser.ParseTagIndex(Info, args[1]);
                 if (tag == null)
                 {
                     return false;

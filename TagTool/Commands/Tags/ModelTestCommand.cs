@@ -15,10 +15,7 @@ namespace TagTool.Commands.Tags
 {
     class ModelTestCommand : Command
     {
-        private readonly OpenTagCache _info;
-        private readonly TagCache _cache;
-        private readonly FileInfo _fileInfo;
-        private readonly StringIDCache _stringIds;
+        private OpenTagCache Info { get; }
 
         public ModelTestCommand(OpenTagCache info) : base(
             CommandFlags.Inherit,
@@ -31,10 +28,7 @@ namespace TagTool.Commands.Tags
             "Injects the model over the traffic cone.\n" +
             "The model must only have a single material and no nodes.")
         {
-            _info = info;
-            _cache = info.Cache;
-            _fileInfo = info.CacheFile;
-            _stringIds = info.StringIDs;
+            Info = info;
         }
 
         public override bool Execute(List<string> args)
@@ -42,11 +36,11 @@ namespace TagTool.Commands.Tags
             if (args.Count < 1 || args.Count > 2)
                 return false;
 
-            TagInstance destination = _cache.Tags[0x3317];
+            TagInstance destination = Info.Cache.Tags[0x3317];
 
             if (args.Count == 2)
             {
-                destination = ArgumentParser.ParseTagIndex(_cache, args[0]);
+                destination = ArgumentParser.ParseTagIndex(Info, args[0]);
 
                 if (!destination.IsInGroup("mode"))
                 {
@@ -57,12 +51,12 @@ namespace TagTool.Commands.Tags
                 args = args.Skip(1).ToList();
             }
 
-            var builder = new RenderModelBuilder(_info.Version);
+            var builder = new RenderModelBuilder(Info.Version);
 
             // Add a root node
             var node = builder.AddNode(new RenderModel.Node
             {
-                Name = _stringIds.GetStringID("street_cone"),
+                Name = Info.StringIDs.GetStringID("street_cone"),
                 ParentNode = -1,
                 FirstChildNode = -1,
                 NextSiblingNode = -1,
@@ -74,8 +68,8 @@ namespace TagTool.Commands.Tags
             });
 
             // Begin building the default region and permutation
-            builder.BeginRegion(_stringIds.GetStringID("default"));
-            builder.BeginPermutation(_stringIds.GetStringID("default"));
+            builder.BeginRegion(Info.StringIDs.GetStringID("default"));
+            builder.BeginPermutation(Info.StringIDs.GetStringID("default"));
 
             using (var importer = new AssimpContext())
             {
@@ -128,7 +122,7 @@ namespace TagTool.Commands.Tags
                     // Define a material and part for this mesh
                     var material = builder.AddMaterial(new RenderMaterial
                     {
-                        RenderMethod = _cache.Tags[0x101F],
+                        RenderMethod = Info.Cache.Tags[0x101F],
                     });
 
 
@@ -153,25 +147,27 @@ namespace TagTool.Commands.Tags
             Console.WriteLine("Building Blam mesh data...");
 
             var resourceStream = new MemoryStream();
-            var renderModel = builder.Build(_info.Serializer, resourceStream);
+            var renderModel = builder.Build(Info.Serializer, resourceStream);
 
             Console.WriteLine("Writing resource data...");
 
             // Add a new resource for the model data
             var resources = new ResourceDataManager();
-            resources.LoadCachesFromDirectory(_fileInfo.DirectoryName);
+            resources.LoadCachesFromDirectory(Info.CacheFile.DirectoryName);
             resourceStream.Position = 0;
             resources.Add(renderModel.Geometry.Resource, ResourceLocation.Resources, resourceStream);
 
             Console.WriteLine("Writing tag data...");
 
-            using (var cacheStream = _fileInfo.Open(FileMode.Open, FileAccess.ReadWrite))
+            using (var cacheStream = Info.OpenCacheReadWrite())
             {
                 var tag = destination;
-                var context = new TagSerializationContext(cacheStream, _cache, _stringIds, tag);
-                _info.Serializer.Serialize(context, renderModel);
+                var context = new TagSerializationContext(cacheStream, Info.Cache, Info.StringIDs, tag);
+                Info.Serializer.Serialize(context, renderModel);
             }
+
             Console.WriteLine("Model imported successfully!");
+
             return true;
         }
     }

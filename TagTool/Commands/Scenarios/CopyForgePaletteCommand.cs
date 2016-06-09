@@ -13,9 +13,9 @@ namespace TagTool.Commands.Scenarios
 
         public CopyForgePaletteCommand(OpenTagCache info, Scenario definition)
             : base(CommandFlags.Inherit,
-                 "copy_forge_palette",
+                 "copyforgepalette",
                  "Copies the forge palette from the current scenario to another scenario",
-                 "copy_forge_palette [palette = all] <destination scenario>",
+                 "copyforgepalette [palette = all] <destination scenario>",
                  "Copies the forge palette from the current scenario to another scenario")
         {
             Info = info;
@@ -47,13 +47,13 @@ namespace TagTool.Commands.Scenarios
                 args.RemoveAt(0);
             }
 
-            if (ValidPalettes.Contains(palette))
+            if (ValidPalettes.Find(i => i == palette) == null)
             {
                 Console.WriteLine($"ERROR: invalid forge palette specified: {palette}");
                 return false;
             }
 
-            var destinationTag = ArgumentParser.ParseTagIndex(Info.Cache, args[0]);
+            var destinationTag = ArgumentParser.ParseTagIndex(Info, args[0]);
 
             if (destinationTag == null || destinationTag.Group.Tag.ToString() != "scnr")
             {

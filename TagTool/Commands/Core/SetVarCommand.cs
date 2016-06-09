@@ -8,9 +8,9 @@ namespace TagTool.Commands.Core
 
         public SetVarCommand(OpenTagCache info)
             : base(CommandFlags.Inherit,
-                  "set_var",
+                  "setvar",
                   "Assigns a value to a variable.",
-                  "set_var <name> <value>",
+                  "setvar <name> <value>",
                   "Assigns a value to a tag tool global variable, which can be accessed via $name")
         {
             Info = info;
@@ -28,7 +28,7 @@ namespace TagTool.Commands.Core
                 value = args[1];
 
             if (value == "*")
-                value = $"{ArgumentParser.ParseTagIndex(Info.Cache, value).Index:X4}";
+                value = $"{ArgumentParser.ParseTagIndex(Info, value).Index:X4}";
 
             ArgumentParser.Variables[args[0]] = value;
 
