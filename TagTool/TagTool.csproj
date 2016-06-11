@@ -95,6 +95,7 @@
     <Compile Include="Commands\RenderMethods\ListBitmapsCommand.cs" />
     <Compile Include="Commands\RenderMethods\RenderMethodContextFactory.cs" />
     <Compile Include="Commands\RenderMethods\SpecifyBitmapsCommand.cs" />
+    <Compile Include="Commands\RenderModels\GetResourceCommand.cs" />
     <Compile Include="Commands\RenderModels\RenderModelContextFactory.cs" />
     <Compile Include="Commands\RenderModels\SpecifyShadersCommand.cs" />
     <Compile Include="Commands\Scenarios\CopyForgePaletteCommand.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Commands\TagPrinter.cs" />
     <Compile Include="Commands\Tags\AddressCommand.cs" />
     <Compile Include="Commands\Tags\CollisionGeometryTestCommand.cs" />
+    <Compile Include="Commands\Tags\ConvertArmorCommand.cs" />
     <Compile Include="Commands\Tags\ConvertCommand.cs" />
     <Compile Include="Commands\Tags\ConvertPluginsCommand.cs" />
     <Compile Include="Commands\Tags\DependencyCommand.cs" />
@@ -128,7 +130,7 @@
     <Compile Include="Commands\Tags\NullTagCommand.cs" />
     <Compile Include="Commands\Tags\OpenCacheCommand.cs" />
     <Compile Include="Commands\Tags\PhysicsModelTestCommand.cs" />
-    <Compile Include="Commands\Tags\ResourceDataCommand.cs" />
+    <Compile Include="Commands\Tags\ResourceCommand.cs" />
     <Compile Include="Commands\Tags\StringIdCommand.cs" />
     <Compile Include="Commands\Tags\TagCacheContextFactory.cs" />
     <Compile Include="Commands\Tags\TestCommand.cs" />
@@ -155,6 +157,7 @@
     <Compile Include="Common\TagReferenceBlock.cs" />
     <Compile Include="Common\Vector.cs" />
     <Compile Include="Common\Vertex.cs" />
+    <Compile Include="Definitions\TagConverter.cs" />
     <Compile Include="IO\ConsoleHistory.cs" />
     <Compile Include="Layouts\ArrayTagLayoutField.cs" />
     <Compile Include="Layouts\BasicTagLayoutField.cs" />

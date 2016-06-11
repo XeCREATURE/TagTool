@@ -6,16 +6,16 @@ using TagTool.Cache;
 
 namespace TagTool.Commands.Tags
 {
-    class ResourceDataCommand : Command
+    class ResourceCommand : Command
     {
-        public ResourceDataCommand() : base(
+        public ResourceCommand() : base(
             CommandFlags.None,
 
-            "resourcedata",
+            "resource",
             "Manage raw resource data",
 
-            "resourcedata extract <.dat file> <index> <compressed size> <output file>\n" +
-            "resourcedata import <.dat file> <index> <input file>",
+            "resource extract <.dat file> <index> <compressed size> <output file>\n" +
+            "resource import <.dat file> <index> <input file>",
 
             "Extracts and imports raw resource data.\n" +
             "When extracting, the compressed size must include chunk headers.\n\n" +
@@ -48,9 +48,11 @@ namespace TagTool.Commands.Tags
         {
             if (args.Count != 5)
                 return false;
+
             uint compressedSize;
             if (!uint.TryParse(args[3], NumberStyles.HexNumber, null, out compressedSize))
                 return false;
+
             var outPath = args[4];
             try
             {
@@ -68,6 +70,7 @@ namespace TagTool.Commands.Tags
             {
                 Console.WriteLine("Failed to extract resource: {0}", ex.Message);
             }
+
             return true;
         }
 
@@ -75,6 +78,7 @@ namespace TagTool.Commands.Tags
         {
             if (args.Count != 4)
                 return false;
+
             var inPath = args[3];
             try
             {
@@ -91,6 +95,7 @@ namespace TagTool.Commands.Tags
             {
                 Console.WriteLine("Failed to import resource: {0}", ex.Message);
             }
+
             return true;
         }
     }

@@ -20,7 +20,7 @@ namespace TagTool.Commands.Tags
             context.AddCommand(new MapCommand());
             context.AddCommand(new DuplicateTagCommand(info));
             context.AddCommand(new AddressCommand());
-            context.AddCommand(new ResourceDataCommand());
+            context.AddCommand(new ResourceCommand());
             context.AddCommand(new TestCommand(info));
             context.AddCommand(new NullTagCommand(info));
             context.AddCommand(new ListUnreferencedTagsCommand(info));
@@ -46,6 +46,7 @@ namespace TagTool.Commands.Tags
                 context.AddCommand(new OpenCacheCommand(stack, info));
                 context.AddCommand(new MatchTagsCommand(info));
                 context.AddCommand(new ConvertCommand(info));
+                context.AddCommand(new ConvertArmorCommand(info));
             }
             return context;
         }

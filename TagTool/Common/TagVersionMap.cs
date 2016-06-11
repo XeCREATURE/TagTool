@@ -99,7 +99,7 @@ namespace TagTool.Common
         /// </summary>
         /// <param name="reader">The reader to read from.</param>
         /// <returns>The map that was read.</returns>
-        public static TagVersionMap ParseCsv(TextReader reader)
+        public static TagVersionMap ParseTagVersionMap(TextReader reader)
         {
             var result = new TagVersionMap();
 

@@ -20,6 +20,7 @@ namespace TagTool.Commands.RenderModels
         public static void Populate(CommandContext context, OpenTagCache info, TagInstance tag, RenderModel renderModel)
         {
             context.AddCommand(new SpecifyShadersCommand(info, tag, renderModel));
+            context.AddCommand(new GetResourceCommand(info, tag, renderModel));
         }
     }
 }
