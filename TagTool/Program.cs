@@ -117,7 +117,7 @@ namespace TagTool
                 Deserializer = new TagDeserializer(version),
             };
 
-            var tagNamesPath = "tagnames_" + Definition.GetVersionString(version) + ".csv";
+            var tagNamesPath = "TagNames\\tagnames_" + Definition.GetVersionString(version) + ".csv";
 
             if (File.Exists(tagNamesPath))
             {
