@@ -21,6 +21,7 @@ namespace TagTool.Commands.RenderModels
         {
             context.AddCommand(new SpecifyShadersCommand(info, tag, renderModel));
             context.AddCommand(new GetResourceCommand(info, tag, renderModel));
+            context.AddCommand(new ReplaceCommand(info, tag, renderModel));
         }
     }
 }

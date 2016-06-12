@@ -25,7 +25,7 @@ namespace TagTool.Commands.Tags
             context.AddCommand(new NullTagCommand(info));
             context.AddCommand(new ListUnreferencedTagsCommand(info));
             context.AddCommand(new ListNullTagsCommand(info));
-            context.AddCommand(new GenerateCacheCommand());
+            context.AddCommand(new GenerateCacheCommand(info));
             context.AddCommand(new NewTagCommand(info));
             context.AddCommand(new ExportTagsCommand(info));
 
