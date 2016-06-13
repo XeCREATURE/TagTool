@@ -8,6 +8,7 @@ using TagTool.Commands.VFiles;
 using TagTool.Serialization;
 using TagTool.TagDefinitions;
 using TagTool.TagGroups;
+using TagTool.Commands.Animations;
 
 namespace TagTool.Commands.Editing
 {
@@ -48,6 +49,10 @@ namespace TagTool.Commands.Editing
 
                 case "mode": // render_model
                     EditRenderModel(context, info, tag);
+                    break;
+
+                case "jmad":
+                    EditAnimation(context, info, tag);
                     break;
 
                 case "rm  ": // render_method
@@ -144,6 +149,17 @@ namespace TagTool.Commands.Editing
                     new TagSerializationContext(stream, info.Cache, info.StringIDs, tag));
 
             RenderModelContextFactory.Populate(context, info, tag, renderModel);
+        }
+
+        private static void EditAnimation(CommandContext context, OpenTagCache info, TagInstance tag)
+        {
+            ModelAnimationGraph animation;
+
+            using (var stream = info.OpenCacheRead())
+                animation = info.Deserializer.Deserialize<ModelAnimationGraph>(
+                    new TagSerializationContext(stream, info.Cache, info.StringIDs, tag));
+
+            AnimationContextFactory.Populate(context, info, tag, animation);
         }
 
         private static void EditRenderMethod(CommandContext context, OpenTagCache info, TagInstance tag)

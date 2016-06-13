@@ -60,6 +60,8 @@
     <Compile Include="Analysis\ITagElementGuessVisitor.cs" />
     <Compile Include="Bitmaps\DDS.cs" />
     <Compile Include="Bitmaps\DXTDecoder.cs" />
+    <Compile Include="Commands\Animations\AnimationContextFactory.cs" />
+    <Compile Include="Commands\Animations\GetResourcesCommand.cs" />
     <Compile Include="Commands\ArgumentParser.cs" />
     <Compile Include="Commands\Bitmaps\BitmapContextFactory.cs" />
     <Compile Include="Commands\Bitmaps\ImportCommand.cs" />
