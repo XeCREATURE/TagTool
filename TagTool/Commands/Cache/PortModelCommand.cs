@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -56,7 +56,7 @@ namespace TagTool.Commands.Cache
 
             foreach (var tag in BlamCache.IndexItems)
             {
-                if (tag.ClassCode == "mode" && tag.Filename == renderModelName)
+                if ((tag.ClassCode == "mode" || tag.ClassCode == "sbsp") && tag.Filename == renderModelName)
                 {
                     item = tag;
                     break;
@@ -117,9 +117,22 @@ namespace TagTool.Commands.Cache
             //
             // Load the Blam render_model tag raw
             //
-            
-            var mode = DefinitionsManager.mode(BlamCache, item);
-            mode.LoadRaw();
+
+            var isBSP = item.ClassCode == "sbsp";
+
+            scenario_structure_bsp sbsp = null;
+            render_model mode = null;
+
+            if (isBSP)
+            {
+                sbsp = DefinitionsManager.sbsp(BlamCache, item);
+                sbsp.LoadRaw();
+            }
+            else
+            {
+                mode = DefinitionsManager.mode(BlamCache, item);
+                mode.LoadRaw();
+            }
 
             //
             // Duplicate the render_model tag we're injecting over
@@ -148,9 +161,30 @@ namespace TagTool.Commands.Cache
             // Start porting the model
             //
 
-            var builder = new RenderModelBuilder(DefinitionSet.HaloOnline106708);
-            
-            foreach (var node in mode.Nodes)
+            RenderModelBuilder builder = new RenderModelBuilder(DefinitionSet.HaloOnline106708);
+
+            var blamNodes = isBSP ?
+                new List<render_model.Node>
+                {
+                    new render_model.Node
+                    {
+                        Name = "default",
+                        ParentIndex = -1,
+                        FirstChildIndex = -1,
+                        NextSiblingIndex = -1,
+                        Position = new Vector(),
+                        Rotation = new Vector(0, 0, 0, -1),
+                        TransformScale = 1,
+                        TransformMatrix = new Matrix4x3(
+                            1, 0, 0,
+                            0, 1, 0,
+                            0, 0, 1,
+                            0, 0, 0),
+                        DistanceFromParent = 0
+                    }
+                } : mode.Nodes;
+
+            foreach (var node in blamNodes)
             {
                 var nodeNameId = Info.StringIDs.GetStringID(node.Name);
 
@@ -176,8 +210,10 @@ namespace TagTool.Commands.Cache
             //
             // Create empty materials for now...
             //
-            
-            foreach (var shader in mode.Shaders)
+
+            var blamShaders = isBSP ? sbsp.Shaders : mode.Shaders;
+
+            foreach (var shader in blamShaders)
                 builder.AddMaterial(
                     new RenderMaterial
                     {
@@ -187,6 +223,108 @@ namespace TagTool.Commands.Cache
             //
             // Build the model regions
             //
+
+            if (isBSP)
+            {
+                builder.BeginRegion(Info.StringIDs.GetStringID("default"));
+                builder.BeginPermutation(Info.StringIDs.GetStringID("default"));
+
+                foreach (var section in sbsp.ModelSections)
+                {
+                    if (section.Submeshes.Count == 0)
+                        continue;
+
+                    var rigidVertices = new List<RigidVertex>();
+
+                    VertexValue v;
+                    if (section.Vertices != null)
+                    {
+                        foreach (var vertex in section.Vertices)
+                        {
+                            vertex.TryGetValue("position", 0, out v);
+                            var position = new Common.Vector4(v.Data.X, v.Data.Y, v.Data.Z, 1);
+
+                            vertex.TryGetValue("normal", 0, out v);
+                            var normal = new Common.Vector3(v.Data.I, v.Data.J, v.Data.K);
+
+                            vertex.TryGetValue("texcoords", 0, out v);
+                            var texcoord = new Common.Vector2(v.Data.X, v.Data.Y);
+
+                            vertex.TryGetValue("tangent", 0, out v);
+                            var tangent = new Common.Vector4(v.Data.X, v.Data.Y, v.Data.Z, 1);
+
+                            vertex.TryGetValue("binormal", 0, out v);
+                            var binormal = new Common.Vector3(v.Data.X, v.Data.Y, v.Data.Z);
+
+                            rigidVertices.Add(
+                                new RigidVertex
+                                {
+                                    Position = position,
+                                    Normal = normal,
+                                    Texcoord = texcoord,
+                                    Tangent = tangent,
+                                    Binormal = binormal
+                                });
+                        }
+                    }
+
+                    // Build the section's subparts
+
+                    builder.BeginMesh();
+
+                    var indices = new List<ushort>();
+
+                    foreach (var submesh in section.Submeshes)
+                    {
+                        builder.BeginPart((short)submesh.ShaderIndex, (ushort)submesh.FaceIndex, (ushort)submesh.FaceCount, (ushort)submesh.VertexCount);
+                        for (var j = 0; j < submesh.SubsetCount; j++)
+                        {
+                            var subpart = section.Subsets[submesh.SubsetIndex + j];
+                            builder.DefineSubPart((ushort)subpart.FaceIndex, (ushort)subpart.FaceCount, (ushort)subpart.VertexCount);
+                        }
+                        builder.EndPart();
+                    }
+
+                    builder.BindRigidVertexBuffer(rigidVertices, 0);
+                    builder.BindIndexBuffer(section.Indices.Select(index => (ushort)index), PrimitiveType.TriangleList);
+
+                    builder.EndMesh();
+                }
+
+                builder.EndPermutation();
+                builder.EndRegion();
+
+                foreach (var instance in sbsp.GeomInstances)
+                {
+                    var mesh = builder.Meshes[instance.SectionIndex];
+
+                    if (mesh.VertexFormat == VertexBufferFormat.Rigid)
+                        foreach (var i in mesh.RigidVertices)
+                                i.Position = new Common.Vector4(
+                                    i.Position.X + instance.TransformMatrix.m41,
+                                    i.Position.Y + instance.TransformMatrix.m42,
+                                    i.Position.Z + instance.TransformMatrix.m43,
+                                    i.Position.W);
+
+                    else if (mesh.VertexFormat == VertexBufferFormat.World)
+                        foreach (var i in mesh.WorldVertices)
+                            i.Position = new Common.Vector4(
+                                i.Position.X + instance.TransformMatrix.m41,
+                                i.Position.Y + instance.TransformMatrix.m42,
+                                i.Position.Z + instance.TransformMatrix.m43,
+                                i.Position.W);
+
+                    else if (mesh.VertexFormat == VertexBufferFormat.Skinned)
+                        foreach (var i in mesh.SkinnedVertices)
+                            i.Position = new Common.Vector4(
+                                i.Position.X + instance.TransformMatrix.m41,
+                                i.Position.Y + instance.TransformMatrix.m42,
+                                i.Position.Z + instance.TransformMatrix.m43,
+                                i.Position.W);
+                }
+            }
+
+            else
 
             foreach (var region in mode.Regions)
             {
@@ -348,10 +486,10 @@ namespace TagTool.Commands.Cache
             var resourceStream = new MemoryStream();
             var newRenderModel = builder.Build(Info.Serializer, resourceStream);
 
-            var renderModelNameStringID = Info.StringIDs.GetStringID(mode.Name);
+            var renderModelNameStringID = Info.StringIDs.GetStringID(isBSP ? "default" : mode.Name);
 
             newRenderModel.Name = renderModelNameStringID.Index == -1 ?
-                renderModelNameStringID = Info.StringIDs.Add(mode.Name) :
+                renderModelNameStringID = Info.StringIDs.Add(isBSP ? "default" : mode.Name) :
                 renderModelNameStringID;
 
             //
@@ -359,8 +497,10 @@ namespace TagTool.Commands.Cache
             //
 
             newRenderModel.MarkerGroups = new List<TagDefinitions.RenderModel.MarkerGroup>();
-            
-            foreach (var markerGroup in mode.MarkerGroups)
+
+            var blamMarkerGroups = isBSP ? new List<render_model.MarkerGroup>() : mode.MarkerGroups;
+
+            foreach (var markerGroup in blamMarkerGroups)
             {
                 var markerGroupNameId = Info.StringIDs.GetStringID(markerGroup.Name);
 
