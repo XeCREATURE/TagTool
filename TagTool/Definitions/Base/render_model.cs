@@ -93,7 +93,7 @@ namespace TagTool.Definitions
             }
         }
 
-        public abstract class Node
+        public class Node
         {
             public string Name;
             public int ParentIndex;
