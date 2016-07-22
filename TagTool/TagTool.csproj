@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Analysis\DataReferenceGuess.cs" />
     <Compile Include="Analysis\ITagElementGuessVisitor.cs" />
+    <Compile Include="Animations\Animation.cs" />
     <Compile Include="Bitmaps\DDS.cs" />
     <Compile Include="Bitmaps\DXTDecoder.cs" />
     <Compile Include="Commands\Animations\AnimationContextFactory.cs" />
@@ -116,11 +117,13 @@
     <Compile Include="Commands\Tags\ExtractBitmapCommand.cs" />
     <Compile Include="Commands\Tags\ExtractBitmapsCommand.cs" />
     <Compile Include="Commands\Tags\ExtractCommand.cs" />
+    <Compile Include="Commands\Tags\ExtractResourceCommand.cs" />
     <Compile Include="Commands\Tags\GenerateCacheCommand.cs" />
     <Compile Include="Commands\Tags\GenerateLayoutsCommand.cs" />
     <Compile Include="Commands\Tags\GenerateTagNamesCommand.cs" />
     <Compile Include="Commands\Tags\ImportBitmapCommand.cs" />
     <Compile Include="Commands\Tags\ImportCommand.cs" />
+    <Compile Include="Commands\Tags\ImportResourceCommand.cs" />
     <Compile Include="Commands\Tags\InfoCommand.cs" />
     <Compile Include="Commands\Tags\ListCommand.cs" />
     <Compile Include="Commands\Tags\ListNullTagsCommand.cs" />
