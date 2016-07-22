@@ -28,6 +28,7 @@ namespace TagTool.Commands.Tags
             context.AddCommand(new GenerateCacheCommand(info));
             context.AddCommand(new NewTagCommand(info));
             context.AddCommand(new ExportTagsCommand(info));
+            context.AddCommand(new ExtractResourceCommand(info));
 
             if (info.StringIDs != null)
             {
@@ -47,6 +48,7 @@ namespace TagTool.Commands.Tags
                 context.AddCommand(new MatchTagsCommand(info));
                 context.AddCommand(new ConvertCommand(info));
                 context.AddCommand(new ConvertArmorCommand(info));
+                context.AddCommand(new ImportResourceCommand(info));
             }
             return context;
         }
