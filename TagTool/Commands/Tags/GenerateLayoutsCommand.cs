@@ -20,9 +20,9 @@ namespace TagTool.Commands.Tags
             "genlayouts",
             "Generate tag layouts",
 
-            "genlayouts <type> <output dir>",
+            "genlayouts <tag index> <type> <output dir>",
 
-            "Scans all tags in the file to guess tag layouts.\n" +
+            "Scans tags by index group in the file to guess tag layouts.\n" +
             "Layouts will be written to the output directory in the chosen format.\n" +
             "\n" +
             "Supported types: csharp, cpp")
@@ -33,10 +33,11 @@ namespace TagTool.Commands.Tags
 
         public override bool Execute(List<string> args)
         {
-            if (args.Count != 2)
+            if (args.Count != 3)
                 return false;
-            var type = args[0];
-            var outDir = args[1];
+            var entry = args[0];
+            var type = args[1];
+            var outDir = args[2];
             TagLayoutWriter writer;
             switch (type)
             {
@@ -53,7 +54,8 @@ namespace TagTool.Commands.Tags
             var count = 0;
             using (var stream = _info.OpenCacheRead())
             {
-                foreach (var groupTag in _cache.Tags.NonNull().Select(t => t.Group.Tag).Distinct())
+                //foreach (var groupTag in _cache.Tags.NonNull().Select(t => t.Group.Tag).Distinct())
+                var groupTag = ArgumentParser.ParseTagIndex(_info, entry).Group.Tag;
                 {
                     TagLayoutGuess layout = null;
                     TagInstance lastTag = null;
